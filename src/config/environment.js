@@ -1,9 +1,10 @@
 var path     = require('path');
 var express  = require('express');
 var favicon = require('static-favicon');
-var logger = require('morgan');
+var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var logger = require('../util/logger');
 
 module.exports = function (app) {
   app.configure(function () {
@@ -12,7 +13,7 @@ module.exports = function (app) {
     app.set('view engine', 'jade');
 
     app.use(favicon());
-    app.use(logger('dev'));
+    app.use(morgan('dev'));
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded());
     app.use(cookieParser());
@@ -23,7 +24,7 @@ module.exports = function (app) {
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
-  err.status = 404;
+  err.status = 404;logger.error("页面找不到!");
   next(err);
 });
 
@@ -48,5 +49,6 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
+
 });
 };
