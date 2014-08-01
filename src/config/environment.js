@@ -9,7 +9,7 @@ var logger = require('../util/logger');
 module.exports = function (app) {
   app.configure(function () {
     // view engine setup
-    app.set('views', path.join(__dirname, 'views'));
+    app.set('views', path.join(__dirname, '../../views'));
     app.set('view engine', 'jade');
 
     app.use(favicon());
@@ -24,7 +24,8 @@ module.exports = function (app) {
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
-  err.status = 404;logger.error("页面找不到!");
+  err.status = 404;
+  logger.warn(req.url+",页面找不到!");
   next(err);
 });
 
