@@ -5,6 +5,9 @@ var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var logger = require('../util/logger');
+var session = require('express-session');
+
+
 
 module.exports = function (app) {
   app.configure(function () {
@@ -20,13 +23,15 @@ module.exports = function (app) {
     app.use(require('stylus').middleware(path.join(__dirname, 'public')));
     app.use(express.static(path.join(__dirname, 'public')));
     app.use(app.router);
+    app.use(session({secret: 'acgfun',resave:false,saveUninitialized:false}));
+
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
-  logger.warn(req.url+",页面找不到!");
   next(err);
+  logger.warn("用户名:"+(req.session.user!==undefined?req.session.user.email:"未登陆用户,请求地址:")+req.url+",错误:页面找不到!");
 });
 
 /// error handlers
@@ -49,6 +54,7 @@ app.use(function(err, req, res, next) {
     message: err.message,
     error: {}
   });
+  logger.error("用户名:"+(req.session.user!==undefined?req.session.user.email:"未登陆用户,请求地址:")+req.url+",错误:"+err.message);
 });
 
 });
