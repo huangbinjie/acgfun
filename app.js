@@ -7,6 +7,7 @@ var settings = require('./src/config/settings');
 var mongodb = require('./src/database');
 var app = express();
 
+
 mongodb.config(settings.database);
 mongodb.init();
 var routes = require('./src/config/routes');
