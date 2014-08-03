@@ -10,8 +10,8 @@ var app = express();
 
 mongodb.config(settings.database);
 mongodb.init();
-var routes = require('./src/config/routes');
 environment(app);
+var routes = require('./src/config/routes');
 routes(app);
 
 app.set('port', settings.port);
