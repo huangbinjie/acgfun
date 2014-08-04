@@ -9,7 +9,7 @@ var userModel = function(){
 	var userSchema = new Schema({
 		email		: {type:String,match:/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,max:20,index:true,required:true,unique: true,sparse:true},//邮箱
 		password	: {type:String,required:true},//密码
-		nick		: {type:String,max:20},//昵称
+		nick		: {type:String,max:10},//昵称
 		face		: String,//头像
 		status		: {type:Number,default:0},//0 激活，1 关闭,
 		reputation	: {type:Number,default:0},//声望=积分

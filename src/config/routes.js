@@ -6,4 +6,5 @@ module.exports = function(app){
 	app.get('/user',auth.ensureAuthenticated,controllers.user.get);
 	app.get('/user/:uid',auth.ensureAuthenticated,controllers.user.get);
     app.post('/login',controllers.user.login);
+    app.post('/register',controllers.user.register);
 }

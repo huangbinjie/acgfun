@@ -13,22 +13,22 @@
             <button id="change" type="button" class="btn blue">注册</button>
         </div>
     </form>
-    <form id="register" class="hide" ng-submit="register()">
+    <form id="register" class="hide" ng-submit="regist()">
         <div class="field">
-            <label>昵称</label>
-            <input placeholder="昵称" pattern="[a-z]{6,20}" title="请输入6-20位的字符" ng-model="register_nick">
+            <label>邮箱</label>
+            <input type="email" placeholder="邮箱" ng-model="register_email">
         </div>
         <div class="field">
             <label>密码</label>
-            <input type="password" placeholder="密码" ng-model="register_password">
+            <input type="password" placeholder="密码" pattern="\w{6,20}" title="请输入6到20位之间的字符" ng-model="register_password">
         </div>
         <div class="field">
-            <label>邮箱</label>
-            <input type="password" placeholder="邮箱" ng-model="register_email">
+            <label>昵称</label>
+            <input placeholder="昵称" pattern="^[A-Za-z0-9\u4e00-\u9fa5]{2,10}$" title="请输入2-10位的汉字或字符" ng-model="register_nick">
         </div>
         <div>
-            <button id="save" class="btn blue">确认</button>
-            <button id="cancel" class="btn blue">取消</button>
+            <button id="save" class="btn blue" type="submit">确认</button>
+            <button id="cancel" class="btn blue" type="button">取消</button>
         </div>
     </form>
 </div>

@@ -13,4 +13,17 @@ app.controller('loginCtrl',['$scope','$http','$message','$loadingBar',function($
             }
         });
     }
+
+    $scope.regist = function(){
+        $loadingBar("80%");
+        $http.post('/register',{nick:$scope.register_nick,email:$scope.register_email,password:$scope.register_password}).
+            success(function(data){
+                if(data.result==="success"){
+                    $message("注册成功",90);
+                    $loadingBar("100%","/login");
+                } else {
+                    $message(data.msg!==undefined?data.msg:"注册失败",90);
+                }
+            })
+    }
 }]);
