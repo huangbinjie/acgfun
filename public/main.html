@@ -1,0 +1,73 @@
+<div>
+    <audio>
+        <source src="static/music/Otokaze.mp3">
+    </audio>
+</div>
+<div id="background-img"></div>
+<div id="menu-wrapper">
+    <a href="a/main.html" title="动画">
+        <div id="menu1" class="menu case-border"></div>
+    </a>
+    <a href="#" title="漫画">
+        <div id="menu2" class="menu case-border"></div>
+    </a>
+    <a href="#" title="游戏">
+        <div id="menu3" class="menu case-border"></div>
+    </a>
+    <a href="#" title="音乐">
+        <div id="menu4" class="menu case-border"></div>
+    </a>
+</div>
+<!--<canvas id="pig-canvas"></canvas>-->
+<!--<script type="text/javascript" src="static/plugins/squarepig/js/squarepig.js"></script>-->
+<!--<script type="text/javascript" src="static/plugins/squarepig/js/randall.js"></script>-->
+<script>
+    var windowWidth = window.innerWidth;
+    var windowHeight = window.innerHeight;
+    var menuArray = ['#menu1', '#menu2', '#menu3', '#menu4'];
+    if (windowWidth >= 625 && windowHeight >= 625) {
+        $('#menu-wrapper').css('margin-top', (window.innerHeight - $('#menu-wrapper').height()) / 2 + 'px');
+    } else {
+        $('#menu-wrapper').css("margin-top", "30px");
+        var column = Math.floor((windowWidth - 60) / 100);
+        var ccount = Math.floor(((windowWidth - 60) - (column - 1) * 10) / 100);
+        var rcount = Math.ceil(menuArray.length / ccount);
+        //row
+        for (var i = 0; i < rcount; i++) {
+            //column
+            for (var k = 0; k < ccount; k++) {
+                var rpx = 110 * i + "px";
+                var cpx = 30 + 110 * k + "px";
+                $(menuArray[i * ccount + k]).css({top: rpx, left: cpx});
+            }
+        }
+    }
+    window.onresize = function () {
+        var width = window.innerWidth;
+        var height = window.innerHeight;
+        if (width >= 625 && height >= 625) {
+            $('#menu-wrapper').css('margin-top', (window.innerHeight - $('#menu-wrapper').height()) / 2 + 'px');
+            $(menuArray[0]).css({top: "20px", left: "20px"});
+            $(menuArray[2]).css({top: "20px", left: "280px", right: "20px"});
+            $(menuArray[1]).css({top: "280px", bottom: "20px", left: "20px"});
+            $(menuArray[3]).css({top: "280px", bottom: "20px", left: "280px", right: "20px"});
+        } else {
+            $('#menu-wrapper').css("margin-top", "30px");
+            var column1 = Math.floor((width - 60) / 100);
+            var ccount1 = Math.floor(((width - 60) - (column1 - 1) * 10) / 100);
+            var rcount1 = Math.ceil(menuArray.length / ccount1);
+            //row
+            for (var i = 0; i < rcount1; i++) {
+                //column
+                for (var k = 0; k < ccount1; k++) {
+                    var rpx = 110 * i + "px";
+                    var cpx = 30 + 110 * k + "px";
+                    $(menuArray[i * ccount1 + k]).css({top: rpx, left: cpx});
+                }
+            }
+        }
+    };
+    var audio = document.getElementsByTagName('audio')[0];
+    audio.volume = 0.5;
+    audio.play();
+</script>

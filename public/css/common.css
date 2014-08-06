@@ -104,6 +104,13 @@ input{
     -o-transition: .6s linear;
     transition: .6s linear;
 }
+
+.h0 {
+    height: 0px;
+}
+.w0{
+    width: 0px;
+}
 #login_content{
     max-width: 400px;
     margin: 150px auto;
@@ -233,6 +240,130 @@ form .field label {
 
 .loader span {
     display: none;
+}
+/*主页菜单阴影*/
+.case-border {
+    transition: .1s linear;
+}
+.case-border:hover {
+    -webkit-box-shadow: 0 0 20px #33FF66;
+    -o-box-shadow:  0 0 20px #074A99;
+    -moz-box-shadow: 0 0 20px #074A99;
+    box-shadow: 0 0 20px #0066ff;
+    opacity: .8;
+}
+
+/*主页*/
+@media screen and (max-width:624px),screen and (max-height:624px){
+    #menu-wrapper {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+    .menu {
+        width: 100px;
+        height: 100px;
+        border-radius: 6px;
+        position: absolute;
+    }
+    #pig-canvas {
+        display: none;
+    }
+    #menu1 {
+        background-image: url(../images/animation.jpg);
+    }
+    #menu2 {
+        background-image: url(../images/comic.jpg);
+    }
+    #menu3 {
+        background-image: url(../images/game.jpg);
+    }
+    #menu4 {
+        background-image: url(../images/music.jpg);
+    }
+}
+@media screen and (min-width:625px) and (min-height:625px){
+    #menu-wrapper {
+        margin-top: 30px;
+        width: 500px;
+        height: 500px;
+        margin: 0 auto;
+        overflow: hidden;
+        position: relative;
+        transition: .3s linear;
+        /*旋转*/
+        -webkit-animation-name: spin;
+        -webkit-animation-duration: 50000ms;
+        -webkit-animation-iteration-count: infinite;
+        -webkit-animation-timing-function: linear;
+        -moz-animation-name: spin;
+        -moz-animation-duration: 50000ms;
+        -moz-animation-iteration-count: infinite;
+        -moz-animation-timing-function: linear;
+        -ms-animation-name: spin;
+        -ms-animation-duration: 50000ms;
+        -ms-animation-iteration-count: infinite;
+        -ms-animation-timing-function: linear;
+
+        animation-name: spin;
+        animation-duration: 50000ms;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+    }
+    .menu {
+        width: 200px;
+        height: 200px;
+        border-radius: 100px;
+        display: inline-block;
+        position: absolute;
+    }
+    @-ms-keyframes spin {
+        from { -ms-transform: rotate(0deg); }
+        to { -ms-transform: rotate(360deg); }
+    }
+    @-moz-keyframes spin {
+        from { -moz-transform: rotate(0deg); }
+        to { -moz-transform: rotate(360deg); }
+    }
+    @-webkit-keyframes spin {
+        from { -webkit-transform: rotate(0deg); }
+        to { -webkit-transform: rotate(360deg); }
+    }
+    @keyframes spin {
+        from {
+            transform:rotate(0deg);
+        }
+        to {
+            transform:rotate(360deg);
+        }
+    }
+    #menu1 {
+        background-image: url(../images/animation.jpg);
+        top: 20px;
+        left: 20px;
+    }
+    #menu2 {
+        background-image: url(../images/comic.jpg);
+        bottom: 20px;
+        left: 20px;
+    }
+    #menu3 {
+        background-image: url(../images/game.jpg);
+        top: 20px;
+        right: 20px;
+    }
+    #menu4 {
+        background-image: url(../images/music.jpg);
+        bottom: 20px;
+        right: 20px;
+    }
+    #pig-canvas {
+        position: fixed;
+        bottom: 0px !important;
+        width: 100%;
+        height: 64px;
+        left: 0px;
+    }
 }
 
 @media screen and (min-width: 768px) {
@@ -411,7 +542,7 @@ form .field label {
 
 #menu-btn:before {
     content: "";
-    background: url(../pic/list_btn.png) no-repeat no-repeat;
+    background: url(../images/list_btn.png) no-repeat no-repeat;
     width: 24px;
     height: 24px;
     display: block;

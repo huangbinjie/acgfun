@@ -14,6 +14,9 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider','$resourcePro
                 templateUrl:'login.html',
                 controller:'loginCtrl'
             }).
+            when('/main',{
+                templateUrl:'main.html'
+            }).
             otherwise({redirecTo:'404.html'});
     }]).run(function($rootScope){
 

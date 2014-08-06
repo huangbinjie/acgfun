@@ -28,6 +28,10 @@ app.factory('$loadingBar', function ($timeout, $location) {
                 $(".loading-bar").remove();
             }, 1000);
         }
+        if(path instanceof Function){
+            path();
+            return;
+        }
         if (path) {
             $location.path(path);
         }
