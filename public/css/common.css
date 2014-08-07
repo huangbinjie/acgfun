@@ -563,7 +563,7 @@ form .field label {
     z-index: 1;
 }
 
-#menu .row1 {
+#menu #close {
     width: 110px;
     font-family: "微软雅黑";
     font-weight: 700;
@@ -578,7 +578,7 @@ form .field label {
     font-weight: 500;
 }
 
-#menu .row1:hover {
+#menu #close:hover {
     background-color: rgba(37, 39, 48, 0.8);
 }
 
