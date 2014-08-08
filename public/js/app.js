@@ -29,6 +29,9 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider','$resourcePro
             when('/d',{
                 templateUrl:'animation.html'
             }).
+            when('/a/page',{
+                templateUrl:'page.html'
+            }).
             otherwise({redirecTo:'404.html'});
     }]).run(function($rootScope){
 
