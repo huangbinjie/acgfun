@@ -1,7 +1,7 @@
 /**
  * Created by hbj on 2014/8/3.
  */
-var app = angular.module('acgfun', ['ngRoute','ngResource']);
+var app = angular.module('acgfun', ['ngRoute','ngResource','ngCookies']);
 app.config(['$routeProvider', '$locationProvider', '$httpProvider','$resourceProvider',
     function ($routeProvider, $locationProvider, $httpProvider,$resourceProvider) {
         $locationProvider.html5Mode(true);
@@ -11,28 +11,24 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider','$resourcePro
 
         $routeProvider.
             when('/',{
-                templateUrl:'main.html'
+                templateUrl:'main.html',
+                controller:'indexCtrl'
             }).
             when('/login',{
                 templateUrl:'login.html',
                 controller:'loginCtrl'
             }).
-            when('/a',{
-                templateUrl:'animation.html'
+            when('/[acgm]',{
+                templateUrl:'page.html',
+                controller:'pageCtrl'
             }).
-            when('/b',{
-                templateUrl:'animation.html'
+            when('/[acgm]/:pid/:title',{
+                templateUrl:'topic.html',
+                controller:'topicCtrl'
             }).
-            when('/c',{
-                templateUrl:'animation.html'
-            }).
-            when('/d',{
-                templateUrl:'animation.html'
-            }).
-            when('/a/page',{
-                templateUrl:'page.html'
-            }).
-            otherwise({redirecTo:'404.html'});
-    }]).run(function($rootScope){
-
+            otherwise({
+                templateUrl:'404.html'
+            });
+    }]).run(function($rootScope,Auth){
+    $rootScope.signOut = Auth.signOut;
 });

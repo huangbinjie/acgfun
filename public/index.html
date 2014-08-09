@@ -3,16 +3,20 @@
 <head>
     <title>acgfun</title>
     <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width">
     <link href="css/common.css" type="text/css" rel="stylesheet">
     <script src="js/vendor/jquery/jquery.min.js"></script>
     <script src="js/vendor/angularjs/angular.js"></script>
     <script src="js/vendor/angularjs/angular-resource.js"></script>
     <script src="js/vendor/angularjs/angular-route.js"></script>
+    <script src="js/vendor/angularjs/angular-cookies.min.js"></script>
     <script src="js/app.js"></script>
     <script src="js/controllers.js"></script>
-    <script src="js/directives.js"></script>
     <script src="js/services.js"></script>
+    <script src="js/directives.js"></script>
+    <script src="js/filters.js"></script>
     <base href="/index.html">
 </head>
 <body>
@@ -22,8 +26,37 @@
 <div id="background-img"></div>
 <div class="loading-bar"></div>
 <div id="message">啦啦啦</div>
-<div class="ng-view">
-    <div ng-view></div>
+<div id="menu" nav>
+    <div id="close" class="row">关闭</div>
+    <label class="splite"></label>
+
+    <div id="open" class="row" ng-click="showEditor = true" ng-show="showOpenEditor&&isUser">发帖</div>
+    <label class="splite"></label>
+    <div class="row" ng-show="isUser"><img src="images/img1.jpg" alt="头像"></div>
+    <label class="splite"></label>
+    <div class="row">
+        <a href="/login"  ng-if="!isUser">登陆/注册</a>
+        <span ng-click="signOut()" ng-if="isUser">登出</span>
+    </div>
 </div>
+<div id="menu-btn"></div>
+<div class="container">
+    <div class="crumbs" ng-show="showCrumb"><a href="#">主页</a> / {{crumbs}}</div>
+    <div class="ng-view clearfloat">
+        <div ng-view></div>
+    </div>
+</div>
+<div class="editor" ng-show="showEditor">
+    <div class="editor_container">
+        <textarea name="description" id="id_description" class="rte-zone"></textarea>
+    </div>
+</div>
+<script type="text/javascript" src="vendor/editor/js/jquery.rte.js"></script>
+<script type="text/javascript">
+    $(".rte-zone").rte({
+        content_css_url: "vendor/editor/css/editor.css",
+        media_url: "vendor/editor/images/"
+    });
+</script>
 </body>
 </html>

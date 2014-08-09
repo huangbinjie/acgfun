@@ -7,13 +7,13 @@ var mongoose = require('mongoose'),
 
 var postModel = function(){
 	var postSchema = new Schema({
-		team_id		: {type:Number,ref:'Team'},//分组(分类)ID
-		user_id		: {type:Number,ref:'User'},//用户ID
-		title		: {type:String,max:50,index:true,required:true},//标题
+		parent_url		: {type:String,required:true,index:true},//父路径，版块路径
+		user_id		: {type:Number,ref:'User',required:true},//用户ID
+		title		: {type:String,max:50,required:true},//标题
 		content		: {type:String,required:true},//文本
-		comment_id	: {type:Number,ref:'Comment'},//评论ID
 		order		: {type:Number,default:0},//排序方式，应该按从大到小排
-		createDate	: Date,
+        view        :{type:Number,default:0},//浏览次数
+		createDate	: {type:Date,default:Date.now},
 		modifyDate	: Date
 	});
 

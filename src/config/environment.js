@@ -31,7 +31,6 @@ module.exports = function (app) {
             var err = new Error('Not Found');
             err.status = 404;
             next(err);
-            logger.warn("用户名:" + (req.session.user !== undefined ? req.session.user.email : "未登陆用户,请求地址:") + req.url + ",错误:页面找不到!");
         });
 
 /// error handlers
@@ -40,10 +39,15 @@ module.exports = function (app) {
 // will print stacktrace
         if (app.get('env') === 'development') {
             app.use(function (err, req, res, next) {
-                res.render('error', {
-                    message: err.message,
-                    error: err
-                });
+                if(err.status===404){
+                    res.redirect('index.html#/'+req.url);
+                } else {
+                    res.render('error', {
+                        message: err.message,
+                        error: err
+                    });
+                }
+                logger.error("用户名:" + (req.session.user !== undefined ? req.session.user.email : "未登陆用户,请求地址:") + req.url + ",错误:" + err.message);
             });
         }
 
@@ -52,10 +56,9 @@ module.exports = function (app) {
         app.use(function (err, req, res, next) {
             res.render('error', {
                 message: err.message,
-                error: {}
+                error: err
             });
             logger.error("用户名:" + (req.session.user !== undefined ? req.session.user.email : "未登陆用户,请求地址:") + req.url + ",错误:" + err.message);
         });
-
     });
 };

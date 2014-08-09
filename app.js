@@ -1,7 +1,5 @@
 'use strict';
 var express = require('express');
-var http = require('http');
-var path = require('path');
 var environment = require('./src/config/environment');
 var settings = require('./src/config/settings');
 var mongodb = require('./src/database');

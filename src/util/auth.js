@@ -2,7 +2,7 @@
 // var passport-local = require('passport-local');
 
 module.exports.ensureAuthenticated= function(req, res, next){
-	if(!req.session){
+	if(!req.session.user){
 		res.redirect('/');
 	} else {
 		next();

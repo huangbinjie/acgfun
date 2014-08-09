@@ -1,0 +1,18 @@
+            <ul class="topic-ul">
+                <li class="topic-item clearfloat">
+                    <div class="topic-left">
+                        <img class="face" ng-src="{{topic.topic.face}}" src="images/default.jpg" alt="img">
+                        <p>{{topic.topic.nick}}</p>
+                    </div>
+                    <div class="topic-right">
+                        <header><span class="btn right small">收藏</span>{{topic.topic.title}}</header>
+                        <div>{{topic.topic.content}}</div>
+                    </div>
+                </li>
+                <li class="topic-item clearfloat" ng-repeat="comment in topic.comments">
+                    <div class="topic-left">
+                        <img class="face" ng-src="{{comment.face}}" src="images/default.jpg" alt="">
+                    </div>
+                    <div class="topic-right">{{comment.content}}</div>
+                </li>
+            </ul>

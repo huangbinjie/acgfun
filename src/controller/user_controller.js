@@ -30,6 +30,7 @@ var MD5 = require('MD5');
                         if (err) next(err);
                         if (num > 0) {
                             req.session.user = doc;
+                            res.cookie('user',"欢迎来到Acgfun",{httpOnly:false});
                             res.json({"result": "success"});
                         } else {
                             res.json({"result": "failed"});
@@ -82,5 +83,12 @@ var MD5 = require('MD5');
                 res.json({"result": "failed", "msg": "该邮箱已注册过"});
             }
         })
+    }
+
+    //退出
+    module.signOut = function(req,res){
+        req.session.destroy();
+        res.clearCookie("user");
+        res.json({"result":"success"});
     }
 }(exports))

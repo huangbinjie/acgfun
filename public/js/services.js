@@ -28,7 +28,7 @@ app.factory('$loadingBar', function ($timeout, $location) {
                 $(".loading-bar").remove();
             }, 1000);
         }
-        if(path instanceof Function){
+        if (path instanceof Function) {
             path();
             return;
         }
@@ -38,3 +38,44 @@ app.factory('$loadingBar', function ($timeout, $location) {
     }
     return load;
 });
+
+app.factory('Post', function ($resource, $rootScope) {
+    return function (path) {
+        return $resource(path, {}, {
+            list: {method: "POST", isArray: true},
+            add: {method: "PUT"},
+            delete: {method: "DELETE"}
+        })
+    };
+})
+app.factory('Topic', function ($resource) {
+    return function (path) {
+        return $resource(path, {}, {
+            get: {method: "POST", isArray: false},
+            add: {method: "PUT"},
+            delete: {method: "DELETE"}
+        })
+    };
+})
+app.factory('Auth', function ($cookies, $rootScope, $http, $message) {
+    var auth = {
+        isUser: function () {
+            if ($cookies.user === undefined) {
+                $rootScope.isUser = false;
+            } else {
+                $rootScope.isUser = true;
+            }
+        },
+        signOut: function () {
+            $http.post("/signout").success(function (data) {
+                if (data.result === "success") {
+                    $message("成功推出");
+                    $rootScope.isUser = false;
+                } else {
+                    $message("退出失败");
+                }
+            })
+        }
+    }
+    return auth;
+})

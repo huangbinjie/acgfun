@@ -5,9 +5,17 @@
 * {
     margin: 0;
     padding: 0;
+    font-size: 1.6rem;
 }
+
+@-webkit-viewport   { width: device-width; }
+@-moz-viewport      { width: device-width; }
+@-ms-viewport       { width: device-width; }
+@-o-viewport        { width: device-width; }
+@viewport           { width: device-width; }
 html {
-    font-size: 16px;
+    font-size: 10px;
+    height: 100%;
 }
 
 body {
@@ -16,14 +24,13 @@ body {
     color: #FFFFFF;
     font-size: 1rem;
 }
-
 #background-img {
     top: 0 !important;
     height: 100%;
     width: 100%;
     position: fixed;
     background: url(../images/bg.jpg) fixed ;
-    background-size: 100% 100%;
+    background-size: cover;
 }
 
 .ng-view{
@@ -52,8 +59,7 @@ body {
     margin-right: .5rem;
     color: #fff;
     background-color: rgba(37, 39, 48, .6);
-    padding: 0.7em 1.5em;
-    font-size: 1.6rem;
+    padding: 1rem 2rem;
     border: none;
     border-radius: .4rem;
     cursor: pointer;
@@ -69,6 +75,12 @@ body {
 
 .btn:hover {
     background-color: rgba(37, 39, 48, 1);
+}
+.btn.small{
+    padding: .5rem 1rem;
+}
+.btn.big{
+    padding: 1.1rem 2.4rem;
 }
 .btn.blue{
     background-color:#6ECFF5;
@@ -116,7 +128,8 @@ input{
 }
 #login_content{
     max-width: 40rem;
-    margin: 15rem auto;
+    margin: 10rem auto;
+    font-size: 1.6rem;
 }
 form {
     max-width: 40rem;
@@ -166,33 +179,28 @@ form .field label {
 
 .crumbs {
     margin: .3rem;
+    margin-bottom: 1rem;
+    width: 100%;
     background-color: rgba(37, 39, 48, 0.6);
     padding: 1rem;
     color: #a2a2a2;
     border-radius: .4rem;
+    box-sizing: border-box;
 }
 
 .container {
+    width: 100%;
     margin: 0 auto;
     padding: 1rem;
     transition: .25s linear;
     position: relative;
-}
-
-.container:before, body:before,
-.container:after, body:before {
-    content: "";
-    display: table;
-}
-
-.container:after, body:after {
-    clear: both;
-    overflow: hidden;
+    font-size:1.6rem;
+    box-sizing: border-box;
 }
 
 .item {
-    width: 21.5%;
-    height: auto;
+    width: 222px;
+    max-height: 119px;
     margin: .3rem;
     border-radius: .4rem;
     overflow: hidden;
@@ -200,6 +208,7 @@ form .field label {
     position: relative;
     background-color: rgba(37, 39, 48, 0.6);
     transition: opacity 3s linear;
+    box-sizing: border-box;
 }
 .item:hover {
     background-color: rgba(37, 39, 48, 0.8);
@@ -215,21 +224,21 @@ form .field label {
     padding: .4rem;
     position: absolute;
     box-sizing: border-box;
-    font-size: 16px;
+    font-size: 2em;
 }
 .item header {
     font-weight: bold;
     color: #ffffff;
-    font-size: .8rem;
+    font-size: .8em;
 }
 .item footer {
     font-weight: bold;
     color: #ffffff;
     text-align: right;
-    font-size: 2rem;
+    font-size: 4rem;
 }
 .item footer div {
-    font-size: 0rem;
+    font-size: 2rem;
 }
 
 .face {
@@ -393,33 +402,86 @@ form .field label {
     }
 }
 
+/*主页结束*/
+.category {
+    width: 100%;
+    height: auto;
+    margin-left: .3rem;
+    margin-right: .3rem;
+    padding: .6rem;
+    overflow: hidden;
+    float: left;
+    position: relative;
+    background-color: rgba(37, 39, 48, 0.6);
+    transition: opacity 3s linear;
+    box-sizing: border-box;
+    border-top: 1px solid #ffffff;
+}
+.category:first-child{
+    border:none;
+}
+.category:hover {
+    background-color: rgba(37, 39, 48, 0.7);
+}
+
+.category-author-pic {
+    float: left;
+    margin-right: 11px;
+}
+
+.category-author-pic img {
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+    vertical-align: middle;
+}
+.category-post{
+    overflow: hidden;
+}
+.category-post-title {
+    height: auto;
+    text-align: left;
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.category a {
+    text-decoration: none;
+    color: #9AD7FF;
+}
+.category-post-time {
+    font-size: 1.3rem;
+    padding: .5rem 0;
+}
+
+.category-profile{
+    float: right;
+    height: 5rem;
+    line-height: 2.5rem;
+    display: none;
+}
+.category-profile .option{
+    display: inline-block;
+    margin: 0 .5rem;
+}
+.category-profile .option strong {
+    display: block;
+}
+.category-profile .option small {
+    font-size: 1.3rem;
+}
+.category-profile img {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 100%;
+    vertical-align: sub;
+}
+@media screen and (min-width: 480px){
+    .category-profile{
+        display: block;
+    }
+}
 @media screen and (min-width: 768px) {
-    .container {
-        width: 736px;
-        margin: 0 auto;
-    }
-    .topic-ul {
-        list-style: none;
-        margin: 10px;
-    }
-    .item {
-        width: 18.6%;
-    }
-
-    .item .content{
-        padding: .8rem;
-    }
-
-    .item header {
-        font-size: 1.5rem;
-    }
-    .item footer {
-        font-size: 2rem;
-    }
-    .item footer div {
-        font-size: 1.6rem;
-    }
-
     .face {
         width: 100px;
         height: 100px;
@@ -448,39 +510,12 @@ form .field label {
     }
 }
 
-@media (min-width: 992px) {
-    .container {
-        width: 900px;
-    }
-    .item {
-        width: 18.8%;
-    }
-    .item header {
-        font-size: 1.5rem;
-    }
-    .item footer {
-        font-size: 3rem;
-    }
-    .item footer div {
-        font-size: 1.6rem;
-    }
+@media (min-width: 980px) {
 }
 
 @media screen and (min-width: 1200px) {
     .container {
-        width: 1160px;
-    }
-    .item {
-        width: 19.1%;
-    }
-    .item header {
-        font-size: 2rem;
-    }
-    .item footer {
-        font-size: 4rem;
-    }
-    .item footer div {
-        font-size: 1.6rem;
+        width: 1200px;
     }
 
     .left-panel {
@@ -494,31 +529,12 @@ form .field label {
     }
 }
 
-.category-pic {
-    float: left;
-    margin-right: 11px;
-}
-
-.category-text {
-    height: auto;
-    text-align: left;
-    overflow: hidden;
-}
-
-.category-text a {
-    text-decoration: none;
-    color: #fff;
-}
-
-.category {
-    height: 100%;
-    padding: 8px;
-}
-
-/*????*/
+/*文章*/
 .topic-ul {
+    width: 100%;
     list-style: none;
-    margin-top: 10px;
+    margin: .3rem;
+    box-sizing: border-box;
 }
 
 .clearfloat:before,
@@ -534,8 +550,7 @@ form .field label {
 
 .topic-item {
     width: 100%;
-    margin-bottom: 5px;
-    border-radius: 4px;
+    margin-bottom: 1rem;
     background-color: rgba(37, 39, 48, 0.6);
 }
 
@@ -548,14 +563,19 @@ form .field label {
 }
 
 .topic-left p {
-    margin-bottom: 5px;
-    margin-top: 5px;
+    margin-bottom: .5rem;
+    margin-top: .5rem;
 }
 
 .topic-right {
-    max-width: 1054px;
-    padding: 10px;
+    padding: 1rem 1rem 1rem 0;
     overflow: hidden;
+}
+
+.topic-right header{
+    margin-bottom: 1rem;
+    font-size: 2.4rem;
+    color: #a3d277;
 }
 
 .topic-right div {
@@ -567,14 +587,6 @@ form .field label {
     display: block;
     max-width: 100%;
     height: auto;
-}
-
-.topic-right h2 a {
-    color: #f5f5f5;
-    padding: 3px 5px;
-    font-size: 1.5rem;
-    font-weight: 500;
-    font-family: "微软雅黑";
 }
 
 #menu-btn {
@@ -612,22 +624,19 @@ form .field label {
     z-index: 1;
 }
 
-#menu #close {
+#menu .row {
     width: 110px;
-    font-family: "微软雅黑";
     font-weight: 700;
     font-size: 2.1rem;
     cursor: pointer;
-    transition: .25s linear;
 }
 
-#menu .row1 a {
+#menu .row a {
     text-decoration: none;
-    color: #fff;
-    font-weight: 500;
+    font-weight: 700;
 }
 
-#menu #close:hover {
+#menu .row:hover {
     background-color: rgba(37, 39, 48, 0.8);
 }
 
@@ -754,4 +763,58 @@ form .field label {
     display: none;
     background-color: #73E064;
     font-family: "黑体";
+}
+
+/*编辑器*/
+.editor {
+    width: 100%;
+    height: 30%;
+    background: rgba(37,39,48,0.6);
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    padding-bottom: 60px;
+    overflow: hidden;
+    transition: all .25s linear;
+}
+.editor_container {
+    height: 100%;
+    padding: 10px 20px 50px 20px;
+}
+.rte-zone
+{
+    width: 100%;
+    margin:0;
+    padding:0;
+    border:1px #999 solid;
+    clear:both;
+    height:100%;
+    display:block;
+}
+.editor_title {
+    width: 100%;
+    height: 26px;
+    margin-bottom: 5px;
+}
+.rte-toolbar{
+    width: 100%;
+}
+.rte-toolbar span, .rte-toolbar span img {
+    border:0;
+    cursor: pointer;
+}
+
+.rte-toolbar p {
+    display: inline-block;
+    margin:0;
+    padding-right:5px;
+}
+.rte-toolbar .submit {
+    color: #fff;
+    text-decoration: none;
+    vertical-align: 6px;
+    font-family: "微软雅黑";
+}
+.rte-toolbar .submit:hover {
+    color: #6196F9;
 }

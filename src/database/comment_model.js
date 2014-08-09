@@ -6,12 +6,12 @@ var mongoose = require('mongoose'),
 
 
 var commentModel = function(){
-	var postSchema = new Schema({
-		user_id		: {type:Number,ref:'User'},//用户ID
-		post_id		: {type:Number,ref:'Post'},//文章ID
-		content		: {type:String,,required:true},//评论内容
-		parent_id	: Number,
-		createDate	: Date,
+	var commentSchema = new Schema({
+		user_id		: {type:Number,ref:'User',required:true},//用户ID
+		post_id		: {type:Number,ref:'Post',required:true},//文章ID
+		content		: {type:String,required:true},//评论内容
+		parent_id	: {type:Number,default:0},
+		createDate	: {type:Date,default:Date.now},
 		modifyDate	: Date
 	});
 
