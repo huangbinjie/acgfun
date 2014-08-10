@@ -69,13 +69,13 @@ var async = require('async');
         var pid = req.params.pid;
         async.parallel({
             comments: function (callback) {
-                Comment.find({post_id: pid}, {_id: 1, user_id: 1, content: 1}).sort({_id: 1}).populate("user_id", "face,nick").exec(function (err, docs) {
+                Comment.find({post_id: pid}, {_id: 1, user_id: 1, content: 1}).sort({_id: 1}).populate("user_id", {face:1,nick:1}).exec(function (err, docs) {
                     if (err) next(err);
                     callback(null, docs);
                 })
             },
             topic: function (callback) {
-                Post.findOne({_id: pid}, {_id: 1, user_id: 1, title: 1, content: 1}).populate('user_id', "face,nick").exec(function (err, docs) {
+                Post.findOne({_id: pid}, {_id: 1, user_id: 1, title: 1, content: 1}).populate('user_id', {face:1,nick:1}).exec(function (err, docs) {
                     if (err) next(err);
                     callback(null, docs);
                 })
