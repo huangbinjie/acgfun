@@ -72,7 +72,9 @@ app.factory('User', function ($resource) {
 app.factory('Auth', function ($cookies, $rootScope, $http, $message) {
     var auth = {
         getUser: function () {
+            if(window.sessionStorage.User!==undefined){
                 $rootScope.User = JSON.parse(window.sessionStorage.User);
+            }
         },
         signOut: function () {
             $http.post("/signout").success(function (data) {
