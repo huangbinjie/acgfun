@@ -18,7 +18,7 @@ app.controller('loginCtrl', ['$scope', '$http', '$message', '$loadingBar', '$roo
             $loadingBar("80%");
             $http.post("/login", {email: $scope.login_email, password: $scope.login_password}).success(function (data) {
                 if (data.result === "success") {
-                    Auth.setUser(data.user);
+                    Auth.setUser(JSON.stringify(data.user));
                     $loadingBar("100%");
                     $location.path("/");
                 } else {

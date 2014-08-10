@@ -72,13 +72,14 @@ app.factory('User', function ($resource) {
 app.factory('Auth', function ($cookies, $rootScope, $http, $message) {
     var auth = {
         getUser: function () {
-                $rootScope.User = window.sessionStorage.User;
+                $rootScope.User = JSON.parse(window.sessionStorage.User);
         },
         signOut: function () {
             $http.post("/signout").success(function (data) {
                 if (data.result === "success") {
                     $message("成功推出");
-                    $rootScope.isUser = false;
+                    window.sessionStorage.removeItem("User");
+                    $rootScope.User = undefined;
                 } else {
                     $message("退出失败");
                 }
