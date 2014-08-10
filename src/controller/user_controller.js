@@ -153,7 +153,7 @@ var fs = require("fs");
             return;
         }
         var filename = req.session.user._id+"_"+Date.now()+"."+req.files.file.extension;
-        fs.rename(req.files.file.path,"public\\uploads\\faces\\"+filename,function(err){
+        fs.rename(req.files.file.path,"public//uploads//faces//"+filename,function(err){
             if (err) throw next(err);
             User.update({_id:req.session.user._id},{$set:{face:filename}},function(err,num){
                 if (err) throw next(err);
