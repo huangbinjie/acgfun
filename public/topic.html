@@ -11,7 +11,8 @@
                 </li>
                 <li class="topic-item clearfloat" ng-repeat="comment in topic.comments">
                     <div class="topic-left">
-                        <img class="face" ng-src="uploads/faces/{{comment.face}}" src="images/default.jpg" alt="">
+                        <img class="face" ng-src="uploads/faces/{{comment.user_id.face}}" src="images/default.jpg" alt="">
+                        <p>{{comment.user_id.nick}}</p>
                     </div>
                     <div class="topic-right">{{comment.content}}</div>
                 </li>
