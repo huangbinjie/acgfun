@@ -95,7 +95,6 @@ app.factory('Auth', function ($cookies, $rootScope, $http, $message) {
 app.factory('$crumb',function($location,$rootScope){
     return function(path){
         if(/\/a/.test(path)){
-            alert("11")
         }
     }
 })
