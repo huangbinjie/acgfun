@@ -7,6 +7,14 @@ app.controller('loginCtrl', ['$scope', '$http', '$message', '$loadingBar', '$roo
         $rootScope.showOpenEditor = false;
         $rootScope.showCrumb = false;
         $scope.login = function () {
+            if($scope.login_email===undefined||$scope.login_email===""){
+                $message("请填写邮箱",90);
+                return;
+            }
+            if($scope.login_password===undefined||$scope.login_password===""){
+                $message("请填写密码",90);
+                return;
+            }
             $loadingBar("80%");
             $http.post("/login", {email: $scope.login_email, password: $scope.login_password}).success(function (data) {
                 if (data.result === "success") {
@@ -18,6 +26,18 @@ app.controller('loginCtrl', ['$scope', '$http', '$message', '$loadingBar', '$roo
         }
 
         $scope.regist = function () {
+            if($scope.register_email===undefined||$scope.register_email===""){
+                $message("请填写邮箱",90);
+                return;
+            }
+            if($scope.register_password===undefined||$scope.register_password===""){
+                $message("请填写密码",90);
+                return;
+            }
+            if($scope.register_nick===undefined||$scope.register_nick===""){
+                $message("请填写昵称",90);
+                return;
+            }
             $loadingBar("80%");
             $http.post('/register', {nick: $scope.register_nick, email: $scope.register_email, password: $scope.register_password}).
                 success(function (data) {
@@ -44,25 +64,27 @@ app.controller('indexCtrl', ['$scope', '$rootScope', '$message', 'Auth', '$loadi
         $rootScope.showCrumb = false;
         Auth.isUser();
     }])
-app.controller('pageCtrl', ['$scope', '$rootScope', '$message', '$location', 'Post', 'Auth', '$loadingBar',
-    function ($scope, $rootScope, $message, $location, Post, Auth, $loadingBar) {
+app.controller('pageCtrl', ['$scope', '$rootScope', '$message', '$location', 'Post', 'Auth', '$loadingBar','$crumb',
+    function ($scope, $rootScope, $message, $location, Post, Auth, $loadingBar,$crumb) {
         $rootScope.showEditor = false;
         $rootScope.editType = "post";
         $rootScope.showOpenEditor = true;
         $rootScope.showCrumb = true;
         Auth.isUser();
+        $crumb($location.path());
         $scope.url = $location.path();
         Post($location.path()).list(function (data) {
             $scope.topics = data;
         })
     }])
 
-app.controller('topicCtrl', ['$scope', '$rootScope', '$location', 'Topic', 'Auth', '$loadingBar',
-    function ($scope, $rootScope, $location, Topic, Auth, $loadingBar) {
+app.controller('topicCtrl', ['$scope', '$rootScope', '$location', 'Topic', 'Auth', '$loadingBar','$crumb',
+    function ($scope, $rootScope, $location, Topic, Auth, $loadingBar,$crumb) {
         $rootScope.editType = "reply";
         $rootScope.showOpenEditor = true;
         $rootScope.showCrumb = true;
         Auth.isUser();
+        $crumb($location.path());
         Topic($location.path()).get({}, function (data) {
             $scope.topic = data;
         })
