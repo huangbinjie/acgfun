@@ -71,12 +71,8 @@ app.factory('User', function ($resource) {
 })
 app.factory('Auth', function ($cookies, $rootScope, $http, $message) {
     var auth = {
-        isUser: function () {
-            if ($cookies.user === undefined) {
-                $rootScope.user = null;
-            } else {
-                $rootScope.user = $cookies.user;
-            }
+        getUser: function () {
+                $rootScope.User = window.sessionStorage.User;
         },
         signOut: function () {
             $http.post("/signout").success(function (data) {
@@ -87,6 +83,9 @@ app.factory('Auth', function ($cookies, $rootScope, $http, $message) {
                     $message("退出失败");
                 }
             })
+        },
+        setUser:function(user){
+            window.sessionStorage.User = user;
         }
     }
     return auth;

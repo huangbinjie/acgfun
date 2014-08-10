@@ -87,8 +87,8 @@ var fs = require("fs");
                         if (err) next(err);
                         if (num > 0) {
                             req.session.user = doc;
-                            res.cookie('user', doc, {httpOnly: false});
-                            res.json({"result": "success"});
+//                            res.cookie('user', doc, {httpOnly: false});
+                            res.json({"result": "success","user":doc});
                         } else {
                             res.json({"result": "failed"});
                         }

@@ -1,8 +1,8 @@
 /**
  * Created by hbj on 2014/8/3.
  */
-app.controller('loginCtrl', ['$scope', '$http', '$message', '$loadingBar', '$rootScope', 'Auth',
-    function ($scope, $http, $message, $loadingBar, $rootScope, Auth) {
+app.controller('loginCtrl', ['$scope', '$http', '$message', '$loadingBar', '$rootScope','$location', 'Auth',
+    function ($scope, $http, $message, $loadingBar, $rootScope,$location, Auth) {
         $rootScope.showEditor = false;
         $rootScope.showOpenEditor = false;
         $rootScope.showCrumb = false;
@@ -18,7 +18,9 @@ app.controller('loginCtrl', ['$scope', '$http', '$message', '$loadingBar', '$roo
             $loadingBar("80%");
             $http.post("/login", {email: $scope.login_email, password: $scope.login_password}).success(function (data) {
                 if (data.result === "success") {
-                    location.href = "/";
+                    Auth.setUser(data.user);
+                    $loadingBar("100%");
+                    $location.path("/");
                 } else {
                     $message(data.msg !== undefined ? data.msg : "登陆失败", 90);
                 }
@@ -62,7 +64,7 @@ app.controller('indexCtrl', ['$scope', '$rootScope', '$message', 'Auth', '$loadi
         $rootScope.showEditor = false;
         $rootScope.showOpenEditor = false;
         $rootScope.showCrumb = false;
-        Auth.isUser();
+        Auth.getUser();
     }])
 app.controller('pageCtrl', ['$scope', '$rootScope', '$message', '$location', 'Post', 'Auth', '$loadingBar','$crumb',
     function ($scope, $rootScope, $message, $location, Post, Auth, $loadingBar,$crumb) {
@@ -70,7 +72,7 @@ app.controller('pageCtrl', ['$scope', '$rootScope', '$message', '$location', 'Po
         $rootScope.editType = "post";
         $rootScope.showOpenEditor = true;
         $rootScope.showCrumb = true;
-        Auth.isUser();
+        Auth.getUser();
         $crumb($location.path());
         $scope.url = $location.path();
         Post($location.path()).list(function (data) {
@@ -83,7 +85,7 @@ app.controller('topicCtrl', ['$scope', '$rootScope', '$location', 'Topic', 'Auth
         $rootScope.editType = "reply";
         $rootScope.showOpenEditor = true;
         $rootScope.showCrumb = true;
-        Auth.isUser();
+        Auth.getUser();
         $crumb($location.path());
         Topic($location.path()).get({}, function (data) {
             $scope.topic = data;
@@ -94,7 +96,7 @@ app.controller('userCtrl', ['$scope', '$location', 'User', '$loadingBar', '$root
         $rootScope.showCrumb = true;
         $rootScope.showOpenEditor = true;
         $scope.showModal = false;
-        Auth.isUser();
+        Auth.getUser();
         User($location.path()).get({}, function (data) {
             $scope.userData = data;
             console.log(data);

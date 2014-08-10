@@ -33,16 +33,16 @@
     <div id="close" class="row">关闭</div>
     <label class="splite"></label>
 
-    <div id="open" class="row" ng-click="showEditor = true" ng-show="showOpenEditor&isUser">发帖</div>
+    <div id="open" class="row" ng-click="showEditor = true" ng-show="showOpenEditor&&User!==undefined">发帖</div>
     <label class="splite"></label>
-    <div class="row" ng-show="user">
+    <div class="row" ng-show="User!==undefined">
         <a href="/user">
-            <img ng-src="{{user.face}}" src="images/default.jpg" alt="头像">
+            <img ng-src="{{User.face}}" src="images/default.jpg" alt="头像">
         </a></div>
     <label class="splite"></label>
     <div class="row">
-        <a href="/login"  ng-if="!isUser">登陆/注册</a>
-        <span ng-click="signOut()" ng-if="isUser">登出</span>
+        <a href="/login"  ng-if="User===undefined">登陆/注册</a>
+        <span ng-click="signOut()" ng-if="User!==undefined">登出</span>
     </div>
 </div>
 <div id="menu-btn"></div>
