@@ -1,8 +1,8 @@
 /**
  * Created by hbj on 2014/8/3.
  */
-app.controller('loginCtrl', ['$scope', '$http', '$message', '$loadingBar', '$rootScope','Auth',
-    function ($scope, $http, $message, $loadingBar, $rootScope,Auth) {
+app.controller('loginCtrl', ['$scope', '$http', '$message', '$loadingBar', '$rootScope', 'Auth',
+    function ($scope, $http, $message, $loadingBar, $rootScope, Auth) {
         $rootScope.showEditor = false;
         $rootScope.showOpenEditor = false;
         $rootScope.showCrumb = false;
@@ -26,6 +26,7 @@ app.controller('loginCtrl', ['$scope', '$http', '$message', '$loadingBar', '$roo
                         $loadingBar("100%", success);
                     } else {
                         $message(data.msg !== undefined ? data.msg : "注册失败", 90);
+                        $loadingBar("80%");
                     }
                 })
         }
@@ -36,15 +37,15 @@ app.controller('loginCtrl', ['$scope', '$http', '$message', '$loadingBar', '$roo
             });
         }
     }]);
-app.controller('indexCtrl', ['$scope', '$rootScope', '$message', 'Auth',
-    function ($scope, $rootScope, $message, Auth) {
-    $rootScope.showEditor = false;
-    $rootScope.showOpenEditor = false;
-    $rootScope.showCrumb = false;
-    Auth.isUser();
-}])
-app.controller('pageCtrl', ['$scope', '$rootScope', '$message', '$location', 'Post', 'Auth',
-    function ($scope, $rootScope, $message, $location, Post, Auth) {
+app.controller('indexCtrl', ['$scope', '$rootScope', '$message', 'Auth', '$loadingBar',
+    function ($scope, $rootScope, $message, Auth, $loadingBar) {
+        $rootScope.showEditor = false;
+        $rootScope.showOpenEditor = false;
+        $rootScope.showCrumb = false;
+        Auth.isUser();
+    }])
+app.controller('pageCtrl', ['$scope', '$rootScope', '$message', '$location', 'Post', 'Auth', '$loadingBar',
+    function ($scope, $rootScope, $message, $location, Post, Auth, $loadingBar) {
         $rootScope.showEditor = false;
         $rootScope.editType = "post";
         $rootScope.showOpenEditor = true;
@@ -56,13 +57,50 @@ app.controller('pageCtrl', ['$scope', '$rootScope', '$message', '$location', 'Po
         })
     }])
 
-app.controller('topicCtrl', ['$scope', '$rootScope','$location', 'Topic', 'Auth',
-    function ($scope, $rootScope,$location, Topic, Auth) {
-    $rootScope.editType = "reply";
-    $rootScope.showOpenEditor = true;
-    $rootScope.showCrumb = true;
-    Auth.isUser();
-    Topic($location.path()).get({}, function (data) {
-        $scope.topic = data;
-    })
-}])
+app.controller('topicCtrl', ['$scope', '$rootScope', '$location', 'Topic', 'Auth', '$loadingBar',
+    function ($scope, $rootScope, $location, Topic, Auth, $loadingBar) {
+        $rootScope.editType = "reply";
+        $rootScope.showOpenEditor = true;
+        $rootScope.showCrumb = true;
+        Auth.isUser();
+        Topic($location.path()).get({}, function (data) {
+            $scope.topic = data;
+        })
+    }])
+app.controller('userCtrl', ['$scope', '$location', 'User', '$loadingBar', '$rootScope', 'Auth', '$upload','$message',
+    function ($scope, $location, User, $loadingBar, $rootScope, Auth, $upload,$message) {
+        $rootScope.showCrumb = true;
+        $rootScope.showOpenEditor = true;
+        $scope.showModal = false;
+        Auth.isUser();
+        User($location.path()).get({}, function (data) {
+            $scope.userData = data;
+            console.log(data);
+        })
+
+        $scope.onFileSelect = function ($files) {
+            $scope.file = $files[0];
+        }
+
+        $scope.submit = function(){
+            if($scope.file===undefined){
+                $message("请选择文件");
+                return;
+            }
+            $upload.upload({
+                url: '/upload/face',
+                method:'POST',
+                file: $scope.file
+            }).progress(function(evt) {
+                $(".progressbar").show().width(parseInt(100.0 * evt.loaded / evt.total)+"%");
+            }).success(function(data, status, headers, config) {console.log(data)
+                if(data.result==="success"){
+                    $message("上传头像成功");
+                    $rootScope.showModal = false;
+                    $scope.userData.user.face = data.face;
+                } else {
+                    $message("上传头像失败了");
+                }
+            });
+        }
+    }])

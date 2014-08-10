@@ -7,7 +7,7 @@ var mongoose = require('mongoose'),
 
 var postModel = function(){
 	var postSchema = new Schema({
-		parent_url		: {type:String,required:true,index:true},//父路径，版块路径
+		parent_url		: {type:String,required:true,index:true,ref:'Team'},//父路径，版块路径
 		user_id		: {type:Number,ref:'User',required:true},//用户ID
 		title		: {type:String,max:50,required:true},//标题
 		content		: {type:String,required:true},//文本

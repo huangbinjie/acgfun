@@ -1,10 +1,10 @@
     <div class="category" ng-repeat="topic in topics">
         <div class="category-author-pic">
-            <a href="#"><img ng-src="{{topic.user_id.face}}" src="images/default.jpg" alt="头像"></a>
+            <a href="/user/{{topic.user_id._id}}"><img ng-src="uploads/faces/{{topic.user_id.face}}" src="images/default.jpg" alt="头像"></a>
         </div>
         <div class="category-profile">
             <div class="option">
-                <strong>{{topic.profile.replyCount}}</strong>
+                <strong>{{topic.replyCount}}</strong>
                 <small>回复</small>
             </div>
             <div class="option">
@@ -12,12 +12,13 @@
                 <small>浏览</small>
             </div>
             <div class="option">
-                <div>
-                    <a href="#">
-                        <img ng-src="{{topic.profile.commenter.face}}" src="images/default.jpg" alt="img">
+                <div ng-if="topic.commenter.length>0">
+                    <a href="/user/{{topic.commenter[0].user_id._id}}">
+                        <img ng-src="uploads/faces/{{topic.commenter[0].user_id.face}}" src="images/default.jpg" alt="img">
                     </a>
-                    <a href="#">{{topic.profile.commenter.replyDate|date}}</a>
+                    <a href="#">{{topic.commenter[0].createDate|date}}</a>
                 </div>
+                <div ng-if="topic.commenter.length===0">没有评论</div>
                 <small>最后回复</small>
             </div>
         </div>

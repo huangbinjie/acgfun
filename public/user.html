@@ -1,88 +1,48 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="../static/css/common.css" type="text/css" rel="stylesheet">
-        <script src="../static/js/jquery.js"></script>
-        <script src="../static/js/drag.js"></script>
-        <script src="../static/js/jquery.form.js"></script>
-    </head>
-    <body>
-        <div id="background-img"></div>
-        <div class="container">
-            <div class="crumbs"><a href="#">主页</a> / 用户中心</div>
-            <div class="left-panel">
-                <div class="face-panel">
-                    <div>
-                        <a><img src="../static/pic/img1.jpg" alt="face"><div id="changeFace">更换头像</div></a>
-                    </div>
-                    <div>hbj</div>
-                </div>
-                <div class="param">
-                    <div class="inline-block">
-                        <div class="user-star-count">0</div>
-                        <div class="user-star-label">收藏</div>
-                    </div>
-                    <div class="inline-block">
-                        <div class="user-post-count">0</div>
-                        <div class="user-post-label">发表</div>
-                    </div>
-                    <div class="inline-block">
-                        <div class="user-reputation-count">0</div>
-                        <div class="user-reputation-label">积分</div>
-                    </div>
-                </div>
-            </div>
-            <div class="post-panel">
-                <div class="title"><h3>最近发表</h3></div>
-                <div class="panel">还没有发表任何文章</div>
-            </div>
+<div class="left-panel">
+    <div class="face-panel">
+        <div>
+             <label>
+                <img ng-src="uploads/faces/{{userData.user.face}}" src="images/default.jpg" alt="face">
+                <div id="changeFace" ng-click="showModal=true">更换头像</div>
+             </label>
         </div>
-        <div class="modal-div">
-            <div class="modal">
-                <div class="modal-header">
-                    <h3>上传图片</h3>
-                </div>
-                <div class="modal-body">
-                    <form id="uploadForm" action="/user/uploadpicture" method="post" enctype="multipart/form-data">
-                        <input type="file" name="userImg">
-                    </form>
-                    <p>只能上传jpg,png文件(最大256kb)</p>
-                </div>
-                <div class="modal-footer">
-                    <button id="close" class="btn">关闭</button>
-                    <button id="upload" class="btn">上传</button>
-                </div>
-            </div>
+        <div>{{userData.user.nick}}</div>
+    </div>
+    <div class="param">
+        <div class="inline-block">
+            <div class="user-star-count">{{userData.user.star[0]}}</div>
+            <div class="user-star-label">收藏</div>
         </div>
-        <script>
-            $(".face-panel a").mouseover(function() {
-                $("#changeFace").css("opacity", "1");
-            }).mouseout(function() {
-                $("#changeFace").css("opacity", "0");
-            });
-            $("#changeFace").click(function() {
-                $(".modal-div").show();
-            });
-            $("#close").click(function() {
-                $(".modal-div").hide();
-            });
-            $(".modal-header").drags({}, ".modal");
-            /* 上传表单 */
-            $("form").ajaxForm({
-                target: '#uploadForm',
-                error: function(xhr) {
+        <div class="inline-block">
+            <div class="user-post-count">{{userData.count.postCount+userData.count.replyCount}}</div>
+            <div class="user-post-label">发表</div>
+        </div>
+        <div class="inline-block">
+            <div class="user-reputation-count">{{userData.user.follow[0]}}</div>
+            <div class="user-reputation-label">粉丝</div>
+        </div>
+    </div>
+</div>
+<div class="post-panel">
+    <div class="title"><h3>最近发表</h3></div>
+    <div class="panel"><span ng-if=""></span>还没有发表任何动态</div>
+</div>
+</div>
+<div class="modal-div" ng-show="showModal">
+    <div class="modal">
+        <div class="modal-header clearfloat">
+            <h3 class="left">上传图片</h3>
 
-                },
-                uploadProgress: function(event, position, total, percent) {
-                    
-                },
-                success: function(response){
-                    
-                }
-            });
-        </script>
-    </body>
-</html>
+            <div class="progressbar"></div>
+        </div>
+        <div class="modal-body">
+            <input type="file" ng-file-select="onFileSelect($files)" accept="image/jpg|image/png">
+
+            <p>只能上传jpg,png文件(最大256kb)</p>
+        </div>
+        <div class="modal-footer">
+            <button id="close" class="btn" ng-click="showModal=false">关闭</button>
+            <button id="upload" class="btn" ng-click="submit()">上传</button>
+        </div>
+    </div>
+</div>

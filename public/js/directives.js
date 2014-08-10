@@ -46,7 +46,7 @@ app.directive('a', function ($loadingBar) {
         restrict: 'E',
         link: function ($scope, element, attr) {
             element.on("click", function (e) {
-                $loadingBar("100%");
+                $loadingBar("80%");
             })
         }
     }

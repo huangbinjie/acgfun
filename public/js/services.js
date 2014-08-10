@@ -19,20 +19,23 @@ app.factory('$message', function ($timeout) {
 });
 
 app.factory('$loadingBar', function ($timeout, $location) {
-    var load = function (width, path) {
-        $(".loading-bar").remove();
-        $("#background-img").after("<div class='loading-bar'></div>");
+    var load = function (width, fuc) {
+        if(typeof(fuc) === "boolean"&&fuc===true){
+        } else {
+            $(".loading-bar").remove();
+            $("#background-img").after("<div class='loading-bar'></div>");
+        }
         $(".loading-bar").width(width);
         if (width === "100%") {
             $timeout(function () {
                 $(".loading-bar").remove();
             }, 1000);
         }
-        if (path instanceof Function) {
+        if (fuc instanceof Function) {
             path();
             return;
         }
-        if (path) {
+        if (typeof(fuc) === "string") {
             $location.path(path);
         }
     }
@@ -57,13 +60,22 @@ app.factory('Topic', function ($resource) {
         })
     };
 })
+app.factory('User', function ($resource) {
+    return function (path) {
+        return $resource(path, {}, {
+            get: {method: "POST", isArray: false},
+            add: {method: "PUT"},
+            delete: {method: "DELETE"}
+        })
+    };
+})
 app.factory('Auth', function ($cookies, $rootScope, $http, $message) {
     var auth = {
         isUser: function () {
             if ($cookies.user === undefined) {
-                $rootScope.isUser = false;
+                $rootScope.user = null;
             } else {
-                $rootScope.isUser = true;
+                $rootScope.user = $cookies.user;
             }
         },
         signOut: function () {

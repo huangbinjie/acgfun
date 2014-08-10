@@ -13,6 +13,9 @@ var db = function () {
             db.once('open', function callback() {
                 logger.log('mongodb connection open');
             });
+            db.on('close',function(){
+                console.log("mongoose closed normal")
+            });
             autoinc.init(db);
         },
         init: function () {

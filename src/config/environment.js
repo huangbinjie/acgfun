@@ -7,6 +7,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var logger = require('../util/logger');
 var session = require('express-session');
+var multer  = require('multer');
 
 
 module.exports = function (app) {
@@ -23,6 +24,7 @@ module.exports = function (app) {
         app.use(require('stylus').middleware(path.join(__dirname, '../../public')));
         app.use(express.static(path.join(__dirname, '../../public')));
         app.use(session({name: "acgfun", secret: 'acgfun', resave: false, saveUninitialized: false}));
+        app.use(multer({ dest: path.join(__dirname, '../../public/uploads/faces')}));
         app.use(app.router);
 
 
