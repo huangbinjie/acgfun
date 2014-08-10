@@ -94,7 +94,7 @@ app.controller('topicCtrl', ['$scope', '$rootScope', '$location', 'Topic', 'Auth
 app.controller('userCtrl', ['$scope', '$location', 'User', '$loadingBar', '$rootScope', 'Auth', '$upload','$message',
     function ($scope, $location, User, $loadingBar, $rootScope, Auth, $upload,$message) {
         $rootScope.showCrumb = true;
-        $rootScope.showOpenEditor = true;
+        $rootScope.showOpenEditor = false;
         $scope.showModal = false;
         Auth.getUser();
         User($location.path()).get({}, function (data) {
