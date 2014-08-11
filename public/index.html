@@ -1,8 +1,9 @@
-<!DOCTYPE html>
+<doctype>
 <html lang="en" ng-app="acgfun">
 <head>
     <title>acgfun</title>
     <meta charset="UTF-8">
+    <meta name="description" content="acg 动漫 游戏 音乐">
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width">
@@ -23,7 +24,8 @@
 </head>
 <body>
 <!--[if lt IE 10]>
-<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<p class="browsehappy">嗨，你的浏览器版本太低了，也许你需要升级<a href="http://browsehappy.com/">浏览器</a>了</p>
+<script>window.close();</script>
 <![endif]-->
 <div id="background-img">
 </div>
@@ -35,7 +37,7 @@
 
     <div id="open" class="row" ng-click="showEditor = true" ng-show="showOpenEditor&&User!==undefined">发帖</div>
     <label class="splite"></label>
-    <div class="row" ng-show="User!==undefined">
+    <div class="row face" ng-show="User!==undefined">
         <a href="/user">
             <img ng-src="uploads/faces/{{User.face}}" src="images/default.jpg" alt="头像">
         </a></div>

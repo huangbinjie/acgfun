@@ -22,7 +22,7 @@ app.directive('nav', function ($rootScope, $routeParams) {
     return {
         link: function ($scope, element, attr) {
             $("#menu-btn").click(function () {
-                $("#menu").width("110px");
+                $("#menu").width("100px");
                 $(this).hide();
             });
             $("#menu #close").click(function () {

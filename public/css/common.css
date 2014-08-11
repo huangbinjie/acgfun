@@ -5,7 +5,7 @@
 * {
     margin: 0;
     padding: 0;
-    font-size: 1.6rem;
+    font-size: 1rem;
 }
 
 @-webkit-viewport   { width: device-width; }
@@ -14,7 +14,7 @@
 @-o-viewport        { width: device-width; }
 @viewport           { width: device-width; }
 html {
-    font-size: 10px;
+    font-size: 16px;
     height: 100%;
 }
 
@@ -59,9 +59,9 @@ body {
     margin-right: .5rem;
     color: #fff;
     background-color: rgba(37, 39, 48, .6);
-    padding: 1rem 2rem;
+    padding:.625rem  1.34rem;
     border: none;
-    border-radius: .4rem;
+    border-radius: 4px;
     cursor: pointer;
     font-weight: bold;
     outline: none;
@@ -77,7 +77,7 @@ body {
     background-color: rgba(37, 39, 48, 1);
 }
 .btn.small{
-    padding: .5rem 1rem;
+    padding: .34rem .67rem;
 }
 .btn.big{
     padding: 1.1rem 2.4rem;
@@ -102,17 +102,17 @@ a:hover {
 input{
     width: 100%;
     background-color: #FFFFFF;
-    border: .1rem solid rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(0, 0, 0, 0.15);
     outline: none;
     color: rgba(0, 0, 0, 0.7);
     border-radius: 0.3125em;
     box-sizing: border-box;
-    font-size: 1.6rem;
-    padding: 0.65em 1em;
+    font-size: 1rem;
+    padding: .7rem 1rem;
 }
 
 .translate {
-    -webkit-transform:translate(-999rem);
+    -webkit-transform:translate(-999px);
     -webkit-transition: .6s linear;
     -moz-transition: .6s linear;
     -ms-transition: .6s linear;
@@ -121,80 +121,77 @@ input{
 }
 
 .h0 {
-    height: 0rem;
+    height: 0px;
 }
 .w0{
-    width: 0rem;
+    width: 0px;
 }
 #login_content{
-    max-width: 40rem;
-    margin: 10rem auto;
-    font-size: 1.6rem;
+    max-width: 25rem;
+    margin: 6rem auto;
 }
 form {
-    max-width: 40rem;
-    padding: 1em;
+    max-width: 25rem;
+    padding: 1rem;
     background-color: rgba(0,48,70,0.2);
-    border-radius: .5rem;
-    box-shadow: 0px 0px 0px .1rem rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
 }
 form .field{
     clear: both;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 form .field label {
-    margin-bottom: .3rem;
+    margin-bottom: .33rem;
     display: block;
 }
 
 #menu img,
 .face {
-    width: 10rem;
-    height: 10rem;
+    width: 100px;
+    height: 100px;
 }
 
 .loading-bar {
     width: 0%;
-    height: .3rem;
+    height: 3px;
     background-color: #32D88D;
     position: relative;
     transition: width .5s ease-in;
 }
 
 #message {
-    min-width: 10rem;
-    padding: 1.5rem .5rem 1.5rem .5rem;
+    min-width: 6rem;
+    padding: 1rem .5rem 1rem .5rem;
     opacity: 0;
     text-align: center;
     position: fixed;
-    top: 1rem;
     color: #73E064;
     font-weight: 700;
-    border-radius: .4rem;
+    border-radius: 4px;
     background-color: rgba(0, 48, 70, .8);
     transition: .4s;
     z-index: 1;
 }
 
 .crumbs {
-    margin: .3rem;
+    margin: .5rem;
     margin-bottom: 1rem;
     width: 100%;
     background-color: rgba(37, 39, 48, 0.6);
-    padding: 1rem;
+    padding: .625rem;
     color: #a2a2a2;
-    border-radius: .4rem;
+    border-radius: 4px;
     box-sizing: border-box;
 }
 
 .container {
     width: 100%;
     margin: 0 auto;
-    padding: 1rem;
+    padding: .625rem;
     transition: .25s linear;
     position: relative;
-    font-size:1.6rem;
     box-sizing: border-box;
 }
 
@@ -242,23 +239,22 @@ form .field label {
 }
 
 .face {
-    width: 3rem;
-    height: 3rem;
+    width: 30px;
+    height: 30px;
     vertical-align: middle;
-    border-radius: .6rem;
+    border-radius: 4px;
 }
 
-.left-panel {
-    margin-top: 1rem;
+.panel {
+    width: 100%;
     margin-bottom: 1rem;
-}
-
-.post-panel {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
+    padding: .7rem;
+    margin: .5rem;
     background-color: rgba(37, 39, 48, 0.6);
 }
-
+.panel p {
+    padding: 5px 0;
+}
 .loader {
     width: 100%;
     float: left;
@@ -282,11 +278,10 @@ form .field label {
     transition: .1s linear;
 }
 .case-border:hover {
-    -webkit-box-shadow: 0 0 2rem #33FF66;
-    -o-box-shadow:  0 0 2rem #074A99;
-    -moz-box-shadow: 0 0 2rem #074A99;
-    box-shadow: 0 0 2rem #0066ff;
-    opacity: .8;
+    -webkit-box-shadow: 0 0 4px #33FF66;
+    -o-box-shadow:  0 0 4px #074A99;
+    -moz-box-shadow: 0 0 4px #074A99;
+    box-shadow: 0 0 4px #0066ff;
 }
 
 /*主页*/
@@ -297,9 +292,9 @@ form .field label {
         position: relative;
     }
     .menu {
-        width: 10rem;
-        height: 10rem;
-        border-radius: .6rem;
+        width: 100px;
+        height: 100px;
+        border-radius: 6px;
         position: absolute;
     }
     #pig-canvas {
@@ -307,20 +302,24 @@ form .field label {
     }
     #menu1 {
         background-image: url(../images/animation.jpg);
+        background-size: contain;
     }
     #menu2 {
         background-image: url(../images/comic.jpg);
+        background-size: contain;
     }
     #menu3 {
         background-image: url(../images/game.jpg);
+        background-size: contain;
     }
     #menu4 {
         background-image: url(../images/music.jpg);
+        background-size: contain;
     }
 }
 @media screen and (min-width:625px) and (min-height:625px){
     #menu-wrapper {
-        margin-top: 3rem;
+        margin-top: 30px;
         width: 500px;
         height: 500px;
         margin: 0 auto;
@@ -347,9 +346,9 @@ form .field label {
         animation-timing-function: linear;
     }
     .menu {
-        width: 20rem;
-        height: 20rem;
-        border-radius: 10rem;
+        width: 200px;
+        height: 200px;
+        border-radius: 100%;
         display: inline-block;
         position: absolute;
     }
@@ -375,21 +374,25 @@ form .field label {
     }
     #menu1 {
         background-image: url(../images/animation.jpg);
+        background-size: contain;
         top: 20px;
         left: 20px;
     }
     #menu2 {
         background-image: url(../images/comic.jpg);
+        background-size: contain;
         bottom: 20px;
         left: 20px;
     }
     #menu3 {
         background-image: url(../images/game.jpg);
+        background-size: contain;
         top: 20px;
         right: 20px;
     }
     #menu4 {
         background-image: url(../images/music.jpg);
+        background-size: contain;
         bottom: 20px;
         right: 20px;
     }
@@ -406,14 +409,13 @@ form .field label {
 .category {
     width: 100%;
     height: auto;
-    margin-left: .3rem;
-    margin-right: .3rem;
+    margin-left: .5rem;
+    margin-right: .5rem;
     padding: .6rem;
     overflow: hidden;
     float: left;
     position: relative;
     background-color: rgba(37, 39, 48, 0.6);
-    transition: opacity 3s linear;
     box-sizing: border-box;
     border-top: 1px solid #ffffff;
 }
@@ -426,7 +428,7 @@ form .field label {
 
 .category-author-pic {
     float: left;
-    margin-right: 11px;
+    margin-right: 1rem;
 }
 
 .category-author-pic img {
@@ -441,7 +443,6 @@ form .field label {
 .category-post-title {
     height: auto;
     text-align: left;
-    font-size: 1.8rem;
     font-weight: 700;
 }
 
@@ -450,32 +451,31 @@ form .field label {
     color: #9AD7FF;
 }
 .category-post-time {
-    font-size: 1.3rem;
-    padding: .5rem 0;
+    padding: 0.3125rem 0;
 }
 
 .category-profile{
     float: right;
-    height: 5rem;
-    line-height: 2.5rem;
+    height: 3.125rem;
+    line-height: 1.5625rem;
     display: none;
+    text-align: center;
 }
 .category-profile .option{
     display: inline-block;
-    margin: 0 .5rem;
+    margin: 0 .325rem;
 }
 .category-profile .option:last-child{
-    min-width: 8rem;
+    min-width: 5rem;
 }
 .category-profile .option strong {
     display: block;
 }
 .category-profile .option small {
-    font-size: 1.3rem;
 }
 .category-profile img {
-    width: 2rem;
-    height: 2rem;
+    width: 20px;
+    height: 20px;
     border-radius: 100%;
     vertical-align: sub;
 }
@@ -490,14 +490,12 @@ form .field label {
         height: 100px;
     }
 
-    .left-panel {
-        float: left;
-        width: 49.5%;
+    .panel {
+        width: 46.6%;
     }
 
-    .post-panel {
-        float: right;
-        width: 49.5%;
+    .panel {
+        width: 46.6%;
     }
 
     .loader {
@@ -521,16 +519,6 @@ form .field label {
 @media screen and (min-width: 1200px) {
     .container {
         width: 1200px;
-    }
-
-    .left-panel {
-        float: left;
-        width: 49.5%;
-    }
-
-    .post-panel {
-        float: right;
-        width: 49.5%;
     }
 }
 
@@ -630,10 +618,10 @@ form .field label {
 }
 
 #menu .row {
-    width: 110px;
-    font-weight: 700;
-    font-size: 2.1rem;
+    width: 100px;
+    font-size: 1rem;
     cursor: pointer;
+    padding: 10px 0;
 }
 
 #menu .row a {
@@ -645,18 +633,14 @@ form .field label {
     background-color: rgba(37, 39, 48, 0.8);
 }
 
-#menu .row {
-    width: 110px;
-}
-
-#menu .row img {
+#menu .row.face {
+    padding: 0;
     vertical-align: middle;
     cursor: pointer;
 }
-
-#menu div {
-    padding-top: 5px;
-    padding-bottom: 5px;
+#menu .row.img {
+    vertical-align: middle;
+    cursor: pointer;
 }
 
 #menu .splite {
@@ -670,7 +654,6 @@ form .field label {
 .face-panel {
     padding: 10px;
     text-align: center;
-    background-color: rgba(37, 39, 48, 0.6);
 }
 
 .face-panel label {
@@ -685,11 +668,11 @@ form .field label {
 
 #changeFace {
     width: 100px;
-    height: 103px;
+    height: 100px;
     line-height: 100px;
     position: absolute;
     background-color: rgba(37, 39, 48, 0.8);
-    bottom: 3px;
+    bottom: 0px;
     opacity: 0;
     cursor: pointer;
     transition: opacity .1s linear;
@@ -699,34 +682,28 @@ form .field label {
     opacity: 0.8;
 }
 
-.title {
+.panel header {
     padding: 10px;
     border-bottom: 1px solid #ababab;
 }
 
-.panel {
-    padding: 10px;
-}
-
-.left-panel .param {
+.panel .param {
     width: 100%;
     margin-top: 10px;
     padding-top: 10px;
     padding-bottom: 10px;
     text-align: center;
-    background-color: rgba(37, 39, 48, 0.6);
 }
 
-.left-panel .inline-block {
+.panel .param .inline-block {
     width: 100px;
 }
 
-.left-panel .inline-block div:first-child {
-    font-size: 3rem;
+.panel .param .inline-block div:first-child {
+    font-size: 2rem;
 }
 
-.left-panel .inline-block div:last-child {
-    font-size: 1.6rem;
+.panel .param .inline-block div:last-child {
     font-weight: 700;
 }
 
@@ -836,4 +813,11 @@ form .field label {
     position: fixed;
     bottom: 0;
     left:0;
+}
+/*低版本提示*/
+.browsehappy{
+    position: fixed;
+    z-index: 999;
+    background-color: pink;
+    width: 100%;
 }

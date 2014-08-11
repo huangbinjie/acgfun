@@ -11,6 +11,8 @@ app.filter('date', function () {
             return Math.round(date / 60000) + "分钟前";
         if (date < 86400000)
             return Math.round(date / 3600000) + "小时前";
+        if (date < 604800000)
+            return "大约"+Math.round(date / 86400000) + "天前";
         if (date < 2592000000)
             return "大约" + Math.round(date / (86400000 * 7)) + "星期前";
         if (date < 31536000000)
