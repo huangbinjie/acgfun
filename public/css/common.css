@@ -560,14 +560,13 @@ form .field label {
 }
 
 .topic-right {
-    padding: 1rem 1rem 1rem 0;
     overflow: hidden;
 }
 
 .topic-right header{
-    margin-bottom: 1rem;
-    font-size: 2.4rem;
+    font-size: 1.5rem;
     color: #a3d277;
+    padding: 10px 0 0 0;
 }
 
 .topic-right div {
