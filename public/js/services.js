@@ -20,7 +20,7 @@ app.factory('$message', function ($timeout) {
 
 app.factory('$loadingBar', function ($timeout, $location) {
     var load = function (width, fuc) {
-        if(typeof(fuc) === "boolean"&&fuc===true){
+        if (typeof(fuc) === "boolean" && fuc === true) {
         } else {
             $(".loading-bar").remove();
             $("#background-img").after("<div class='loading-bar'></div>");
@@ -72,7 +72,7 @@ app.factory('User', function ($resource) {
 app.factory('Auth', function ($cookies, $rootScope, $http, $message) {
     var auth = {
         getUser: function () {
-            if(window.sessionStorage.User!==undefined){
+            if (window.sessionStorage.User !== undefined) {
                 $rootScope.User = JSON.parse(window.sessionStorage.User);
             }
         },
@@ -87,16 +87,16 @@ app.factory('Auth', function ($cookies, $rootScope, $http, $message) {
                 }
             })
         },
-        setUser:function(user){
+        setUser: function (user) {
             window.sessionStorage.User = user;
         }
     }
     return auth;
 })
 
-app.factory('$crumb',function($location,$rootScope){
-    return function(path){
-        if(/\/a/.test(path)){
+app.factory('$crumb', function ($location, $rootScope) {
+    return function (path) {
+        if (/\/a/.test(path)) {
         }
     }
 })

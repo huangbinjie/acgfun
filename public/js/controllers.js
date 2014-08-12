@@ -88,7 +88,7 @@ app.controller('topicCtrl', ['$scope', '$rootScope', '$location', 'Topic', 'Auth
         Auth.getUser();
         $crumb($location.path());
         Topic($location.path()).get({}, function (data) {
-            $scope.topic = data;console.log(data);
+            $scope.topic = data;
         })
     }])
 app.controller('userCtrl', ['$scope', '$location', 'User', '$loadingBar', '$rootScope', 'Auth', '$upload','$message',

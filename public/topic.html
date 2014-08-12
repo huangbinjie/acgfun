@@ -1,19 +1,21 @@
-            <ul class="topic-ul">
-                <li class="topic-item clearfloat">
-                    <div class="topic-left">
-                        <img class="face" ng-src="uploads/faces/{{topic.topic.user_id.face}}" src="images/default.jpg" alt="img">
-                        <p>{{topic.topic.user_id.nick}}</p>
-                    </div>
-                    <div class="topic-right">
-                        <header><span class="btn right small">收藏</span>{{topic.topic.title}}</header>
-                        <div>{{topic.topic.content}}</div>
-                    </div>
-                </li>
-                <li class="topic-item clearfloat" ng-repeat="comment in topic.comments">
-                    <div class="topic-left">
-                        <img class="face" ng-src="uploads/faces/{{comment.user_id.face}}" src="images/default.jpg" alt="">
-                        <p>{{comment.user_id.nick}}</p>
-                    </div>
-                    <div class="topic-right">{{comment.content}}</div>
-                </li>
-            </ul>
+<ul class="topic-ul">
+    <li class="topic-item clearfloat">
+        <div class="topic-left">
+            <img class="face" ng-src="uploads/faces/{{topic.topic.user_id.face}}" src="images/default.jpg" alt="img">
+
+            <p>{{topic.topic.user_id.nick}}</p>
+        </div>
+        <div class="topic-right">
+            <header><span class="btn right small">收藏</span>{{topic.topic.title}}</header>
+            <div>{{topic.topic.content}}</div>
+        </div>
+    </li>
+    <li class="topic-item clearfloat" ng-repeat="comment in topic.comments">
+        <div class="topic-left">
+            <img class="face" ng-src="uploads/faces/{{comment.user_id.face}}" src="images/default.jpg" alt="">
+
+            <p>{{comment.user_id.nick}}</p>
+        </div>
+        <div class="topic-right" compile="comment.content"></div>
+    </li>
+</ul>

@@ -112,3 +112,15 @@ app.directive('editor', ['Post', 'Topic', '$rootScope', '$message','$routeParams
         }
     }
 }])
+
+app.directive('compile',function($compile){
+    return {
+        restrict: 'A',
+        link:function($scope,element,attr){
+            $scope.$watch(attr.compile, function(text) {
+                element.html(text);
+                $compile(element.contents())($scope);
+            });
+        }
+    }
+})
