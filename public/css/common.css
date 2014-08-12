@@ -176,7 +176,6 @@ form .field label {
 }
 
 .crumbs {
-    margin: .5rem;
     margin-bottom: 1rem;
     width: 100%;
     background-color: rgba(37, 39, 48, 0.6);
@@ -249,8 +248,9 @@ form .field label {
     width: 100%;
     margin-bottom: 1rem;
     padding: .7rem;
-    margin: .5rem;
+    /*margin: .5rem;*/
     background-color: rgba(37, 39, 48, 0.6);
+    box-sizing: border-box;
 }
 .panel p {
     padding: 5px 0;
@@ -491,13 +491,8 @@ form .field label {
     }
 
     .panel {
-        width: 46.6%;
+        width: 49.5%;
     }
-
-    .panel {
-        width: 46.6%;
-    }
-
     .loader {
         margin-left: 10px;
         margin-right: 10px;
@@ -520,6 +515,9 @@ form .field label {
     .container {
         width: 1200px;
     }
+    /*.panel {*/
+        /*width: 49.5%;*/
+    /*}*/
 }
 
 /*文章*/
