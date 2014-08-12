@@ -53,8 +53,7 @@
 <div class="container">
     <div class="crumbs" ng-show="showCrumb">
         <span ng-repeat="crumb in crumbs track by $index">
-            <a ng-if="!$last">{{crumb}}</a>
-        <label ng-if="$last">{{crumb}}</label>
+            <label compile="crumb"></label>
         </span>
     </div>
     <!--<div class="ng-view clearfloat">-->

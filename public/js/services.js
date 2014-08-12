@@ -98,23 +98,23 @@ app.factory('$crumb', function ($location, $rootScope) {
     return function (path) {
         $rootScope.crumbs = [];
         if (/^\/*/.test(path)) {
-            $rootScope.crumbs.push("主页");
+            $rootScope.crumbs.push("<a href='/'>主页</a>");
         }
         if (/^\/a.*/.test(path)) {
             $rootScope.crumbs.push("/");
-            $rootScope.crumbs.push("动画");
+            $rootScope.crumbs.push("<a href='/a'>动画</a>");
         }
         if(/^\/c.*/.test(path)){
             $rootScope.crumbs.push("/");
-            $rootScope.crumbs.push("漫画");
+            $rootScope.crumbs.push("<a href='.c'>漫画</a>");
         }
         if(/^\/g.*/.test(path)){
             $rootScope.crumbs.push("/");
-            $rootScope.crumbs.push("游戏");
+            $rootScope.crumbs.push("<a href='/g'>游戏</a>");
         }
         if(/^\/m.*/.test(path)){
             $rootScope.crumbs.push("/");
-            $rootScope.crumbs.push("音乐");
+            $rootScope.crumbs.push("<a href='/m'>音乐</a>");
         }
         if(/^\/[acgm]\/+.*/.test(path)){
             $rootScope.crumbs.push("/");
