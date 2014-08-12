@@ -83,6 +83,9 @@ var async = require('async');
             if (err) next(err);
             res.json(result);
         })
+        Post.update({_id:pid},{$inc:{view:1}},function(err,num){
+            if(err) next(err);
+        })
     }
 
     module.putComment = function (req, res, next) {

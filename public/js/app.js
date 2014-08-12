@@ -12,7 +12,7 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider','$resourcePro
         $routeProvider.
             when('/',{
                 templateUrl:'main.html',
-                controller:'indexCtrl'
+                controller:'mainCtrl'
             }).
             when('/login',{
                 templateUrl:'login.html',

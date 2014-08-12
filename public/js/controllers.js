@@ -59,7 +59,7 @@ app.controller('loginCtrl', ['$scope', '$http', '$message', '$loadingBar', '$roo
             });
         }
     }]);
-app.controller('indexCtrl', ['$scope', '$rootScope', '$message', 'Auth', '$loadingBar',
+app.controller('mainCtrl', ['$scope', '$rootScope', '$message', 'Auth', '$loadingBar',
     function ($scope, $rootScope, $message, Auth, $loadingBar) {
         $rootScope.showEditor = false;
         $rootScope.showOpenEditor = false;

@@ -33,9 +33,9 @@ body {
     background-size: cover;
 }
 
-.ng-view{
-    position: relative;
-}
+/*.ng-view{*/
+    /*position: relative;*/
+/*}*/
 .show{
     display: block;
 }
