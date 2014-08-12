@@ -120,5 +120,9 @@ app.factory('$crumb', function ($location, $rootScope) {
             $rootScope.crumbs.push("/");
             $rootScope.crumbs.push(path.split("/").slice(-1)[0]);
         }
+        if(/^\/(user).*/.test(path)){
+            $rootScope.crumbs.push("/");
+            $rootScope.crumbs.push("个人中心");
+        }
     }
 })

@@ -91,12 +91,13 @@ app.controller('topicCtrl', ['$scope', '$rootScope', '$location', 'Topic', 'Auth
             $scope.topic = data;
         })
     }])
-app.controller('userCtrl', ['$scope', '$location', 'User', '$loadingBar', '$rootScope', 'Auth', '$upload','$message',
-    function ($scope, $location, User, $loadingBar, $rootScope, Auth, $upload,$message) {
+app.controller('userCtrl', ['$scope', '$location', 'User', '$loadingBar', '$rootScope', 'Auth', '$upload','$message','$crumb',
+    function ($scope, $location, User, $loadingBar, $rootScope, Auth, $upload,$message,$crumb) {
         $rootScope.showCrumb = true;
         $rootScope.showOpenEditor = false;
         $scope.showModal = false;
         Auth.getUser();
+        $crumb($location.path());
         User($location.path()).get({}, function (data) {
             $scope.userData = data;
             console.log(data);
