@@ -37,21 +37,28 @@
 
     <div id="open" class="row" ng-click="showEditor = true" ng-show="showOpenEditor&&User!==undefined">发帖</div>
     <label class="splite"></label>
+
     <div class="row face" ng-show="User!==undefined">
         <a href="/user">
             <img ng-src="uploads/faces/{{User.face}}" src="images/default.jpg" alt="头像">
         </a></div>
     <label class="splite"></label>
+
     <div class="row">
-        <a href="/login"  ng-if="User===undefined">登陆/注册</a>
+        <a href="/login" ng-if="User===undefined">登陆/注册</a>
         <span ng-click="signOut()" ng-if="User!==undefined">登出</span>
     </div>
 </div>
 <div id="menu-btn"></div>
 <div class="container">
-    <div class="crumbs" ng-show="showCrumb"><a href="#">主页</a> / {{crumb}}</div>
+    <div class="crumbs" ng-show="showCrumb">
+        <span ng-repeat="crumb in crumbs track by $index">
+            <a ng-if="!$last">{{crumb}}</a>
+        <label ng-if="$last">{{crumb}}</label>
+        </span>
+    </div>
     <!--<div class="ng-view clearfloat">-->
-        <div ng-view></div>
+    <div ng-view></div>
     <!--</div>-->
 </div>
 <div class="editor" ng-show="showEditor">

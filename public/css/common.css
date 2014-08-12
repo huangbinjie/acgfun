@@ -176,7 +176,7 @@ form .field label {
 }
 
 .crumbs {
-    margin-bottom: 1rem;
+    margin-bottom: .625rem;
     width: 100%;
     background-color: rgba(37, 39, 48, 0.6);
     padding: .625rem;
@@ -409,8 +409,6 @@ form .field label {
 .category {
     width: 100%;
     height: auto;
-    margin-left: .5rem;
-    margin-right: .5rem;
     padding: .6rem;
     overflow: hidden;
     float: left;
@@ -524,7 +522,6 @@ form .field label {
 .topic-ul {
     width: 100%;
     list-style: none;
-    margin: .5rem;
     box-sizing: border-box;
 }
 
@@ -541,7 +538,7 @@ form .field label {
 
 .topic-item {
     width: 100%;
-    margin-bottom: 1rem;
+    margin-bottom: .625rem;
     background-color: rgba(37, 39, 48, 0.6);
 }
 

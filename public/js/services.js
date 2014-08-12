@@ -96,7 +96,29 @@ app.factory('Auth', function ($cookies, $rootScope, $http, $message) {
 
 app.factory('$crumb', function ($location, $rootScope) {
     return function (path) {
-        if (/\/a/.test(path)) {
+        $rootScope.crumbs = [];
+        if (/^\/*/.test(path)) {
+            $rootScope.crumbs.push("主页");
+        }
+        if (/^\/a.*/.test(path)) {
+            $rootScope.crumbs.push("/");
+            $rootScope.crumbs.push("动画");
+        }
+        if(/^\/c.*/.test(path)){
+            $rootScope.crumbs.push("/");
+            $rootScope.crumbs.push("漫画");
+        }
+        if(/^\/g.*/.test(path)){
+            $rootScope.crumbs.push("/");
+            $rootScope.crumbs.push("游戏");
+        }
+        if(/^\/m.*/.test(path)){
+            $rootScope.crumbs.push("/");
+            $rootScope.crumbs.push("音乐");
+        }
+        if(/^\/[acgm]\/+.*/.test(path)){
+            $rootScope.crumbs.push("/");
+            $rootScope.crumbs.push(path.split("/").slice(-1)[0]);
         }
     }
 })
