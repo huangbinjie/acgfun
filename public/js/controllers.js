@@ -19,8 +19,7 @@ app.controller('loginCtrl', ['$scope', '$http', '$message', '$loadingBar', '$roo
             $http.post("/login", {email: $scope.login_email, password: $scope.login_password}).success(function (data) {
                 if (data.result === "success") {
                     Auth.setUser(JSON.stringify(data.user));
-                    $loadingBar("100%");
-                    $location.path("/");
+                    $loadingBar("100%","/");
                 } else {
                     $message(data.msg !== undefined ? data.msg : "登陆失败", 90);
                 }
@@ -87,9 +86,42 @@ app.controller('topicCtrl', ['$scope', '$rootScope', '$location', 'Topic', 'Auth
         $rootScope.showCrumb = true;
         Auth.getUser();
         $crumb($location.path());
-        Topic($location.path()).get({}, function (data) {
-            $scope.topic = data;
-        })
+        $scope.currentPage = 0;
+        query(0);
+        $scope.page = function(skip){
+            query(skip);
+        }
+
+        function query(skip){
+            Topic($location.path()).get({skip:skip*30}, function (data) {
+                $scope.topic = data;
+                $scope.pageCounts = [];
+                for (var i = 0; i < Math.ceil($scope.topic.count / 30); i++) {
+                    $scope.pageCounts.push(i);
+                }
+                $scope.currentPage += 1;
+                $scope.pagination = true;
+                dis($scope.currentPage);
+            })
+        }
+
+        function dis() {
+            if($scope.pageCounts.length===1){
+                $scope.left = false;
+                $scope.right = false;
+                return;
+            }
+            if ($scope.currentPage === 1) {
+                $scope.left = false;
+            } else {
+                $scope.left = true;
+            }
+            if ($scope.currentPage === $scope.pageCounts.length) {
+                $scope.right = false;
+            } else {
+                $scope.right = true;
+            }
+        }
     }])
 app.controller('userCtrl', ['$scope', '$location', 'User', '$loadingBar', '$rootScope', 'Auth', '$upload','$message','$crumb',
     function ($scope, $location, User, $loadingBar, $rootScope, Auth, $upload,$message,$crumb) {

@@ -36,7 +36,7 @@ app.factory('$loadingBar', function ($timeout, $location) {
             return;
         }
         if (typeof(fuc) === "string") {
-            $location.path(path);
+            $location.path(fuc);
         }
     }
     return load;

@@ -11,7 +11,7 @@ var async = require('async');
      */
     module.list = function (req, res, next) {
         var skip = 0;
-        Post.find({parent_url: req.url}, {_id: 1, user_id: 1, title: 1, view: 1, createDate: 1}, {skip: skip, limit: 30, sort: "order"})
+        Post.find({parent_url: req.url}, {_id: 1, user_id: 1, title: 1, view: 1, createDate: 1}, {skip: skip, limit: 30, sort: {order: 1, _id: 1}})
             .populate('user_id', "face")
             .exec(function (err, docs) {
                 if (err) next(err);
@@ -24,9 +24,9 @@ var async = require('async');
                                 })
                             },
                             commenter: function (callback) {
-                                Comment.find({post_id: doc._id}, {user_id:1,createDate:1}).sort({createDate: -1}).limit(1).populate("user_id", "face").exec(function (err, comment) {
+                                Comment.find({post_id: doc._id}, {user_id: 1, createDate: 1}).sort({createDate: -1}).limit(1).populate("user_id", "face").exec(function (err, comment) {
                                     if (err) next(err);
-                                    callback(null,comment);
+                                    callback(null, comment);
                                 })
                             }
                         },
@@ -67,24 +67,38 @@ var async = require('async');
     /*topic页面*/
     module.getTopic = function (req, res, next) {
         var pid = req.params.pid;
+        var skip = req.body.skip?req.body.skip:0;
         async.parallel({
             comments: function (callback) {
-                Comment.find({post_id: pid}, {_id: 1, user_id: 1, content: 1}).populate("user_id", {face:1,nick:1}).sort({_id: 1}).exec(function (err, docs) {
+                Comment.find({post_id: pid}, {_id: 1, user_id: 1, content: 1}).populate("user_id", {face: 1, nick: 1}).sort({_id: 1})
+                    .skip(skip)
+                    .limit(30)
+                    .exec(function (err, docs) {
                     if (err) next(err);
                     callback(null, docs);
                 })
             },
             topic: function (callback) {
-                Post.findOne({_id: pid}, {_id: 1, user_id: 1, title: 1, content: 1}).populate('user_id', {face:1,nick:1}).exec(function (err, docs) {
+                if(skip>0){
+                    callback(null,null);
+                    return;
+                }
+                Post.findOne({_id: pid}, {_id: 1, user_id: 1, title: 1, content: 1}).populate('user_id', {face: 1, nick: 1}).exec(function (err, docs) {
                     if (err) next(err);
                     callback(null, docs);
+                })
+            },
+            count: function (callback) {
+                Comment.find({post_id:pid}).count(function(err,num){
+                    if(err) next(err);
+                    callback(null,num);
                 })
             }}, function (err, result) {
             if (err) next(err);
             res.json(result);
         })
-        Post.update({_id:pid},{$inc:{view:1}},function(err,num){
-            if(err) next(err);
+        Post.update({_id: pid}, {$inc: {view: 1}}, function (err, num) {
+            if (err) next(err);
         })
     }
 

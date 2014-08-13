@@ -63,64 +63,81 @@ app.directive('ngView', function () {
         }
     }
 })
-app.directive('editor', ['Post', 'Topic', '$rootScope', '$message','$routeParams',
-    function (Post, Topic, $rootScope, $message,$routeParams) {
-    return{
-        restrict: "C",
-        link: function ($scope, element, attr) {
-            $('.editor .close').click(function () {
-                $rootScope.$apply(function () {
-                    $rootScope.showEditor = false;
-                })
-            });
-        },
-        controller: function ($scope,$location) {
-            $scope.submit = function () {
-                var title = $(".editor_title").val();
-                var content = $(".editor iframe").contents().find("body").html();
-                if (title === undefined || title === "" || title === null) {
-                    $message("标题不能为空");
-                    return;
-                }
-                if (content === undefined || content === "" || content === null) {
-                    $message("请填写内容..");
-                    return;
-                }
-                if ($rootScope.editType === "post") {
-                    Post($location.path()).add({title: title, content: content}, function (data) {
-                        if (data.result === "success") {
-                            $message("发帖成功");
-                            $(".editor_title").val("");
-                            $(".editor iframe").contents().find("body").html("");
-                        } else {
-                            $message("发帖失败");
-                        }
+app.directive('editor', ['Post', 'Topic', '$rootScope', '$message', '$routeParams',
+    function (Post, Topic, $rootScope, $message, $routeParams) {
+        return{
+            restrict: "C",
+            link: function ($scope, element, attr) {
+                $('.editor .close').click(function () {
+                    $rootScope.$apply(function () {
+                        $rootScope.showEditor = false;
                     })
-                }
-                if ($rootScope.editType === "reply") {
-                    Topic($location.path()).add({content:content,post_id:$routeParams.pid},function(data){
-                        if (data.result === "success") {
-                            $message("发帖成功");
-                            $(".editor iframe").contents().find("body").html("");
-                        } else {
-                            $message("发帖失败");
-                        }
-                    })
-                }
+                });
+            },
+            controller: function ($scope, $location) {
+                $scope.submit = function () {
+                    var title = $(".editor_title").val();
+                    var content = $(".editor iframe").contents().find("body").html();
+                    if (title === undefined || title === "" || title === null) {
+                        $message("标题不能为空");
+                        return;
+                    }
+                    if (content === undefined || content === "" || content === null) {
+                        $message("请填写内容..");
+                        return;
+                    }
+                    if ($rootScope.editType === "post") {
+                        Post($location.path()).add({title: title, content: content}, function (data) {
+                            if (data.result === "success") {
+                                $message("发帖成功");
+                                $(".editor_title").val("");
+                                $(".editor iframe").contents().find("body").html("");
+                            } else {
+                                $message("发帖失败");
+                            }
+                        })
+                    }
+                    if ($rootScope.editType === "reply") {
+                        Topic($location.path()).add({content: content, post_id: $routeParams.pid}, function (data) {
+                            if (data.result === "success") {
+                                $message("发帖成功");
+                                $(".editor iframe").contents().find("body").html("");
+                            } else {
+                                $message("发帖失败");
+                            }
+                        })
+                    }
 
+                }
             }
         }
-    }
-}])
+    }])
 
-app.directive('compile',function($compile){
+app.directive('compile', function ($compile) {
     return {
         restrict: 'A',
-        link:function($scope,element,attr){
-            $scope.$watch(attr.compile, function(text) {
+        link: function ($scope, element, attr) {
+            $scope.$watch(attr.compile, function (text) {
                 element.html(text);
                 $compile(element.contents())($scope);
             });
+        }
+    }
+})
+
+app.directive('scrolling', function ($compile,$location,Topic) {
+    return {
+        restrict: 'A',
+        link: function ($scope, element, attr) {
+            $scope.skip = 30;
+            $(window).on("scroll",function(){
+//                if ($(window).scrollTop() + $(window).height()> $(document).height()-1000) {
+//                    Topic($location.path()).get({skip:$scope.skip}, function (data) {
+//                        $scope.topic = data;
+//                        $scope.skip += 30;
+//                    })
+//                }
+            })
         }
     }
 })

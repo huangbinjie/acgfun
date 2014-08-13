@@ -1,5 +1,5 @@
 <ul class="topic-ul">
-    <li class="topic-item clearfloat">
+    <li class="topic-item clearfloat" ng-if="topic.topic!==null">
         <div class="topic-left">
             <img class="face" ng-src="uploads/faces/{{topic.topic.user_id.face}}" src="images/default.jpg" alt="img">
 
@@ -18,4 +18,11 @@
         </div>
         <div class="topic-right" compile="comment.content"></div>
     </li>
+</ul>
+<ul class="pagination" ng-show="pagination">
+    <li ng-show="left"><a ng-click="page(skip-1)">&laquo;</a></li>
+    <li ng-repeat="pageCount in pageCounts" ng-class="currentPage===pageCount+1?'active':''">
+        <a ng-click="page(pageCount)">{{pageCount+1}}</a>
+    </li>
+    <li ng-show="right"><a ng-click="page(skip+1)">&raquo;</a></li>
 </ul>

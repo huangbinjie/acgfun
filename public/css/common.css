@@ -814,3 +814,31 @@ form .field label {
     background-color: pink;
     width: 100%;
 }
+/*分页*/
+.pagination{
+    float: right;
+    margin-bottom: 1rem;
+}
+.pagination>li {
+    display: inline;
+}
+.pagination>li>a{
+    position: relative;
+    float: left;
+    padding: 6px 12px;
+    margin-left: -1px;
+    line-height: 1.42857143;
+    color: #fff;
+    text-decoration: none;
+    background: rgba(37,39,48,0.6);
+}
+.pagination>li>a:hover {
+    background: rgba(37,39,48,0.7);
+}
+.pagination>li.active>a {
+    z-index: 2;
+    color: #fff;
+    cursor: default;
+    background-color: #428bca;
+    border-color: #428bca;
+}
