@@ -32,7 +32,7 @@ app.factory('$loadingBar', function ($timeout, $location) {
             }, 1000);
         }
         if (fuc instanceof Function) {
-            path();
+            fuc();
             return;
         }
         if (typeof(fuc) === "string") {
