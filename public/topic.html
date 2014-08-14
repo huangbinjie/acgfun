@@ -1,5 +1,6 @@
 <ul class="topic-ul">
     <li class="topic-item clearfloat" ng-if="topic.topic!==null">
+        <input type="hidden" id="post_user_id" value="{{topic.topic.user_id._id}}">
         <div class="topic-left">
             <img class="face" ng-src="uploads/faces/{{topic.topic.user_id.face}}" src="images/default.jpg" alt="img">
 
@@ -9,20 +10,45 @@
             <header><span class="btn right small">收藏</span>{{topic.topic.title}}</header>
             <div>{{topic.topic.content}}</div>
         </div>
+        <footer>
+            <label class="operate" dropdown>
+                操作
+                <ul class="dropdown-menu">
+                    <li ng-if="User.rank>1||User.rank===0" ng-click="delete(comment._id,'p')"><span>删除</span>
+                    </li>
+                    <li ng-if="User.rank>1||User.rank===0"><span>禁言</span></li>
+                    <li><span>关注</span></li>
+                </ul>
+            </label>
+            <label>1楼</label><label>{{topic.topic.createDate|date}}</label>
+        </footer>
     </li>
-    <li class="topic-item clearfloat" ng-repeat="comment in topic.comments">
+    <li class="topic-item clearfloat" ng-repeat="comment in topic.comments" id="{{comment._id}}">
         <div class="topic-left">
             <img class="face" ng-src="uploads/faces/{{comment.user_id.face}}" src="images/default.jpg" alt="">
 
             <p>{{comment.user_id.nick}}</p>
         </div>
         <div class="topic-right" compile="comment.content"></div>
+        <footer>
+            <label class="operate" dropdown>
+                操作
+                <ul class="dropdown-menu">
+                    <li ng-if="User.rank>1||User.rank===0" ng-click="delete(comment._id,'c')"><span>删除</span>
+                    </li>
+                    <li ng-if="User.rank>1||User.rank===0"><span>禁言</span></li>
+                    <li><span>关注</span></li>
+                </ul>
+            </label>
+            <label>{{currentPage*30+$index+2}}楼</label><label>{{comment.createDate|date}}</label>
+            <label class="reply">回复</label>
+        </footer>
     </li>
 </ul>
 <ul class="pagination" ng-show="pagination">
-    <li ng-show="left"><a ng-click="page(skip-1)">&laquo;</a></li>
-    <li ng-repeat="pageCount in pageCounts" ng-class="currentPage===pageCount+1?'active':''">
+    <li ng-show="left"><a ng-click="page(currentPage-1);">&laquo;</a></li>
+    <li ng-repeat="pageCount in pageCounts" ng-class="currentPage===pageCount?'active':''">
         <a ng-click="page(pageCount)">{{pageCount+1}}</a>
     </li>
-    <li ng-show="right"><a ng-click="page(skip+1)">&raquo;</a></li>
+    <li ng-show="right"><a ng-click="page(currentPage+1);">&raquo;</a></li>
 </ul>

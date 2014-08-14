@@ -575,6 +575,50 @@ form .field label {
     height: auto;
 }
 
+.topic-item footer {
+    width: 100%;
+    padding: .5rem;
+    float: left;
+    clear: both;
+    text-align: right;
+    border-top: 1px solid #d9d9d9;
+    box-sizing: border-box;
+}
+.topic-item footer label {
+    margin-right: .5rem;
+    position: relative;
+    text-align: center;
+}
+.topic-item footer .reply {
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAAm0lEQVQ4jd3PIQoCQRSH8Z8iJnHBIILRJJgMglisYtYb2IzeyeQNvIIn8AA2m2DRtUwYlnVX1qR/eDDMe9+bb/jrDL6BZ7hWhZe4Ia0Cr3EPcBosTtihXQZv8YjgbF0wzUL16Nws0e7hiFF8WcsMLbBHEn0pQR8TzHHGGM93Lw3DUJ5NFwesCkxBJ+jmpY5N2QJoFPRanyz4kbwA3jIcAPgq1wAAAAAASUVORK5CYII=) no-repeat left center;
+    padding-left: 20px;
+    cursor: pointer;
+}
+.topic-item footer .operate{
+    cursor: pointer;
+}
+
+.dropdown-menu {
+    margin-top: 3px;
+    position: absolute;
+    width: 100%;
+    list-style: none;
+    overflow: hidden;
+    display: none;
+    background-color: rgba(37, 39, 48, 0.6);
+    border-radius: 4px;
+}
+.dropdown-menu li {
+    padding: 3px 0;
+    text-align: center;
+}
+.dropdown-menu .splite {
+    padding: 0;
+}
+.dropdown-menu li:hover{
+    background-color: #00B5AD;
+}
+
 #menu-btn {
     position: fixed;
     background-color: rgba(37, 39, 48, 0.6);
@@ -636,8 +680,8 @@ form .field label {
     cursor: pointer;
 }
 
-#menu .splite {
-    width: 120px;
+.splite {
+    width: 100%;
     border-bottom: 1px solid gray;
     display: block;
     float: left;

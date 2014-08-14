@@ -92,16 +92,19 @@ app.directive('editor', ['Post', 'Topic', '$rootScope', '$message', '$routeParam
                                 $message("发帖成功");
                                 $(".editor_title").val("");
                                 $(".editor iframe").contents().find("body").html("");
+                                $rootScope.showEditor = false;
                             } else {
                                 $message("发帖失败");
                             }
                         })
                     }
                     if ($rootScope.editType === "reply") {
-                        Topic($location.path()).add({content: content, post_id: $routeParams.pid}, function (data) {
+                        Topic($location.path()).add({content: content, post_id: $routeParams.pid,post_user_id:$("#post_user_id").val()}, function (data) {
                             if (data.result === "success") {
                                 $message("发帖成功");
                                 $(".editor iframe").contents().find("body").html("");
+                                $rootScope.showEditor = false;
+                                $rootScope.$broadcast("postSuccess");
                             } else {
                                 $message("发帖失败");
                             }
@@ -125,19 +128,33 @@ app.directive('compile', function ($compile) {
     }
 })
 
-app.directive('scrolling', function ($compile,$location,Topic) {
-    return {
-        restrict: 'A',
+app.directive("dropdown", function () {
+    return{
         link: function ($scope, element, attr) {
-            $scope.skip = 30;
-            $(window).on("scroll",function(){
-//                if ($(window).scrollTop() + $(window).height()> $(document).height()-1000) {
-//                    Topic($location.path()).get({skip:$scope.skip}, function (data) {
-//                        $scope.topic = data;
-//                        $scope.skip += 30;
-//                    })
-//                }
+            element.on('click', function (e) {
+                e.stopPropagation();
+                $(this).find(".dropdown-menu").slideDown();
+            })
+            $(window).click(function(){
+                $(".dropdown-menu").slideUp();
             })
         }
     }
 })
+
+//app.directive('scrolling', function ($compile,$location,Topic) {
+//    return {
+//        restrict: 'A',
+//        link: function ($scope, element, attr) {
+//            $scope.skip = 30;
+//            $(window).on("scroll",function(){
+////                if ($(window).scrollTop() + $(window).height()> $(document).height()-1000) {
+////                    Topic($location.path()).get({skip:$scope.skip}, function (data) {
+////                        $scope.topic = data;
+////                        $scope.skip += 30;
+////                    })
+////                }
+//            })
+//        }
+//    }
+//})

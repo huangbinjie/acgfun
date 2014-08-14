@@ -8,9 +8,9 @@ module.exports.ensureAuthenticated= function(req, res, next){
 		next();
 	}
 }
-module.exports.ensureRank1= function(req, res, next){
-	if(req.session){
-		if(!req.session.user.rank){
+module.exports.ensureRank= function(req, res, next){
+	if(req.session.user){
+		if(req.session.user.rank===1){
 			res.redirect('/');
 		}else{
 			next();

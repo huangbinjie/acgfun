@@ -12,9 +12,10 @@ var userModel = function(){
 		nick		: {type:String,max:10},//昵称
 		face		: String,//头像
 		status		: {type:Number,default:0},//0 激活，1 关闭,
-		reputation	: {type:Number,default:0},//声望=积分
+		exp	: {type:Number,default:0},//经验
 		star		: [Number],//收藏
         follow     : [Number],//粉丝，关注
+        message     :[String],
 		loginDate	: Date,//登陆时间
 		loginIp	: String,//登陆IP
 		rank		: {type:Number,default:1},//权限等级 0，admin，1普通用户

@@ -79,29 +79,52 @@ app.controller('pageCtrl', ['$scope', '$rootScope', '$message', '$location', 'Po
         })
     }])
 
-app.controller('topicCtrl', ['$scope', '$rootScope', '$location', 'Topic', 'Auth', '$loadingBar','$crumb',
-    function ($scope, $rootScope, $location, Topic, Auth, $loadingBar,$crumb) {
+app.controller('topicCtrl', ['$scope', '$rootScope', '$location', 'Topic', 'Auth', '$loadingBar','$crumb','$message',
+    function ($scope, $rootScope, $location, Topic, Auth, $loadingBar,$crumb,$message) {
         $rootScope.editType = "reply";
         $rootScope.showOpenEditor = true;
         $rootScope.showCrumb = true;
+        $rootScope.showEditor = false;
         Auth.getUser();
+        $scope.User = $rootScope.User;
         $crumb($location.path());
         $scope.currentPage = 0;
         query(0);
+        $scope.$on('postSuccess',function(){
+            query(0);
+        })
         $scope.page = function(skip){
             query(skip);
         }
 
+        $scope.delete = function(id,itemType){
+            Topic($location.path()).delete({id:id,type:itemType},function(data){
+                if(data.result==="success"){
+                    $message("已删除");
+                    if(itemType==="p"){
+                        $location.path($location.path().substring(0,$location.path().lastIndexOf('/')));
+                    }
+                    if(itemType==="c"){
+                        $("#"+id).remove();
+                    }
+                } else {
+                    $message("删除失败");
+                }
+            })
+        }
+
         function query(skip){
+            $scope.currentPage = skip;
             Topic($location.path()).get({skip:skip*30}, function (data) {
                 $scope.topic = data;
                 $scope.pageCounts = [];
                 for (var i = 0; i < Math.ceil($scope.topic.count / 30); i++) {
                     $scope.pageCounts.push(i);
                 }
-                $scope.currentPage += 1;
                 $scope.pagination = true;
                 dis($scope.currentPage);
+                window.scrollTo(0,0);
+                $loadingBar("100%");
             })
         }
 
@@ -111,12 +134,12 @@ app.controller('topicCtrl', ['$scope', '$rootScope', '$location', 'Topic', 'Auth
                 $scope.right = false;
                 return;
             }
-            if ($scope.currentPage === 1) {
+            if ($scope.currentPage === 0) {
                 $scope.left = false;
             } else {
                 $scope.left = true;
             }
-            if ($scope.currentPage === $scope.pageCounts.length) {
+            if ($scope.currentPage === $scope.pageCounts.length-1) {
                 $scope.right = false;
             } else {
                 $scope.right = true;

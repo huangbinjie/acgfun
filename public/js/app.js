@@ -33,9 +33,13 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider','$resourcePro
             otherwise({
                 templateUrl:'404.html'
             });
-    }]).run(function($rootScope,Auth,$loadingBar){
+    }]).run(function($rootScope,Auth,$loadingBar,$anchorScroll,$location,$routeParams){
     $rootScope.signOut = Auth.signOut;
     $rootScope.$on("$viewContentLoaded",function(){
         $loadingBar("100%",true);
     })
+    $rootScope.$on('$routeChangeSuccess', function(newRoute, oldRoute) {
+        $location.hash($routeParams.scrollTo);
+        $anchorScroll();
+    });
 });
