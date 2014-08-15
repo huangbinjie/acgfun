@@ -16,7 +16,7 @@
                     <a href="/user/{{topic.commenter[0].user_id._id}}">
                         <img ng-src="uploads/faces/{{topic.commenter[0].user_id.face}}" src="images/default.jpg" alt="img">
                     </a>
-                    <a href="#">{{topic.commenter[0].createDate|date}}</a>
+                    <a href="{{url}}/{{topic._id}}/{{topic.title}}?scrollTo={{topic.commenter[0]._id}}">{{topic.commenter[0].createDate|dateCustom}}</a>
                 </div>
                 <div ng-if="topic.commenter.length===0">没有评论</div>
                 <small>最后回复</small>
@@ -26,6 +26,6 @@
             <div class="category-post-title">
                 <a href="{{url}}/{{topic._id}}/{{topic.title}}">{{topic.title}}</a>
             </div>
-            <div class="category-post-time">{{topic.createDate|date}}</div>
+            <div class="category-post-time">{{topic.createDate|dateCustom}}</div>
         </div>
     </div>

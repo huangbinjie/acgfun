@@ -10,33 +10,39 @@ var fs = require("fs");
         console.log("1111");
         return next(err);
     }
-    // 收藏，发表，粉丝
+    // 收藏，发表，粉丝,关注，经验，时间，最后在线
     module.get = function (req, res, next) {
         var skip = 0;
+        var uid = req.params.uid ? req.params.uid : req.session.user._id;
         async.parallel({
             user: function (callback) {
-                User.findOne({_id:req.session.user._id},{password:0},function(err,user){
-                    if(err) next(err);
-                    user.follow = user.follow.length;
-                    user.star = user.star.length;
-                    callback(null,user);
+                User.findOne({_id: uid}, {password: 0}, function (err, user) {
+                    if (err) next(err);
+                    if (user !== null) {
+                        user.follow = user.follow.length;
+                        user.star = user.star.length;
+                        user.fans = user.fans.length;
+                        callback(null, user);
+                    } else {
+                        next();
+                    }
                 })
             },
             post: function (callback) {
                 async.parallel({
-                    topic:function(callback){
-                        Post.find({user_id:req.session.user._id},{title:1,parent_url:1},{skip:skip,limit:10},function(err,post){
-                            if(err) next(err);
-                            callback(null,post);
+                    topic: function (callback) {
+                        Post.find({user_id: uid}, {title: 1, parent_url: 1}, {sort: {createDate: -1}, skip: skip, limit: 10}, function (err, post) {
+                            if (err) next(err);
+                            callback(null, post);
                         })
                     },
-                    comment:function(callback){
-                        Comment.find({user_id:req.session.user._id},{content:1,post_id:1},{skip:skip,limit:10,sort:{createDate:-1}}).populate("post_id","_id,title").exec(function(err,comment){
-                            if(err) next(err);
-                            callback(null,comment);
+                    comment: function (callback) {
+                        Comment.find({user_id: uid}, {content: 1, post_id: 1}, {sort: {createDate: -1}, skip: skip, limit: 10}).populate("post_id", {_id: 1, title: 1, createDate: 1, parent_url: 1}).exec(function (err, comment) {
+                            if (err) next(err);
+                            callback(null, comment);
                         })
                     }
-                },function(err,result){
+                }, function (err, result) {
                     if (err) next(err);
                     callback(null, result);
                 })
@@ -44,25 +50,25 @@ var fs = require("fs");
             count: function (callback) {
                 async.parallel({
                         postCount: function (callback) {
-                            Post.find({user_id: req.session.user._id}).count(function (err, num) {
+                            Post.find({user_id: uid}).count(function (err, num) {
                                 if (err) next(err);
                                 callback(null, num);
                             })
                         },
                         replyCount: function (callback) {
-                            Comment.find({user_id: req.session.user._id}).count(function (err, num) {
+                            Comment.find({user_id: uid}).count(function (err, num) {
                                 if (err) next(err);
                                 callback(null, num);
                             })
                         }
-                    }, function (err,result) {
+                    }, function (err, result) {
                         if (err) next(err);
                         callback(null, result);
                     }
                 )
             }
-        },function(err,doc){
-            if(err) next(err);
+        }, function (err, doc) {
+            if (err) next(err);
             res.json(doc);
         })
 
@@ -88,7 +94,7 @@ var fs = require("fs");
                         if (num > 0) {
                             req.session.user = doc;
 //                            res.cookie('user', doc, {httpOnly: false});
-                            res.json({"result": "success","user":doc});
+                            res.json({"result": "success", "user": doc});
                         } else {
                             res.json({"result": "failed"});
                         }
@@ -143,29 +149,89 @@ var fs = require("fs");
     }
 
     //上传头像
-    module.uploadFace = function(req,res,next){
-        if(!/png|jpg/.test(req.files.file.extension)){
-            res.json({"result":"failed","msg":"图片格式不正确"});
+    module.uploadFace = function (req, res, next) {
+        if (!/png|jpg/.test(req.files.file.extension)) {
+            res.json({"result": "failed", "msg": "图片格式不正确"});
             return;
         }
-        if(req.files.file.size>1024*1024*100){
-            res.json({"result":"failed","msg":"图片太大了"});
+        if (req.files.file.size > 1024 * 1024 * 100) {
+            res.json({"result": "failed", "msg": "图片太大了"});
             return;
         }
-        var filename = req.session.user._id+"_"+Date.now()+"."+req.files.file.extension;
-        fs.rename(req.files.file.path,"public//uploads//faces//"+filename,function(err){
+        var filename = req.session.user._id + "_" + Date.now() + "." + req.files.file.extension;
+        fs.rename(req.files.file.path, "public//uploads//faces//" + filename, function (err) {
             if (err) throw next(err);
-            User.update({_id:req.session.user._id},{$set:{face:filename}},function(err,num){
+            User.update({_id: req.session.user._id}, {$set: {face: filename}}, function (err, num) {
                 if (err) throw next(err);
-                if(num>0){
-                    res.json({"result":"success","face":filename});
+                if (num > 0) {
+                    res.json({"result": "success", "face": filename});
                 } else {
-                    res.json({"result":"failed"});
+                    res.json({"result": "failed"});
                 }
             })
         });
     }
 
+    //收藏
+    module.star = function (req, res, next) {
+        var pid = req.body.pid;
+        if (pid === undefined) {
+            res.json({"result": "failed"});
+            return;
+        }
+        User.find({_id: req.session.user._id, follow: {$in: [pid]}}, function (err, doc) {
+            if (err) next(err);
+            if (doc.length > 0) {
+                res.json({"result": "failed", "msg": "已在你的收藏列表中"});
+            } else {
+                User.update({_id: req.session.user._id}, {$push: {star: pid}}, function (err, num) {
+                    if (err) next(err);
+                    if (num > 0) {
+                        res.json({"result": "success"});
+                    } else {
+                        res.json({"result": "failed"});
+                    }
+                })
+            }
+        })
+    }
+    //关注
+    module.follow = function (req, res, next) {
+        var uid = req.body.uid;
+        if (uid === undefined) {
+            res.json({"result": "failed"});
+            return;
+        }
+        User.find({_id: req.session.user._id, follow: {$in: [uid]}}, function (err, doc) {
+            if (err) next(err);
+            if (doc.length > 0) {
+                res.json({"result": "failed", "msg": "已在你的关注列表中"});
+            } else {
+                async.parallel([function (callback) {
+                    User.update({_id: req.session.user._id}, {$push: {follow: uid}}, function (err, num) {
+                        if (err) next(err);
+                        if (num > 0) {
+                            callback(null, num);
+                        } else {
+                            res.json({"result": "failed"});
+                        }
+                    })
+                }, function (callback) {
+                    User.update({_id: uid}, {$push: {fans: req.session.user._id}}, function (err, num) {
+                        if (err) next(err);
+                        if (num > 0) {
+                            callback(null, num);
+                        } else {
+                            res.json({"result": "failed"});
+                        }
+                    })
+                }], function (err, result) {
+                    if (err) next(err);
+                    res.json({"result": "success"});
+                })
+            }
+        })
+    }
     //退出
     module.signOut = function (req, res) {
         req.session.destroy();

@@ -5,7 +5,7 @@
 * {
     margin: 0;
     padding: 0;
-    font-size: 1rem;
+    /*font-size: 1rem;*/
 }
 
 @-webkit-viewport   { width: device-width; }
@@ -41,6 +41,12 @@ body {
 }
 .hide{
     display: none;
+}
+.clear {
+    clear: both;
+}
+.text-center{
+    text-align: center;
 }
 
 .left {
@@ -248,12 +254,17 @@ form .field label {
     width: 100%;
     margin-bottom: 1rem;
     padding: .7rem;
-    /*margin: .5rem;*/
     background-color: rgba(37, 39, 48, 0.6);
     box-sizing: border-box;
 }
 .panel p {
     padding: 5px 0;
+}
+.panel .row {
+    margin: .5rem 0;
+}
+.panel .row small {
+    color: #73E064;
 }
 .loader {
     width: 100%;
@@ -885,4 +896,16 @@ form .field label {
     cursor: default;
     background-color: #428bca;
     border-color: #428bca;
+}
+.followed {
+    background: url(../images/red_heart.png);
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    position: absolute;
+}
+.stared {
+    background: url(../images/star.png);
+    width: 20px;
+    height: 20px;
 }

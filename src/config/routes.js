@@ -6,7 +6,7 @@ module.exports = function (app) {
     app.post('/login', controllers.user.login);
     app.post('/register', controllers.user.register);
     app.post('/signout',auth.ensureAuthenticated,controllers.user.signOut);
-    app.get('/users', auth.ensureAuthenticated, controllers.user.list);
+//    app.get('/users', auth.ensureAuthenticated, controllers.user.list);
     app.post('/user', auth.ensureAuthenticated, controllers.user.get);
     app.post('/user/:uid',controllers.user.get);
 
@@ -17,5 +17,8 @@ module.exports = function (app) {
     app.put('/[acgm]/:pid/:title',auth.ensureAuthenticated,controllers.post.putComment);
     app.delete('/[acgm]/:pid/:title',auth.ensureRank,controllers.post.delete);
 
+    /*收藏，关注*/
+    app.put('/user/star',auth.ensureAuthenticated,controllers.user.star);
+    app.put('/user/follow',auth.ensureAuthenticated,controllers.user.follow);
     app.post('/upload/face',auth.ensureAuthenticated,controllers.user.uploadFace);
 }

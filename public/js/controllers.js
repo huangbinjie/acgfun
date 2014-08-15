@@ -79,8 +79,8 @@ app.controller('pageCtrl', ['$scope', '$rootScope', '$message', '$location', 'Po
         })
     }])
 
-app.controller('topicCtrl', ['$scope', '$rootScope', '$location', 'Topic', 'Auth', '$loadingBar','$crumb','$message',
-    function ($scope, $rootScope, $location, Topic, Auth, $loadingBar,$crumb,$message) {
+app.controller('topicCtrl', ['$scope', '$rootScope', '$location', 'Topic', 'Auth', '$loadingBar','$crumb','$message','Follow',"Star",
+    function ($scope, $rootScope, $location, Topic, Auth, $loadingBar,$crumb,$message,Follow,Star) {
         $rootScope.editType = "reply";
         $rootScope.showOpenEditor = true;
         $rootScope.showCrumb = true;
@@ -89,12 +89,45 @@ app.controller('topicCtrl', ['$scope', '$rootScope', '$location', 'Topic', 'Auth
         $scope.User = $rootScope.User;
         $crumb($location.path());
         $scope.currentPage = 0;
-        query(0);
+        $scope.query = function(skip){
+            $scope.currentPage = skip;
+            Topic($location.path()).get({skip:skip*30}, function (data) {
+                $scope.topic = data;
+                $scope.pageCounts = [];
+                for (var i = 0; i < Math.ceil($scope.topic.count / 30); i++) {
+                    $scope.pageCounts.push(i);
+                }
+                $scope.pagination = true;
+                dis($scope.currentPage);
+                window.scrollTo(0,0);
+                $loadingBar("100%");
+            })
+        }
+        $scope.query(0);
         $scope.$on('postSuccess',function(){
-            query(0);
+            $scope.query(0);
         })
-        $scope.page = function(skip){
-            query(skip);
+
+        $scope.star = function(pid){
+            Star.add({pid:pid},function(data){
+                if(data.result==="success"){
+                    $message("收藏成功");
+                    $("body").click();
+                } else {
+                    $message(data.msg?data.msg:"收藏失败");
+                }
+            })
+        }
+
+        $scope.follow = function(uid){
+            Follow.add({uid:uid},function(data){
+                if(data.result==="success"){
+                    $message("关注成功");
+                    $("body").click();
+                } else {
+                    $message(data.msg?data.msg:"关注失败");
+                }
+            })
         }
 
         $scope.delete = function(id,itemType){
@@ -110,21 +143,6 @@ app.controller('topicCtrl', ['$scope', '$rootScope', '$location', 'Topic', 'Auth
                 } else {
                     $message("删除失败");
                 }
-            })
-        }
-
-        function query(skip){
-            $scope.currentPage = skip;
-            Topic($location.path()).get({skip:skip*30}, function (data) {
-                $scope.topic = data;
-                $scope.pageCounts = [];
-                for (var i = 0; i < Math.ceil($scope.topic.count / 30); i++) {
-                    $scope.pageCounts.push(i);
-                }
-                $scope.pagination = true;
-                dis($scope.currentPage);
-                window.scrollTo(0,0);
-                $loadingBar("100%");
             })
         }
 
@@ -146,13 +164,14 @@ app.controller('topicCtrl', ['$scope', '$rootScope', '$location', 'Topic', 'Auth
             }
         }
     }])
-app.controller('userCtrl', ['$scope', '$location', 'User', '$loadingBar', '$rootScope', 'Auth', '$upload','$message','$crumb',
-    function ($scope, $location, User, $loadingBar, $rootScope, Auth, $upload,$message,$crumb) {
+app.controller('userCtrl', ['$scope', '$location', 'User', '$loadingBar', '$rootScope', 'Auth', '$upload','$message','$crumb','$routeParams',
+    function ($scope, $location, User, $loadingBar, $rootScope, Auth, $upload,$message,$crumb,$routeParams) {
         $rootScope.showCrumb = true;
         $rootScope.showOpenEditor = false;
         $scope.showModal = false;
         Auth.getUser();
         $crumb($location.path());
+        $scope.showChangeFace = $routeParams.uid?false:true;
         User($location.path()).get({}, function (data) {
             $scope.userData = data;
             console.log(data);
@@ -178,6 +197,8 @@ app.controller('userCtrl', ['$scope', '$location', 'User', '$loadingBar', '$root
                     $message("上传头像成功");
                     $rootScope.showModal = false;
                     $scope.userData.user.face = data.face;
+                    $rootScope.User.face = data.face;
+                    window.sessionStorage.User = JSON.stringify($rootScope.User);
                 } else {
                     $message("上传头像失败了");
                 }

@@ -14,7 +14,8 @@ var userModel = function(){
 		status		: {type:Number,default:0},//0 激活，1 关闭,
 		exp	: {type:Number,default:0},//经验
 		star		: [Number],//收藏
-        follow     : [Number],//粉丝，关注
+        follow     : [Number],//关注
+        fans        :[Number],//粉丝
         message     :[String],
 		loginDate	: Date,//登陆时间
 		loginIp	: String,//登陆IP

@@ -30,16 +30,22 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider','$resourcePro
                 templateUrl:'user.html',
                 controller:'userCtrl'
             }).
+            when('/user/:uid',{
+                templateUrl:'user.html',
+                controller:'userCtrl'
+            }).
             otherwise({
                 templateUrl:'404.html'
             });
-    }]).run(function($rootScope,Auth,$loadingBar,$anchorScroll,$location,$routeParams){
+    }]).run(function($rootScope,Auth,$loadingBar,$anchorScroll,$location,$routeParams,$timeout){
     $rootScope.signOut = Auth.signOut;
     $rootScope.$on("$viewContentLoaded",function(){
         $loadingBar("100%",true);
     })
     $rootScope.$on('$routeChangeSuccess', function(newRoute, oldRoute) {
         $location.hash($routeParams.scrollTo);
-        $anchorScroll();
+        $timeout(function(){
+            $anchorScroll();
+        },1000)
     });
 });

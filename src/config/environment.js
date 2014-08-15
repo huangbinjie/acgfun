@@ -49,7 +49,7 @@ module.exports = function (app) {
                         error: err
                     });
                 }
-                logger.error("用户名:" + (req.session.user !== undefined ? req.session.user.email : "未登陆用户,请求地址:") + req.url + ",错误:" + err.message);
+                logger.error(req.url + ",错误:" + err.message);
             });
         }
 

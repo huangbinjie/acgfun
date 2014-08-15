@@ -81,7 +81,7 @@ app.factory('Auth', function ($cookies, $rootScope, $http, $message) {
                 if (data.result === "success") {
                     $message("成功推出");
                     window.sessionStorage.removeItem("User");
-                    $rootScope.User = undefined;
+                    $rootScope.User = window.sessionStorage.User;
                 } else {
                     $message("退出失败");
                 }
@@ -125,4 +125,19 @@ app.factory('$crumb', function ($location, $rootScope) {
             $rootScope.crumbs.push("个人中心");
         }
     }
+})
+
+app.factory('Star',function($resource){
+    return $resource('/user/star', {}, {
+        get: {method: "POST", isArray: false},
+        add: {method: "PUT"},
+        delete: {method: "DELETE"}
+    })
+})
+app.factory('Follow',function($resource){
+    return $resource('/user/follow', {}, {
+        get: {method: "POST", isArray: false},
+        add: {method: "PUT"},
+        delete: {method: "DELETE"}
+    })
 })

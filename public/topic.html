@@ -2,53 +2,59 @@
     <li class="topic-item clearfloat" ng-if="topic.topic!==null">
         <input type="hidden" id="post_user_id" value="{{topic.topic.user_id._id}}">
         <div class="topic-left">
+            <i title="已关注" ng-show="topic.topic.user_id.isFollow" class="followed"></i>
+            <a href="/user/{{topic.topic.user_id._id}}">
             <img class="face" ng-src="uploads/faces/{{topic.topic.user_id.face}}" src="images/default.jpg" alt="img">
-
+            </a>
             <p>{{topic.topic.user_id.nick}}</p>
         </div>
         <div class="topic-right">
-            <header><span class="btn right small">收藏</span>{{topic.topic.title}}</header>
+            <header>{{topic.topic.title}}</header>
             <div>{{topic.topic.content}}</div>
         </div>
         <footer>
+            <i class="stared left" title="已收藏" ng-show="topic.topic.user_id.isStar"></i>
             <label class="operate" dropdown>
-                操作
+                更多
                 <ul class="dropdown-menu">
-                    <li ng-if="User.rank>1||User.rank===0" ng-click="delete(comment._id,'p')"><span>删除</span>
+                    <li ng-if="User.rank>1||User.rank===0" ng-click="delete(topic.topic._id,'p')"><span>删除</span>
                     </li>
                     <li ng-if="User.rank>1||User.rank===0"><span>禁言</span></li>
-                    <li><span>关注</span></li>
+                    <li ng-click="follow(topic.topic.user_id._id)"><span>关注</span></li>
+                    <li ng-click="star(topic.topic._id)"><span>收藏</span></li>
                 </ul>
             </label>
-            <label>1楼</label><label>{{topic.topic.createDate|date}}</label>
+            <label>1楼</label><label>{{topic.topic.createDate|dateCustom}}</label>
         </footer>
     </li>
-    <li class="topic-item clearfloat" ng-repeat="comment in topic.comments" id="{{comment._id}}">
+    <li class="topic-item clearfloat" ng-repeat="comment in topic.comments">
         <div class="topic-left">
-            <img class="face" ng-src="uploads/faces/{{comment.user_id.face}}" src="images/default.jpg" alt="">
-
+            <i title="已关注" ng-show="comment.user_id.isFollow" class="followed"></i>
+            <a id="{{comment._id}}" href="/user/{{comment._id}}">
+                <img class="face" ng-src="uploads/faces/{{comment.user_id.face}}" src="images/default.jpg" alt="">
+            </a>
             <p>{{comment.user_id.nick}}</p>
         </div>
         <div class="topic-right" compile="comment.content"></div>
         <footer>
+            <label class="reply left">回复</label>
             <label class="operate" dropdown>
-                操作
+                更多
                 <ul class="dropdown-menu">
                     <li ng-if="User.rank>1||User.rank===0" ng-click="delete(comment._id,'c')"><span>删除</span>
                     </li>
                     <li ng-if="User.rank>1||User.rank===0"><span>禁言</span></li>
-                    <li><span>关注</span></li>
+                    <li ng-click="follow(comment.user_id._id)"><span>关注</span></li>
                 </ul>
             </label>
-            <label>{{currentPage*30+$index+2}}楼</label><label>{{comment.createDate|date}}</label>
-            <label class="reply">回复</label>
+            <label>{{currentPage*30+$index+2}}楼</label><label>{{comment.createDate|dateCustom}}</label>
         </footer>
     </li>
 </ul>
 <ul class="pagination" ng-show="pagination">
-    <li ng-show="left"><a ng-click="page(currentPage-1);">&laquo;</a></li>
+    <li ng-show="left"><a ng-click="query(currentPage-1);">&laquo;</a></li>
     <li ng-repeat="pageCount in pageCounts" ng-class="currentPage===pageCount?'active':''">
-        <a ng-click="page(pageCount)">{{pageCount+1}}</a>
+        <a ng-click="query(pageCount)">{{pageCount+1}}</a>
     </li>
-    <li ng-show="right"><a ng-click="page(currentPage+1);">&raquo;</a></li>
+    <li ng-show="right"><a ng-click="query(currentPage+1);">&raquo;</a></li>
 </ul>

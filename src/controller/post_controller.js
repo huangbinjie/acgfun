@@ -12,20 +12,20 @@ var async = require('async');
      */
     module.list = function (req, res, next) {
         var skip = 0;
-        Post.find({parent_url: req.url,deleteFlag:0}, {_id: 1, user_id: 1, title: 1, view: 1, createDate: 1}, {skip: skip, limit: 30, sort: {order: 1, _id: 1}})
+        Post.find({parent_url: req.url, deleteFlag: 0}, {_id: 1, user_id: 1, title: 1, view: 1, createDate: 1}, {skip: skip, limit: 30, sort: {order: 1, _id: 1}})
             .populate('user_id', "face")
             .exec(function (err, docs) {
                 if (err) next(err);
                 async.each(docs, function (doc, callback) {
                     async.parallel({
                             replyCount: function (callback) {
-                                Comment.find({post_id: doc._id}).count(function (err, num) {
+                                Comment.find({post_id: doc._id, deleteFlag: 0}).count(function (err, num) {
                                     if (err) next(err);
                                     callback(null, num);
                                 })
                             },
                             commenter: function (callback) {
-                                Comment.find({post_id: doc._id}, {user_id: 1, createDate: 1}).sort({createDate: -1}).limit(1).populate("user_id", "face").exec(function (err, comment) {
+                                Comment.find({post_id: doc._id, deleteFlag: 0}, {user_id: 1, createDate: 1}).sort({createDate: -1}).limit(1).populate("user_id", "face").exec(function (err, comment) {
                                     if (err) next(err);
                                     callback(null, comment);
                                 })
@@ -71,12 +71,27 @@ var async = require('async');
         var skip = req.body.skip ? req.body.skip : 0;
         async.parallel({
             comments: function (callback) {
-                Comment.find({post_id: pid,deleteFlag:0}, {_id: 1, user_id: 1, content: 1, createDate: 1}).populate("user_id", {face: 1, nick: 1}).sort({_id: 1})
+                Comment.find({post_id: pid, deleteFlag: 0}, {_id: 1, user_id: 1, content: 1, createDate: 1}).populate("user_id", {face: 1, nick: 1}).sort({_id: 1})
                     .skip(skip)
                     .limit(30)
                     .exec(function (err, docs) {
                         if (err) next(err);
-                        callback(null, docs);
+                        if (req.session.user) {
+                            async.each(docs, function (doc, callback) {
+                                User.find({_id: req.session.user._id, follow: {$in: [doc.user_id._id]}}, function (err, follow) {
+                                    if (err) next(err);
+                                    if (follow.length > 0) {
+                                        doc._doc.user_id._doc.isFollow = true;
+                                    }
+                                    callback();
+                                })
+                            }, function (err) {
+                                if (err) next(err);
+                                callback(null, docs);
+                            })
+                        } else {
+                            callback(null, docs);
+                        }
                     })
             },
             topic: function (callback) {
@@ -84,13 +99,37 @@ var async = require('async');
                     callback(null, null);
                     return;
                 }
-                Post.findOne({_id: pid,deleteFlag:0}, {_id: 1, user_id: 1, title: 1, content: 1,createDate:1}).populate('user_id', {face: 1, nick: 1}).exec(function (err, docs) {
+                Post.findOne({_id: pid, deleteFlag: 0}, {_id: 1, user_id: 1, title: 1, content: 1, createDate: 1}).populate('user_id', {face: 1, nick: 1}).exec(function (err, doc) {
                     if (err) next(err);
-                    callback(null, docs);
+                    //如果登陆用户则还要查找是否是关注的人和收藏的文章
+                    if (req.session.user) {
+                        async.parallel([function (callback) {
+                            User.find({_id: req.session.user._id, follow: {$in: [doc.user_id._id]}}, function (err, follow) {
+                                if (err) next(err);
+                                if (follow.length > 0) {
+                                    doc._doc.user_id._doc.isFollow = true;
+                                }
+                                callback(null, doc);
+                            })
+                        }, function (callback) {
+                            User.find({_id: req.session.user._id, star: {$in: [pid]}}, function (err, follow) {
+                                if (err) next(err);
+                                if (follow.length > 0) {
+                                    doc._doc.user_id._doc.isStar = true;
+                                }
+                                callback(null, doc);
+                            })
+                        }], function (err, result) {
+                            if (err) next(err);
+                            callback(null, doc);
+                        })
+                    } else {
+                        callback(null, doc);
+                    }
                 })
             },
             count: function (callback) {
-                Comment.find({post_id: pid,deleteFlag:0}).count(function (err, num) {
+                Comment.find({post_id: pid, deleteFlag: 0}).count(function (err, num) {
                     if (err) next(err);
                     callback(null, num);
                 })
