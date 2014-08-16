@@ -190,7 +190,7 @@ var fs = require("fs");
             res.json({"result": "failed"});
             return;
         }
-        User.find({_id: req.session.user._id, follow: {$in: [pid]}}, function (err, doc) {
+        User.find({_id: req.session.user._id, star: {$in: [pid]}}, function (err, doc) {
             if (err) next(err);
             if (doc.length > 0) {
                 res.json({"result": "failed", "msg": "已在你的收藏列表中"});
