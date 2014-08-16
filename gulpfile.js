@@ -4,12 +4,13 @@ var uglify = require('gulp-uglify');
 var imagemin = require('gulp-imagemin');
 var sourcemaps = require('gulp-sourcemaps');
 var minifyCSS = require('gulp-minify-css');
+var rename = require("gulp-rename");
 var del = require('del');
 
 var paths = {
-    scripts: 'public/js/*',
+    scripts: ['public/js/app.js/','public/js/controllers.js/','public/js/directives.js/','public/js/filters.js/','public/js/services.js/'],
     images: 'public/images/**/*',
-    css:'public/css/**/*'
+    css:'public/css/*'
 };
 
 // Not all tasks need to use streams
@@ -22,15 +23,18 @@ gulp.task('clean', function(cb) {
 gulp.task('css',['clean'], function() {
     gulp.src(paths.css)
         .pipe(minifyCSS({keepBreaks:true}))
-        .pipe(gulp.dest('build/css'))
+        .pipe(rename('acgfun.min.css'))
+        .pipe(gulp.dest('public/css'))
 });
 
 gulp.task('scripts', ['clean'], function() {
     // Minify and copy all JavaScript (except vendor scripts)
     // with sourcemaps all the way down
     return gulp.src(paths.scripts)
-        .pipe(uglify())
-        .pipe(gulp.dest('build/js'));
+        .pipe(uglify({mangle: false}))
+        .pipe(concat('acgfun.min.js'))
+        .pipe(rename('acgfun.min.js'))
+        .pipe(gulp.dest('public/js'));
 });
 
 // Copy all static images

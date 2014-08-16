@@ -32,7 +32,8 @@
     "gulp-imagemin": "^1.0.0",
     "gulp-sourcemaps": "^1.1.1",
     "del": "^0.1.2",
-    "hat": "0.0.3"
+    "hat": "0.0.3",
+    "gulp-rename": "^1.2.0"
   },
   "devDependencies": {
     "gulp-minify-css": "^0.3.7"
