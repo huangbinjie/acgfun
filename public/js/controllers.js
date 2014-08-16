@@ -43,7 +43,7 @@ app.controller('loginCtrl', ['$scope', '$http', '$message', '$loadingBar', '$roo
             $http.post('/register', {nick: $scope.register_nick, email: $scope.register_email, password: $scope.register_password}).
                 success(function (data) {
                     if (data.result === "success") {
-                        $message("注册成功,请前往邮箱激活账号<br/><a href='/user/reActive'>没有收到？</a>", 90);
+                        $message("注册成功,请前往邮箱激活账号<br/><a href='/user/reActive'>没有收到？</a>", 90,0);
                         $loadingBar("100%", success);
                     } else {
                         $message(data.msg !== undefined ? data.msg : "注册失败", 90);
