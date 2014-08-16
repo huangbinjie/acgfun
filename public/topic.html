@@ -30,7 +30,7 @@
     <li class="topic-item clearfloat" ng-repeat="comment in topic.comments">
         <div class="topic-left">
             <i title="已关注" ng-show="comment.user_id.isFollow" class="followed"></i>
-            <a id="{{comment.user_id._id}}" href="/user/{{comment._id}}">
+            <a id="{{comment.user_id._id}}" href="/user/{{comment.user_id._id}}">
                 <img class="face" ng-src="uploads/faces/{{comment.user_id.face}}" src="images/default.jpg" alt="">
             </a>
             <p>{{comment.user_id.nick}}</p>
