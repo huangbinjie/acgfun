@@ -142,7 +142,7 @@ var fs = require("fs");
                                     to: criteria.email,
                                     subject: 'acgfun激活',
                                     html: settings.email.register+
-                                            "<a href='http://www.acgfun.cn/user/active?email="+criteria.email+"&id="+id+"'>http://acgfun.cn/user/active?email="+criteria.email+"&id="+id
+                                            "<a href='http://www.acgfun.cn/user/active?email="+criteria.email+"&id="+id+"'>http://www.acgfun.cn/user/active?email="+criteria.email+"&id="+id
                                 });
                                 res.json({"result": "success"});
                             } else {
@@ -277,7 +277,7 @@ var fs = require("fs");
                     to: email,
                     subject: 'acgfun重置密码',
                     html: settings.email.reset +
-                        "<a href='http://www.acgfun.cn/user/reset?email=" + email + "&id=" + id + "'>http://acgfun.cn/user/reset?email=" + email + "&id=" + id
+                        "<a href='http://www.acgfun.cn/user/reset?email=" + email + "&id=" + id + "'>http://www.acgfun.cn/user/reset?email=" + email + "&id=" + id
                 });
                 res.json({"result": "index.html#/reset"});
             } else {
@@ -298,7 +298,7 @@ var fs = require("fs");
                     to: criteria.email,
                     subject: 'acgfun激活',
                     html: settings.email.register+
-                        "<a href='http://www.acgfun.cn/user/active?email="+criteria.email+"&id="+id+"'>http://acgfun.cn/user/active?email="+criteria.email+"&id="+id
+                        "<a href='http://www.acgfun.cn/user/active?email="+criteria.email+"&id="+id+"'>http://www.acgfun.cn/user/active?email="+criteria.email+"&id="+id
                 },function(err,info){
                     if(err) res.json({"result": "failed"});
                     else res.json({"result": "success"});
