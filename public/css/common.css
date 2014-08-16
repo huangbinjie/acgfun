@@ -253,9 +253,12 @@ form .field label {
 .panel {
     width: 100%;
     margin-bottom: 1rem;
-    padding: .7rem;
-    background-color: rgba(37, 39, 48, 0.6);
     box-sizing: border-box;
+}
+.panel .case {
+    padding: .7rem;
+    margin-bottom: 1rem;
+    background-color: rgba(37, 39, 48, 0.6);
 }
 .panel p {
     padding: 5px 0;

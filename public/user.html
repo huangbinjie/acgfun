@@ -1,50 +1,65 @@
-<div class="panel left">
-    <div class="face-panel">
-        <div>
-             <label>
-                <img ng-src="uploads/faces/{{userData.user.face}}" src="images/default.jpg" alt="face">
-                <div id="changeFace" ng-click="showModal=true" ng-show="showChangeFace">更换头像</div>
-             </label>
+<div class="panel left text-center">
+    <div class="case">
+        <div class="face-panel">
+            <div>
+                <label>
+                    <img ng-src="uploads/faces/{{userData.user.face}}" src="images/default.jpg" alt="face">
+
+                    <div id="changeFace" ng-click="showModal=true" ng-show="showChangeFace">更换头像</div>
+                </label>
+            </div>
+            <div>{{userData.user.nick}}</div>
         </div>
-        <div>{{userData.user.nick}}</div>
+        <div class="param">
+            <div class="inline-block">
+                <div class="user-star-count">{{userData.user.follow[0]}}</div>
+                <div class="user-star-label">关注</div>
+            </div>
+            <div class="inline-block">
+                <div class="user-post-count">{{userData.count.postCount+userData.count.replyCount}}</div>
+                <div class="user-post-label">发表</div>
+            </div>
+            <div class="inline-block">
+                <div class="user-reputation-count">{{userData.user.fans[0]}}</div>
+                <div class="user-reputation-label">粉丝</div>
+            </div>
+        </div>
     </div>
-    <div class="param">
-        <div class="inline-block">
-            <div class="user-star-count">{{userData.user.follow[0]}}</div>
-            <div class="user-star-label">关注</div>
+    <div class="case">
+        <div class="row">
+            <small>收藏</small>
         </div>
-        <div class="inline-block">
-            <div class="user-post-count">{{userData.count.postCount+userData.count.replyCount}}</div>
-            <div class="user-post-label">发表</div>
+        <div class="row"><h3>{{userData.user.star[0]}}</h3></div>
+        <div class="row">
+            <small>经验</small>
         </div>
-        <div class="inline-block">
-            <div class="user-reputation-count">{{userData.user.fans[0]}}</div>
-            <div class="user-reputation-label">粉丝</div>
+        <div class="row"><h3>{{userData.user.exp}}</h3></div>
+        <div class="row">
+            <small>加入时间</small>
         </div>
+        <div class="row"><h3>{{userData.user.createDate|date:'yyyy-M-d'}}</h3></div>
+        <div class="row">
+            <small>最后在线</small>
+        </div>
+        <div class="row"><h3>{{userData.user.loginDate|dateCustom}}</h3></div>
     </div>
 </div>
 <div class="panel right">
-    <header>最近发表</header>
-    <p ng-repeat="topic in userData.post.topic">
-        发表了主题:<br/><a href="{{topic.parent_url}}/{{topic._id}}/{{topic.title}}" target="_blank">{{topic.title}}</a></p>
-</div>
-<div class="panel right">
-    <header>最近参与</header>
-    <p ng-repeat="comment in userData.post.comment">
-        在<a href="{{comment.post_id.parent_url}}/{{comment.post_id._id}}/{{comment.post_id.title}}" target="_blank">
-        {{comment.post_id.title}}</a>发表回复:<br/>
-        <a href="{{comment.post_id.parent_url}}/{{comment.post_id._id}}/{{comment.post_id.title}}?scrollTo={{comment._id}}" target="_blank" compile="comment.content"></a>
-        </a></p>
-</div>
-<div class="panel left clear text-center">
-    <div class="row"><small>收藏</small></div>
-    <div class="row"><h3>{{userData.user.star[0]}}</h3></div>
-    <div class="row"><small>经验</small></div>
-    <div class="row"><h3>{{userData.user.exp}}</h3></div>
-    <div class="row"><small>加入时间</small></div>
-    <div class="row"><h3>{{userData.user.createDate|date:'yyyy-M-d'}}</h3></div>
-    <div class="row"><small>最后在线</small></div>
-    <div class="row"><h3>{{userData.user.loginDate|dateCustom}}</h3></div>
+    <div class="case">
+        <header>最近发表</header>
+        <p ng-repeat="topic in userData.post.topic">
+            发表了主题:<br/><a href="{{topic.parent_url}}/{{topic._id}}/{{topic.title}}" target="_blank">{{topic.title}}</a>
+        </p>
+    </div>
+    <div class="case">
+        <header>最近参与</header>
+        <p ng-repeat="comment in userData.post.comment">
+            在<a href="{{comment.post_id.parent_url}}/{{comment.post_id._id}}/{{comment.post_id.title}}" target="_blank">
+            {{comment.post_id.title}}</a>发表回复:<br/>
+            <a href="{{comment.post_id.parent_url}}/{{comment.post_id._id}}/{{comment.post_id.title}}?scrollTo={{comment._id}}"
+               target="_blank" compile="comment.content"></a>
+            </a></p>
+    </div>
 </div>
 <div class="modal-div" ng-show="showModal">
     <div class="modal">
