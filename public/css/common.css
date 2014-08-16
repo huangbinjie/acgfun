@@ -490,6 +490,14 @@ form .field label {
     border-radius: 100%;
     vertical-align: sub;
 }
+.topic-left {
+    display: none;
+    padding: 10px;
+    float: left;
+    vertical-align: top;
+    text-align: center;
+    position: relative;
+}
 @media screen and (min-width: 480px){
     .category-profile{
         display: block;
@@ -503,6 +511,9 @@ form .field label {
 
     .panel {
         width: 49.5%;
+    }
+    .topic-left{
+        display: block;
     }
     .loader {
         margin-left: 10px;
@@ -572,7 +583,7 @@ form .field label {
 }
 
 .topic-right {
-    padding: 10px 0 0 0;
+    padding: 10px;
     overflow: hidden;
 }
 
