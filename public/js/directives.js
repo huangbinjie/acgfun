@@ -143,19 +143,21 @@ app.directive("dropdown", function () {
     }
 })
 
-//app.directive('scrolling', function ($compile,$location,Topic) {
-//    return {
-//        restrict: 'A',
-//        link: function ($scope, element, attr) {
-//            $scope.skip = 30;
-//            $(window).on("scroll",function(){
-////                if ($(window).scrollTop() + $(window).height()> $(document).height()-1000) {
-////                    Topic($location.path()).get({skip:$scope.skip}, function (data) {
-////                        $scope.topic = data;
-////                        $scope.skip += 30;
-////                    })
-////                }
-//            })
-//        }
-//    }
-//})
+app.directive('toTop',function($window){
+    return{
+        restrict:'C',
+        link:function($scope,element,attr){
+            var window = angular.element($window);
+            window.on('scroll',function(){
+                if(window.scrollTop()>window.height()){
+                    element.css('opacity',"1");
+                } else {
+                    element.css('opacity',"0");
+                }
+            })
+            element.on('click',function(){
+                $window.scrollTo(0,0);
+            })
+        }
+    }
+})
