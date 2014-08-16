@@ -561,6 +561,7 @@ form .field label {
     float: left;
     vertical-align: top;
     text-align: center;
+    position: relative;
 }
 
 .topic-left p {
@@ -905,6 +906,8 @@ form .field label {
     height: 16px;
     display: inline-block;
     position: absolute;
+    top:10px;
+    left: 10px;
 }
 .stared {
     background: url(../images/star.png);

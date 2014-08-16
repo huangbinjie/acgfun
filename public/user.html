@@ -33,7 +33,7 @@
     <p ng-repeat="comment in userData.post.comment">
         在<a href="{{comment.post_id.parent_url}}/{{comment.post_id._id}}/{{comment.post_id.title}}" target="_blank">
         {{comment.post_id.title}}</a>发表回复:<br/>
-        <a href="{{comment.post_id.parent_url}}/{{comment.post_id._id}}/{{comment.post_id.title}}?scrollTo={{comment._id}}" target="_blank">{{comment.content}}</a>
+        <a href="{{comment.post_id.parent_url}}/{{comment.post_id._id}}/{{comment.post_id.title}}?scrollTo={{comment._id}}" target="_blank" compile="comment.content"></a>
         </a></p>
 </div>
 <div class="panel left clear text-center">
