@@ -43,13 +43,17 @@ app.controller('loginCtrl', ['$scope', '$http', '$message', '$loadingBar', '$roo
             $http.post('/register', {nick: $scope.register_nick, email: $scope.register_email, password: $scope.register_password}).
                 success(function (data) {
                     if (data.result === "success") {
-                        $message("注册成功", 90);
+                        $message("注册成功,请前往邮箱激活账号<br/><a href='/user/reActive'>没有收到？</a>", 90);
                         $loadingBar("100%", success);
                     } else {
                         $message(data.msg !== undefined ? data.msg : "注册失败", 90);
                         $loadingBar("80%");
                     }
                 })
+        }
+
+        aaa = function(){
+            alert("111");
         }
 
         function success() {
@@ -74,9 +78,43 @@ app.controller('pageCtrl', ['$scope', '$rootScope', '$message', '$location', 'Po
         Auth.getUser();
         $crumb($location.path());
         $scope.url = $location.path();
-        Post($location.path()).list(function (data) {
-            $scope.topics = data;
+        $scope.currentPage = 0;
+        $scope.$on('postSuccess',function(){
+            $scope.query(0);
         })
+
+        $scope.query = function(skip){
+            Post($location.path()).list(function (data) {
+                $scope.topics = data.posts;
+
+                $scope.pageCounts = [];
+                for (var i = 0; i < Math.ceil(data.count / 30); i++) {
+                    $scope.pageCounts.push(i);
+                }
+                $scope.pagination = true;
+                dis($scope.currentPage);
+                window.scrollTo(0,0);
+                $loadingBar("100%");
+            });
+        }
+        $scope.query(0);
+        function dis() {
+            if($scope.pageCounts.length===1){
+                $scope.left = false;
+                $scope.right = false;
+                return;
+            }
+            if ($scope.currentPage === 0) {
+                $scope.left = false;
+            } else {
+                $scope.left = true;
+            }
+            if ($scope.currentPage >= $scope.pageCounts.length) {
+                $scope.right = false;
+            } else {
+                $scope.right = true;
+            }
+        }
     }])
 
 app.controller('topicCtrl', ['$scope', '$rootScope', '$location', 'Topic', 'Auth', '$loadingBar','$crumb','$message','Follow',"Star",
@@ -157,7 +195,7 @@ app.controller('topicCtrl', ['$scope', '$rootScope', '$location', 'Topic', 'Auth
             } else {
                 $scope.left = true;
             }
-            if ($scope.currentPage === $scope.pageCounts.length-1) {
+            if ($scope.currentPage >= $scope.pageCounts.length-1) {
                 $scope.right = false;
             } else {
                 $scope.right = true;
@@ -205,3 +243,25 @@ app.controller('userCtrl', ['$scope', '$location', 'User', '$loadingBar', '$root
             });
         }
     }])
+
+app.controller('activeCtrl',['$scope','$http','$location',function($scope,$http,$location){
+    $http.post('/user/active',$location.search()).success(function(data){
+        $scope.active = data.msg;
+    })
+}])
+
+app.controller('reActiveCtrl',['$scope','$http','$message',function($scope,$http,$message){
+    $scope.send = function(){
+        if($scope.email===undefined||$scope.email===""){
+            $message("请填写邮箱",90);
+            return;
+        }
+        $http.post('/user/reActive',{email:$scope.email}).success(function(data){
+            if(data.result==="success"){
+                $message("发送成功，请前往邮箱查收");
+            } else {
+                $message("发送失败");
+            }
+        })
+    }
+}])

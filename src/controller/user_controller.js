@@ -2,6 +2,9 @@ var User = require('../database/user_model');
 var Post = require('../database/post_model');
 var Team = require('../database/team_model');
 var Comment = require('../database/comment_model');
+var email = require('../util/email');
+var settings = require('../config/settings');
+var hat = require('hat');
 var async = require('async');
 var MD5 = require('MD5');
 var fs = require("fs");
@@ -93,7 +96,6 @@ var fs = require("fs");
                         if (err) next(err);
                         if (num > 0) {
                             req.session.user = doc;
-//                            res.cookie('user', doc, {httpOnly: false});
                             res.json({"result": "success", "user": doc});
                         } else {
                             res.json({"result": "failed"});
@@ -129,10 +131,19 @@ var fs = require("fs");
                 User.find({nick: criteria.nick}, function (err, nick) {
                     if (err) next(err);
                     if (nick.length === 0) {
+                        var id = hat();
                         criteria.password = MD5(criteria.password);
+                        criteria.hat_id = id;
                         new User(criteria).save(function (err, doc) {
                             if (err) next(err);
                             if (doc !== undefined) {
+                                email.transporter.sendMail({
+                                    from: 'admin@acgfun.cn',
+                                    to: criteria.email,
+                                    subject: 'acgfun激活',
+                                    html: settings.email.register+
+                                            "<a href='http://acgfun.cn/user/active?email="+criteria.email+"&id="+id+"'>http://acgfun.cn/user/active?email="+criteria.email+"&id="+id
+                                });
                                 res.json({"result": "success"});
                             } else {
                                 res.json({"result": "failed"});
@@ -232,10 +243,94 @@ var fs = require("fs");
             }
         })
     }
+
+    //激活邮箱
+    module.active = function(req,res,next){
+        var email = req.body.email;
+        var id = req.body.id;
+        if(email===undefined||email===""){
+            res.json({"result": "failed"});
+            return;
+        }
+        if(id===undefined||id===""){
+            res.json({"result": "failed"});
+            return;
+        }
+        User.update({email:email,hat_id:id},{$set:{status:0}},function(err,num){
+            if(err) next(err);
+            if(num>0){
+                res.json({"result": "success","msg":"激活成功"});
+            } else {
+                res.json({"result": "failed","msg":"激活失败"});
+            }
+        })
+    }
+    //忘记密码
+    module.reset = function(req,res,next) {
+        var email = req.body.email;
+        var id = hat();
+        User.update({email: email}, {$set: {hat_id: id}}, {upsert: true}, function (err, num) {
+            if (err) next(err);
+            if (num > 0) {
+                email.transporter.sendMail({
+                    from: 'admin@acgfun.cn',
+                    to: email,
+                    subject: 'acgfun重置密码',
+                    html: settings.email.reset +
+                        "<a href='http://acgfun.cn/user/reset?email=" + email + "&id=" + id + "'>http://acgfun.cn/user/reset?email=" + email + "&id=" + id
+                });
+                res.json({"result": "index.html#/reset"});
+            } else {
+                res.json({"result": "failed"});
+            }
+        })
+    }
+
+    //发送邮箱验证
+    module.reActive = function(req,res,next){
+        var criteria = req.body;
+        var id = hat();
+        User.update({email:criteria.email},{$set:{hat_id:id}},{upsert:true},function(err,num){
+            if(err) next(err);
+            if(num>0){
+                email.transporter.sendMail({
+                    from: 'admin@acgfun.cn',
+                    to: criteria.email,
+                    subject: 'acgfun激活',
+                    html: settings.email.register+
+                        "<a href='http://acgfun.cn/user/active?email="+criteria.email+"&id="+id+"'>http://acgfun.cn/user/active?email="+criteria.email+"&id="+id
+                },function(err,info){
+                    if(err) res.json({"result": "failed"});
+                    else res.json({"result": "success"});
+                });
+            } else {
+                res.json({"result": "failed"});
+            }
+        })
+    }
+    //重置密码
+    module.resetPass = function(req,res,next){
+        var criteria = req.body;
+        if (!/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(criteria.email) || criteria.email === undefined) {
+            res.json({"result": "failed", "msg": "邮箱格式不正确"});
+            return;
+        }
+        if (!/^\w{6,20}$/.test(criteria.password) || criteria.password === undefined) {
+            res.json({"result": "failed", "msg": "密码格式不正确"});
+            return;
+        }
+        User.update({email:criteria.email},{$set:{password:MD5(criteria.password)}},function(err,num){
+            if(err) next(err);
+            if(num>0){
+                res.json({"result": "success"});
+            } else {
+                res.json({"result": "failed"});
+            }
+        })
+    }
     //退出
     module.signOut = function (req, res) {
         req.session.destroy();
-        res.clearCookie("user");
         res.json({"result": "success"});
     }
 }(exports))

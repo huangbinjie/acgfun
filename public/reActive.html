@@ -1,0 +1,11 @@
+<div id="login_content" login>
+    <form id="login" ng-submit="send()">
+        <div class="field">
+            <label>邮箱</label>
+            <input placeholder="邮箱" autofocus="true" pattern="^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$" title="例如:xxxx@qq.com" ng-model="email" tabindex="1">
+        </div>
+        <div>
+            <button type="submit" class="btn blue" tabindex="4">发送</button>
+        </div>
+    </form>
+</div>

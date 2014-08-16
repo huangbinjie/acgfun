@@ -2,13 +2,15 @@ var controllers = require('../controller');
 var auth = require('../util/auth');
 
 module.exports = function (app) {
-
     app.post('/login', controllers.user.login);
     app.post('/register', controllers.user.register);
     app.post('/signout',auth.ensureAuthenticated,controllers.user.signOut);
 //    app.get('/users', auth.ensureAuthenticated, controllers.user.list);
     app.post('/user', auth.ensureAuthenticated, controllers.user.get);
+    app.post('/user/active',controllers.user.active);
+    app.post('/user/reActive',controllers.user.reActive);
     app.post('/user/:uid',controllers.user.get);
+
 
     /*文章相关功能*/
     app.post('/[acgm]',controllers.post.list);

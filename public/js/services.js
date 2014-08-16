@@ -8,12 +8,14 @@ app.factory('User', ['$resource', function ($resource) {
 }]);
 
 app.factory('$message', function ($timeout) {
-    var $message = function (message, top) {
+    var $message = function (message, top,time) {
         var width = ($("body").width() - $("#message").width()) / 2;
-        $('#message').html(message).css({"opacity": ".8", "left": width, "top": top !== undefined ? top : 100});
-        $timeout(function () {
-            $('#message').css({"opacity": "0", "left": width, "top": -100});
-        }, 3000);
+        $('#message').empty().append(message).css({"opacity": ".8", "left": width, "top": top !== undefined ? top : 100});
+        if(time!==0){
+            $timeout(function () {
+                $('#message').css({"opacity": "0", "left": width, "top": -100});
+            }, 3000);
+        }
     };
     return $message;
 });
@@ -45,7 +47,7 @@ app.factory('$loadingBar', function ($timeout, $location) {
 app.factory('Post', function ($resource, $rootScope) {
     return function (path) {
         return $resource(path, {}, {
-            list: {method: "POST", isArray: true},
+            list: {method: "POST", isArray: false},
             add: {method: "PUT"},
             delete: {method: "DELETE"}
         })

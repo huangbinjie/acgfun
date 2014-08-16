@@ -10,7 +10,7 @@
         </div>
         <div class="topic-right">
             <header>{{topic.topic.title}}</header>
-            <div>{{topic.topic.content}}</div>
+            <div compile="topic.topic.content"></div>
         </div>
         <footer>
             <i class="stared left" title="已收藏" ng-show="topic.topic.user_id.isStar"></i>

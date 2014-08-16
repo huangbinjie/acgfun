@@ -11,8 +11,9 @@ var userModel = function(){
 		password	: {type:String,required:true},//密码
 		nick		: {type:String,max:10},//昵称
 		face		: String,//头像
-		status		: {type:Number,default:0},//0 激活，1 关闭,
-		exp	: {type:Number,default:0},//经验
+		status		: {type:Number,default:1},//0 激活，1 关闭,
+        hat_id      : String,//邮箱验证ID
+		exp	        : {type:Number,default:0},//经验
 		star		: [Number],//收藏
         follow     : [Number],//关注
         fans        :[Number],//粉丝

@@ -12,12 +12,9 @@ var settings = {
         user: "acgfun",
         password: "hbj_acgfun"
     },
-    mail: {
-        from: 'admin@acgfun.cn', // sender address
-        to: '501711499@qq.com', // list of receivers
-        subject: 'Hello ✔', // Subject line
-        text: 'Hello ✔', // plaintext body
-        html: '<b>这是acgfun给您发送的邮件，请确认</b>' // html body
+    email: {
+        register:"感谢你注册acgfun，请点击下方链接激活<br/>",
+        reset:"您使用了重置密码功能，请点击下方链接<br/>"
     }
 }
 ;

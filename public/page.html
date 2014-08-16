@@ -29,3 +29,10 @@
             <div class="category-post-time">{{topic.createDate|dateCustom}}</div>
         </div>
     </div>
+    <ul class="pagination" ng-show="pagination">
+        <li ng-show="left"><a ng-click="query(currentPage-1);">&laquo;</a></li>
+        <li ng-repeat="pageCount in pageCounts" ng-class="currentPage===pageCount?'active':''">
+            <a ng-click="query(pageCount)">{{pageCount+1}}</a>
+        </li>
+        <li ng-show="right"><a ng-click="query(currentPage+1);">&raquo;</a></li>
+    </ul>

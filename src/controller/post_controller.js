@@ -12,37 +12,50 @@ var async = require('async');
      */
     module.list = function (req, res, next) {
         var skip = 0;
-        Post.find({parent_url: req.url, deleteFlag: 0}, {_id: 1, user_id: 1, title: 1, view: 1, createDate: 1}, {skip: skip, limit: 30, sort: {order: 1, _id: 1}})
-            .populate('user_id', "face")
-            .exec(function (err, docs) {
-                if (err) next(err);
-                async.each(docs, function (doc, callback) {
-                    async.parallel({
-                            replyCount: function (callback) {
-                                Comment.find({post_id: doc._id, deleteFlag: 0}).count(function (err, num) {
+        async.parallel({
+            posts:function(callback){
+                Post.find({parent_url: req.url, deleteFlag: 0}, {_id: 1, user_id: 1, title: 1, view: 1, createDate: 1}, {sort: {order: 1, createDate: -1},skip: skip, limit: 30})
+                    .populate('user_id', "face")
+                    .exec(function (err, docs) {
+                        if (err) next(err);
+                        async.each(docs, function (doc, callback) {
+                            async.parallel({
+                                    replyCount: function (callback) {
+                                        Comment.find({post_id: doc._id, deleteFlag: 0}).count(function (err, num) {
+                                            if (err) next(err);
+                                            callback(null, num);
+                                        })
+                                    },
+                                    commenter: function (callback) {
+                                        Comment.find({post_id: doc._id, deleteFlag: 0}, {user_id: 1, createDate: 1}).sort({createDate: -1}).limit(1).populate("user_id", "face").exec(function (err, comment) {
+                                            if (err) next(err);
+                                            callback(null, comment);
+                                        })
+                                    }
+                                },
+                                function (err, result) {
                                     if (err) next(err);
-                                    callback(null, num);
-                                })
-                            },
-                            commenter: function (callback) {
-                                Comment.find({post_id: doc._id, deleteFlag: 0}, {user_id: 1, createDate: 1}).sort({createDate: -1}).limit(1).populate("user_id", "face").exec(function (err, comment) {
-                                    if (err) next(err);
-                                    callback(null, comment);
-                                })
-                            }
-                        },
-                        function (err, result) {
+                                    doc._doc.replyCount = result.replyCount;
+                                    doc._doc.commenter = result.commenter;
+                                    callback();
+                                }
+                            )
+                        }, function (err) {
                             if (err) next(err);
-                            doc._doc.replyCount = result.replyCount;
-                            doc._doc.commenter = result.commenter;
-                            callback();
-                        }
-                    )
-                }, function (err) {
-                    if (err) next(err);
-                    res.json(docs);
+                            callback(null,docs)
+                        })
+                    })
+            },
+            count:function(callback){
+                Post.find({parent_url: req.url, deleteFlag: 0}).count(function(err,num){
+                    if(err) next(err);
+                    callback(null,num);
                 })
-            })
+            }
+        },function(err,result){
+            if(err) next(err);
+            res.json(result);
+        })
     }
 
     module.put = function (req, res, next) {

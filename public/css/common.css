@@ -552,6 +552,9 @@ form .field label {
     margin-bottom: .625rem;
     background-color: rgba(37, 39, 48, 0.6);
 }
+.topic-item:last-child{
+    margin-bottom: 0;
+}
 
 .topic-left {
     padding: 10px;
@@ -872,7 +875,7 @@ form .field label {
 /*分页*/
 .pagination{
     float: right;
-    margin-bottom: 1rem;
+    margin: 1rem 0;
 }
 .pagination>li {
     display: inline;
@@ -891,7 +894,6 @@ form .field label {
     background: rgba(37,39,48,0.7);
 }
 .pagination>li.active>a {
-    z-index: 2;
     color: #fff;
     cursor: default;
     background-color: #428bca;

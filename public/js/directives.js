@@ -93,6 +93,7 @@ app.directive('editor', ['Post', 'Topic', '$rootScope', '$message', '$routeParam
                                 $(".editor_title").val("");
                                 $(".editor iframe").contents().find("body").html("");
                                 $rootScope.showEditor = false;
+                                $rootScope.$broadcast("postSuccess");
                             } else {
                                 $message("发帖失败");
                             }

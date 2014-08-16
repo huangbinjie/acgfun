@@ -30,6 +30,14 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider','$resourcePro
                 templateUrl:'user.html',
                 controller:'userCtrl'
             }).
+            when('/user/active',{
+                templateUrl:'active.html',
+                controller:'activeCtrl'
+            }).
+            when('/user/reActive',{
+                templateUrl:'reActive.html',
+                controller:'reActiveCtrl'
+            }).
             when('/user/:uid',{
                 templateUrl:'user.html',
                 controller:'userCtrl'
