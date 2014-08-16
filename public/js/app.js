@@ -51,9 +51,11 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider','$resourcePro
         $loadingBar("100%",true);
     })
     $rootScope.$on('$routeChangeSuccess', function(newRoute, oldRoute) {
-        $location.hash($routeParams.scrollTo);
-        $timeout(function(){
-            $anchorScroll();
-        },1000)
+        if($routeParams.scrollTo){
+            $location.hash($routeParams.scrollTo);
+            $timeout(function(){
+                $anchorScroll();
+            },1000)
+        }
     });
 });
