@@ -298,7 +298,7 @@ var fs = require("fs");
                     to: criteria.email,
                     subject: 'acgfun激活',
                     html: settings.email.register+
-                        "<a href='http://acgfun.cn/user/active?email="+criteria.email+"&id="+id+"'>http://acgfun.cn/user/active?email="+criteria.email+"&id="+id
+                        "<a href='http://www.acgfun.cn/user/active?email="+criteria.email+"&id="+id+"'>http://acgfun.cn/user/active?email="+criteria.email+"&id="+id
                 },function(err,info){
                     if(err) res.json({"result": "failed"});
                     else res.json({"result": "success"});
