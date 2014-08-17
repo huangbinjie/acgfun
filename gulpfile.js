@@ -9,6 +9,7 @@ var del = require('del');
 
 var paths = {
     scripts: ['public/js/app.js/','public/js/controllers.js/','public/js/directives.js/','public/js/filters.js/','public/js/services.js/'],
+    js: 'public/js/*/',
     images: 'public/images/**/*',
     css:'public/css/*'
 };
@@ -37,20 +38,12 @@ gulp.task('scripts', ['clean'], function() {
         .pipe(gulp.dest('public/js'));
 });
 
-// Copy all static images
-gulp.task('images', ['clean'], function() {
-    return gulp.src(paths.images)
-        // Pass in options to the task
-        .pipe(imagemin({optimizationLevel: 5}))
-        .pipe(gulp.dest('build/images'));
-});
-
 // Rerun the task when a file changes
 gulp.task('watch', function() {
-    gulp.watch(paths.scripts, ['scripts']);
+    gulp.watch(paths.js, ['scripts']);
     gulp.watch(paths.images, ['images']);
     gulp.watch(paths.css, ['css']);
 });
 
 // The default task (called when you run `gulp` from cli)
-gulp.task('default', ['css','scripts','watch', 'images']);
+gulp.task('default', ['css','scripts','watch']);

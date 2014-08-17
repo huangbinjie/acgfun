@@ -161,3 +161,67 @@ app.directive('toTop',function($window){
         }
     }
 })
+
+//广场状态
+app.directive('plaza-panel',function(){
+    return{
+        restrict:'C',
+        link:function($scope,element,attr){
+
+        }
+    }
+})
+app.directive('plazaPanelBtn',function(){
+    return{
+        restrict:'C',
+        link:function($scope,element,attr){
+            element.on('click',function(){
+                if(angular.element(this).hasClass('light-orange')){
+                    angular.element(this).removeClass('light-orange');
+                    angular.element(this).css('background','#52c569');
+                    $(".plaza-panel").slideUp();
+                } else {
+                    angular.element(this).addClass('light-orange');
+                    angular.element(this).css('background','lightcoral');
+                    $(".plaza-panel").slideDown();
+                }
+            })
+        }
+    }
+})
+app.directive('chatBtn',function(){
+    return{
+        restrict:'C',
+        link:function($scope,element,attr){
+            element.on('click',function(){
+                $('.chat-panel').toggle(500);
+            })
+        }
+    }
+})
+
+app.directive('chatInput',function($document,$rootScope){
+    return{
+        restrict:'C',
+        link:function($scope,element,attr){
+            $rootScope.showChatInput=false;
+            $document.on('keydown',function(event){
+                if(event.which===13){
+                    if($rootScope.showChatInput===true&&element.find('input').val()!==""){
+                        ws.send("222");
+                    }
+                    if($rootScope.showChatInput===true&&element.find('input').val()===""){
+                        $rootScope.$apply(function (){
+                            $rootScope.showChatInput = !$rootScope.showChatInput;
+                        });
+                    }else if($rootScope.showChatInput===false){
+                        $rootScope.$apply(function (){
+                            $rootScope.showChatInput = !$rootScope.showChatInput;
+                        });
+                        element.find('input').focus();
+                    }
+                }
+            })
+        }
+    }
+})

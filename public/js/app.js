@@ -42,6 +42,10 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider','$resourcePro
                 templateUrl:'user.html',
                 controller:'userCtrl'
             }).
+            when('/plaza',{
+                templateUrl:'plaza.html',
+                controller:'plazaCtrl'
+            }).
             otherwise({
                 templateUrl:'404.html'
             });

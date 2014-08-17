@@ -265,3 +265,7 @@ app.controller('reActiveCtrl',['$scope','$http','$message',function($scope,$http
         })
     }
 }])
+
+app.controller('plazaCtrl',['$scope',function($scope){
+
+}])
