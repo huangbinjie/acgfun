@@ -1,3 +1,4 @@
+var cookieParser = require('cookie');
 var WebSocketServer = require('ws').Server
 var hat = require('hat');
 var onlineUsers = {};
@@ -17,11 +18,14 @@ module.exports = function(server){
         }
     }
     wss.on('connection', function(ws) {
+        if(ws.upgradeReq.headers.cookie===undefined){
+            ws.terminate();
+            return;
+        }
         var id = hat();
         onlineUsers[id] = "123"
         ws.id=id;
         ++onlineNum;
-        ws.send('hello')
         console.log('一个用户连接socket');
         ws.on('close', function() {
             delete onlineUsers[ws.id];

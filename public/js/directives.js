@@ -200,25 +200,15 @@ app.directive('chatBtn',function(){
     }
 })
 
-app.directive('chatInput',function($document,$rootScope){
+app.directive('chatInput',function($document,$rootScope,Auth){
     return{
         restrict:'C',
         link:function($scope,element,attr){
-            $rootScope.showChatInput=false;
             $document.on('keydown',function(event){
                 if(event.which===13){
-                    if($rootScope.showChatInput===true&&element.find('input').val()!==""){
-                        ws.send("222");
-                    }
-                    if($rootScope.showChatInput===true&&element.find('input').val()===""){
-                        $rootScope.$apply(function (){
-                            $rootScope.showChatInput = !$rootScope.showChatInput;
-                        });
-                    }else if($rootScope.showChatInput===false){
-                        $rootScope.$apply(function (){
-                            $rootScope.showChatInput = !$rootScope.showChatInput;
-                        });
-                        element.find('input').focus();
+                    if(element.find('input').val()!==""){
+                        ws.send(JSON.stringify({user:Auth.getUser(),message:element.find('input').val()}));
+                        element.find('input').val("");
                     }
                 }
             })

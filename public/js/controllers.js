@@ -18,7 +18,7 @@ app.controller('loginCtrl', ['$scope', '$http', '$message', '$loadingBar', '$roo
             $loadingBar("80%");
             $http.post("/login", {email: $scope.login_email, password: $scope.login_password}).success(function (data) {
                 if (data.result === "success") {
-                    Auth.setUser(JSON.stringify(data.user));
+                    Auth.setUser(Base64.encode(JSON.stringify(data.user)));
                     $loadingBar("100%","/");
                 } else {
                     $message(data.msg !== undefined ? data.msg : "登陆失败", 90);
@@ -236,7 +236,7 @@ app.controller('userCtrl', ['$scope', '$location', 'User', '$loadingBar', '$root
                     $rootScope.showModal = false;
                     $scope.userData.user.face = data.face;
                     $rootScope.User.face = data.face;
-                    window.sessionStorage.User = JSON.stringify($rootScope.User);
+                    window.sessionStorage.User = $rootScope.User;
                 } else {
                     $message("上传头像失败了");
                 }

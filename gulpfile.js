@@ -8,7 +8,7 @@ var rename = require("gulp-rename");
 var del = require('del');
 
 var paths = {
-    scripts: ['public/js/app.js/','public/js/controllers.js/','public/js/directives.js/','public/js/filters.js/','public/js/services.js/'],
+    scripts: ['public/js/app.js/','public/js/controllers.js/','public/js/directives.js/','public/js/filters.js/','public/js/services.js/','public/js/socket.js/'],
     js: 'public/js/*/',
     images: 'public/images/**/*',
     css:'public/css/*'
