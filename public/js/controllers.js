@@ -20,6 +20,7 @@ app.controller('loginCtrl', ['$scope', '$http', '$message', '$loadingBar', '$roo
                 if (data.result === "success") {
                     Auth.setUser(Base64.encode(JSON.stringify(data.user)));
                     $loadingBar("100%","/");
+                    ws.send(JSON.stringify({path:'/',user:Auth.getUser()}));
                 } else {
                     $message(data.msg !== undefined ? data.msg : "登陆失败", 90);
                 }
@@ -51,11 +52,6 @@ app.controller('loginCtrl', ['$scope', '$http', '$message', '$loadingBar', '$roo
                     }
                 })
         }
-
-        aaa = function(){
-            alert("111");
-        }
-
         function success() {
             $("#register").slideUp(400, function () {
                 $('#login').slideDown();
@@ -115,6 +111,13 @@ app.controller('pageCtrl', ['$scope', '$rootScope', '$message', '$location', 'Po
                 $scope.right = true;
             }
         }
+        //socket
+        var i = setInterval(function(){
+            if(socketed){
+                ws.send(JSON.stringify({path:$location.path(),user:Auth.getUser()}));
+                clearInterval(i);
+            }
+        },1000)
     }])
 
 app.controller('topicCtrl', ['$scope', '$rootScope', '$location', 'Topic', 'Auth', '$loadingBar','$crumb','$message','Follow',"Star",
@@ -266,6 +269,11 @@ app.controller('reActiveCtrl',['$scope','$http','$message',function($scope,$http
     }
 }])
 
-app.controller('plazaCtrl',['$scope',function($scope){
-
+app.controller('plazaCtrl',['$scope','Auth',function($scope,Auth){
+        var i = setInterval(function(){
+            if(socketed){
+                ws.send(JSON.stringify({path:'/plaza',user:Auth.getUser()}));
+                clearInterval(i);
+            }
+        },1000)
 }])

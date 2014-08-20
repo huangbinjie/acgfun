@@ -207,7 +207,7 @@ app.directive('chatInput',function($document,$rootScope,Auth){
             $document.on('keydown',function(event){
                 if(event.which===13){
                     if(element.find('input').val()!==""){
-                        ws.send(JSON.stringify({user:Auth.getUser(),message:element.find('input').val()}));
+                        ws.send(JSON.stringify({path:'/plaza/chat',user:Auth.getUser(),message:element.find('input').val()}));
                         element.find('input').val("");
                     }
                 }

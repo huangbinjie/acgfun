@@ -1,3 +1,13 @@
+<!--聊天-->
+<div class="chat-btn"></div>
+<div class="chat-panel">
+    <ul class="chat-dialog">
+    </ul>
+    <div class="chat-input" ng-if="User!==undefined">
+        <input placeholder="按回车键发表评论" pattern=".+">
+    </div>
+</div>
+<!--导航-->
 <div class="plaza-nav clearfloat">
     <ul>
         <li><a href="/a">动画</a></li>
@@ -7,6 +17,7 @@
         <li><span class="plaza-panel-btn">面板</span></li>
     </ul>
 </div>
+<!--在线用户组-->
 <div class="plaza-group">
     <div class="plaza-panel">
         <div class="case">
@@ -21,55 +32,6 @@
             <div class="inline-block">11</div>
         </div>
     </div>
-    <ul>
-        <li class="inline-block">
-            <a>
-                <img src="images/img1.jpg">
-            </a>
-
-            <p class="text-center">夏恋</p>
-        </li>
-        <li class="inline-block">
-            <a>
-                <img src="images/img2.jpg">
-            </a>
-
-            <p class="text-center">夏恋</p>
-        </li>
-        <li class="inline-block">
-            <a>
-                <img src="images/img3.jpg">
-            </a>
-
-            <p class="text-center">夏恋</p>
-        </li>
-        <li class="inline-block">
-            <a>
-                <img src="images/img4.jpg">
-            </a>
-
-            <p class="text-center">夏恋</p>
-        </li>
-        <li class="inline-block">
-            <a>
-                <img src="images/img5.jpg">
-            </a>
-
-            <p class="text-center">夏恋</p>
-        </li>
-        <li class="inline-block">
-            <a>
-                <img src="images/img6.jpg">
-            </a>
-
-            <p class="text-center">夏恋</p>
-        </li>
-        <li class="inline-block">
-            <a>
-                <img src="images/img7.jpg">
-            </a>
-
-            <p class="text-center">夏恋</p>
-        </li>
+    <ul id="plaza-groups">
     </ul>
 </div>
