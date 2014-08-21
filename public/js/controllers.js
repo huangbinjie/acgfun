@@ -111,13 +111,6 @@ app.controller('pageCtrl', ['$scope', '$rootScope', '$message', '$location', 'Po
                 $scope.right = true;
             }
         }
-        //socket
-        var i = setInterval(function(){
-            if(socketed){
-                ws.send(JSON.stringify({path:$location.path(),user:Auth.getUser()}));
-                clearInterval(i);
-            }
-        },1000)
     }])
 
 app.controller('topicCtrl', ['$scope', '$rootScope', '$location', 'Topic', 'Auth', '$loadingBar','$crumb','$message','Follow',"Star",
@@ -270,10 +263,11 @@ app.controller('reActiveCtrl',['$scope','$http','$message',function($scope,$http
 }])
 
 app.controller('plazaCtrl',['$scope','Auth',function($scope,Auth){
-        var i = setInterval(function(){
-            if(socketed){
-                ws.send(JSON.stringify({path:'/plaza',user:Auth.getUser()}));
-                clearInterval(i);
-            }
-        },1000)
+    $scope.User = Auth.getUser();
+    var i = setInterval(function(){
+        if(socketed){
+            ws.send(JSON.stringify({path:'/plaza',user:Auth.getUser()}));
+            clearInterval(i);
+        }
+    },1000)
 }])

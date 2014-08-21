@@ -48,8 +48,8 @@ module.exports = function (app) {
                         message: err.message,
                         error: err
                     });
+                    logger.error("用户名:" + (req.session.user !== undefined ? req.session.user.email : "未登陆用户,请求地址:") + req.url + ",错误:" + err.message);
                 }
-                logger.error("用户名:" + (req.session.user !== undefined ? req.session.user.email : "未登陆用户,请求地址:") + req.url + ",错误:" + err.message);
             });
         }
 

@@ -22,13 +22,6 @@ var db = function () {
             var User = require('./user_model');
             var Team = require('./team_model');
 
-            //初始化admin账号
-            User.update({_id: 0}, {$set: {email: "501711499@qq.com", password: MD5("hbj19900326"), rank: 0,status:0}}, {upsert: true}, function (err, num) {
-                if (err) logger.error(err);
-                if (num > 0) console.log(('admin账号初始化成功.').green);
-                else console.log(('admn账号初始化失败').red);
-            });
-
             //初始化A,C,G,M四大版块
             Team.update({_id: -1}, {$set: {url: '/a', name: '动画'}}, {upsert: true}, function (err, num) {
                 if (err) logger.error(err);

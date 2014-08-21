@@ -77,7 +77,7 @@ app.factory('Auth', function ($cookies, $rootScope, $http, $message) {
             if (window.sessionStorage.User !== undefined) {
                 $rootScope.User = JSON.parse(Base64.decode(window.sessionStorage.User));
             }
-            return window.sessionStorage.User?Base64.decode(window.sessionStorage.User):{};
+            return window.sessionStorage.User?JSON.parse(Base64.decode(window.sessionStorage.User)):{};
         },
         signOut: function () {
             $http.post("/signout").success(function (data) {
@@ -85,6 +85,7 @@ app.factory('Auth', function ($cookies, $rootScope, $http, $message) {
                     $message("成功推出");
                     window.sessionStorage.removeItem("User");
                     $rootScope.User = window.sessionStorage.User;
+                    ws.close();
                 } else {
                     $message("退出失败");
                 }
