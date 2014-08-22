@@ -260,6 +260,9 @@ app.controller('reActiveCtrl',['$scope','$http','$message',function($scope,$http
     }
 }])
 
-app.controller('plazaCtrl',['$scope','Auth',function($scope,Auth){
+app.controller('plazaCtrl',['$scope','$rootScope','Auth',function($scope,$rootScope,Auth){
+    $rootScope.showEditor = false;
+    $rootScope.showOpenEditor = false;
+    $rootScope.showCrumb = false;
     $scope.User = Auth.getUser();
 }])

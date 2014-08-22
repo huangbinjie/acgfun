@@ -2,6 +2,7 @@ var cookieParser = require('cookie');
 var WebSocketServer = require('ws').Server
 var hat = require('hat');
 var _ = require('underscore');
+var escape = require('escape-html');
 var onlineMember = 0;
 var onlineGuest = 0;
 
@@ -77,7 +78,7 @@ module.exports = function (server) {
                 ws.send(JSON.stringify({path: '/plaza', members: users, guest: onlineGuest}));
                 //如果是聊天
                 if (message.suffix === '/chat') {
-                    wss.broadcast(JSON.stringify({path: '/plaza', suffix: '/chat', members: message.user, message: message.message}), '/plaza')
+                    wss.broadcast(JSON.stringify({path: '/plaza', suffix: '/chat', members: message.user, message: escape(message.message)}), '/plaza')
                 }
             }
 

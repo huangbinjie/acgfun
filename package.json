@@ -37,7 +37,8 @@
     "socket.io": "^1.0.6",
     "ws": "^0.4.32",
     "cookie": "^0.1.2",
-    "underscore": "^1.6.0"
+    "underscore": "^1.6.0",
+    "escape-html": "^1.0.1"
   },
   "devDependencies": {
     "gulp-minify-css": "^0.3.7"
