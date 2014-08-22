@@ -112,11 +112,12 @@ to{transform:rotate(360deg)}}
 .dropdown-menu li:hover{background-color:#00B5AD}
 #menu-btn{position:fixed;background-color:rgba(37,39,48,.6);top:50px;left:0;padding:10px;cursor:pointer;display:inline-block;z-index:500;visibility:visible}
 #menu-btn:before{content:"";background:url(../images/list_btn.png) no-repeat;width:24px;height:24px;display:block}
-#menu{position:fixed;width:0;height:auto;top:50px;left:0;display:inline-block;background-color:rgba(37,39,48,.6);text-align:center;overflow-x:hidden;overflow-y:auto;transition:width .4s;z-index:1}
-#menu .row{width:100px;font-size:1rem;cursor:pointer;padding:10px 0}
-#menu .row a{text-decoration:none;font-weight:700}
+#menu{position:fixed;width:0;height:auto;top:50px;left:0;display:inline-block;background-color:rgba(37,39,48,.6);text-align:center;overflow-x:hidden;overflow-y:auto;transition:width .4s;z-index:999}
+#menu .row{width:100px;font-size:1rem;cursor:pointer}
+#menu .row>a,#menu .row>span{display:block;text-decoration:none;font-weight:700;padding:10px 0}
 #menu .row:hover{background-color:rgba(37,39,48,.8)}
-#menu .row.face{padding:0;vertical-align:middle;cursor:pointer}
+#menu .row.face{vertical-align:middle;cursor:pointer}
+#menu .row.face>a{padding:0}
 #menu .row.img{vertical-align:middle;cursor:pointer}
 .splite{width:100%;border-bottom:1px solid gray;display:block;float:left}
 .face-panel{padding:10px;text-align:center}

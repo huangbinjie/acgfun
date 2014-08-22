@@ -652,12 +652,14 @@ form .field label {
     width: 100px;
     font-size: 1rem;
     cursor: pointer;
-    padding: 10px 0;
 }
 
-#menu .row a {
+#menu .row > a,
+#menu .row > span {
+    display: block;
     text-decoration: none;
     font-weight: 700;
+    padding: 10px 0;
 }
 
 #menu .row:hover {
@@ -665,9 +667,11 @@ form .field label {
 }
 
 #menu .row.face {
-    padding: 0;
     vertical-align: middle;
     cursor: pointer;
+}
+#menu .row.face>a{
+    padding: 0;
 }
 #menu .row.img {
     vertical-align: middle;
