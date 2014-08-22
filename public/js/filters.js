@@ -20,9 +20,3 @@ app.filter('dateCustom', function () {
         return Math.round(date / 31536000000) + "年前";
     }
 })
-
-//app.filter('dateDetail',function(){
-//    return function(input){
-//        var date = new Date(input)
-//    }
-//})

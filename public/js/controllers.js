@@ -207,7 +207,6 @@ app.controller('userCtrl', ['$scope', '$location', 'User', '$loadingBar', '$root
         $scope.showChangeFace = $routeParams.uid?false:true;
         User($location.path()).get({}, function (data) {
             $scope.userData = data;
-            console.log(data);
         })
 
         $scope.onFileSelect = function ($files) {
@@ -225,7 +224,7 @@ app.controller('userCtrl', ['$scope', '$location', 'User', '$loadingBar', '$root
                 file: $scope.file
             }).progress(function(evt) {
                 $(".progressbar").show().width(parseInt(100.0 * evt.loaded / evt.total)+"%");
-            }).success(function(data, status, headers, config) {console.log(data)
+            }).success(function(data, status, headers, config) {
                 if(data.result==="success"){
                     $message("上传头像成功");
                     $rootScope.showModal = false;
