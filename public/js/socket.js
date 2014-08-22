@@ -15,6 +15,7 @@ ws.onopen = function () {
             if (message.suffix === "/join") {
                 if (members.length === 0) return;
 //                var member = JSON.parse(members);
+                if(members.face===undefined) members.face="default.jpg";
                 $('#plaza-groups').append('<li class="inline-block" id="' + members._id + '"><a href="/user/' + members._id + '"><img src="uploads/faces/' + members.face + '"></a><p class="text-center">' + members.nick + '</p></li>')
             } else if (message.suffix === "/left/member") {
                 $('#' + members._id).remove();
@@ -28,6 +29,7 @@ ws.onopen = function () {
                 $('#plaza-groups').empty();
                 for (var i in members) {
 //                    var member = JSON.parse(members[i]);
+                    if(members[i].face===undefined) members[i].face="default.jpg";
                     $('#plaza-groups').append('<li class="inline-block" id="' + members[i]._id + '"><a href="/user/' + members[i]._id + '"><img src="uploads/faces/' + members[i].face + '"></a><p class="text-center">' + members[i].nick + '</p></li>')
                 }
             }

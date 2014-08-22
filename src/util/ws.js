@@ -66,9 +66,7 @@ module.exports = function (server) {
             /*第一次连接处理结束*/
 
             //用户切换地址之后更新地址
-            if(_.isUndefined(ws.path)){
-                ws.path = message.path;
-            }
+            ws.path = message.path;
 
             if (message.path === '/plaza') {
                 /*处理请求路径,切换页面的时候发送一个路径信息path*/
@@ -80,12 +78,14 @@ module.exports = function (server) {
                 //发送在线会员信息;
                 wss.broadcast(JSON.stringify({path: '/plaza', suffix: '/join', members: _.isEmpty(message.user) ? [] : message.user, guest: onlineGuest}), '/plaza');
                 ws.send(JSON.stringify({path: '/plaza', members: users, guest: onlineGuest}), '/plaza');
-            } else if(message.path === '/plaza/chat') {
-                wss.broadcast(JSON.stringify({path: '/plaza', suffix: '/chat', members:message.user,message:message.message}), '/plaza')
-            }else {
-                    //不管谁连上来了都广播给广场用户
-                    wss.broadcast(JSON.stringify({path: '/plaza', suffix: '/join', members: _.isEmpty(message.user) ? [] : message.user, guest: onlineGuest}), '/plaza')
-            };
+                //如果是聊天
+                if (message.suffix === '/chat') {
+                    wss.broadcast(JSON.stringify({path: '/plaza', suffix: '/chat', members: message.user, message: message.message}), '/plaza')
+                }
+            } else {
+                //不管谁连上来了都广播给广场用户
+                wss.broadcast(JSON.stringify({path: '/plaza', suffix: '/join', members: _.isEmpty(message.user) ? [] : message.user, guest: onlineGuest}), '/plaza')
+            }
 
 //            /*处理消息*/
 //            //没有消息

@@ -20,7 +20,6 @@ app.controller('loginCtrl', ['$scope', '$http', '$message', '$loadingBar', '$roo
                 if (data.result === "success") {
                     Auth.setUser(Base64.encode(JSON.stringify(data.user)));
                     $loadingBar("100%","/");
-                    ws.send(JSON.stringify({path:'/',user:Auth.getUser()}));
                 } else {
                     $message(data.msg !== undefined ? data.msg : "登陆失败", 90);
                 }
@@ -232,7 +231,7 @@ app.controller('userCtrl', ['$scope', '$location', 'User', '$loadingBar', '$root
                     $rootScope.showModal = false;
                     $scope.userData.user.face = data.face;
                     $rootScope.User.face = data.face;
-                    window.sessionStorage.User = $rootScope.User;
+                    window.sessionStorage.User = Base64.encode(JSON.stringify($rootScope.User))
                 } else {
                     $message("上传头像失败了");
                 }
@@ -264,10 +263,4 @@ app.controller('reActiveCtrl',['$scope','$http','$message',function($scope,$http
 
 app.controller('plazaCtrl',['$scope','Auth',function($scope,Auth){
     $scope.User = Auth.getUser();
-    var i = setInterval(function(){
-        if(socketed){
-            ws.send(JSON.stringify({path:'/plaza',user:Auth.getUser()}));
-            clearInterval(i);
-        }
-    },1000)
 }])

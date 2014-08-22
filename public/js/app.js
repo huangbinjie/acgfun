@@ -61,13 +61,13 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider','$resourcePro
                 $anchorScroll();
             },1000)
         }
+        setTimeout(function(){
+            var i = setInterval(function(){
+                if(socketed){
+                    ws.send(JSON.stringify({path:$location.path(),user:Auth.getUser()}));
+                    clearInterval(i);
+                }
+            },1000)
+        },1000);
     });
-    setTimeout(function(){
-        var i = setInterval(function(){
-            if(socketed){
-                ws.send(JSON.stringify({path:$location.path(),user:Auth.getUser()}));
-                clearInterval(i);
-            }
-        },1000)
-    },1000);
 });
