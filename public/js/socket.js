@@ -12,7 +12,7 @@ ws.onopen = function () {
         if (message.path === '/plaza') {
             members = message.members;
             guests = message.guest;
-            if (message.suffix === "/join") {
+            if (message.suffix === "/join/member") {
                 if (members.length === 0) return;
 //                var member = JSON.parse(members);
                 if(members.face===undefined) members.face="default.jpg";

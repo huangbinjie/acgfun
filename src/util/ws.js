@@ -31,9 +31,8 @@ module.exports = function (server) {
             ws.terminate();
             return;
         }
-        console.log('一个用户连接socket');
         ws.on('close', function () {
-            if (ws.user) {
+            if (!_.isEmpty(ws.user)) {
                 --onlineMember;
 //                如果在plaza断开的
                 if (ws.path === "/plaza") {
@@ -50,41 +49,51 @@ module.exports = function (server) {
         })
         ws.on('message', function (data) {
             var message = JSON.parse(data);
+            //用户切换地址之后更新地址
+            ws.path = message.path;//告诉你在那
+            ws.user = message.user;//告诉你是谁
             /*处理连接 第一次连接*/
             //用户登陆后应该发送把自己的用户信息发送过来,发送user信息且没有储存过用户信息
             //会员登录
-            if (!_.isEmpty(message.user) && _.isUndefined(ws.user)) {
+            if (!_.isEmpty(ws.user) && ws.connected !== true) {
+                ws.connected = true;
                 ++onlineMember;
-                ws.user = message.user;
                 console.log('一个会员连接socket');
             }
             //游客登录;
-            if (_.isEmpty(message.user) && _.isUndefined(ws.path)) {
+            if (_.isEmpty(ws.user) && ws.connected !== true) {
+                ws.connected = true;
                 ++onlineGuest;//如果user为空，则是游客;
                 console.log('一个游客连接socket');
             }
             /*第一次连接处理结束*/
 
-            //用户切换地址之后更新地址
-            ws.path = message.path;
+            if (message.path.indexOf('/') != -1) {
+                //不管谁连上来了都广播给广场用户
+                //如果是游客
+                if (_.isEmpty(ws.user) || ws.connected === undefined) {
+                    wss.broadcast(JSON.stringify({path: '/plaza', suffix: '/join/guest', members: _.isEmpty(message.user) ? [] : message.user, guest: onlineGuest}), '/plaza')
+                }
+                if (!_.isEmpty(ws.user) || ws.connected === undefined) {
+                    //如果是会员
+                    wss.broadcast(JSON.stringify({path: '/plaza', suffix: '/join/member', members: _.isEmpty(message.user) ? [] : message.user, guest: onlineGuest}), '/plaza')
+                }
+            }
 
-            if (message.path === '/plaza') {
+            if (message.path.indexOf('/plaza') != -1) {
                 /*处理请求路径,切换页面的时候发送一个路径信息path*/
                 var users = [];
                 for (var i in wss.clients) {
-                    if (_.isUndefined(wss.clients[i].user)) continue;//如果用户为空继续
+                    if (_.isEmpty(wss.clients[i].user)) continue;//如果用户为空继续
                     users.push(wss.clients[i].user);//如果存在在放进集合;
                 }
                 //发送在线会员信息;
-                wss.broadcast(JSON.stringify({path: '/plaza', suffix: '/join', members: _.isEmpty(message.user) ? [] : message.user, guest: onlineGuest}), '/plaza');
-                ws.send(JSON.stringify({path: '/plaza', members: users, guest: onlineGuest}), '/plaza');
+//                    wss.broadcast(JSON.stringify({path: '/plaza', suffix: '/join', members: _.isEmpty(message.user) ? [] : message.user, guest: onlineGuest}), '/plaza');
+                ws.send(JSON.stringify({path: '/plaza', members: users, guest: onlineGuest}));
                 //如果是聊天
                 if (message.suffix === '/chat') {
                     wss.broadcast(JSON.stringify({path: '/plaza', suffix: '/chat', members: message.user, message: message.message}), '/plaza')
                 }
-            } else {
-                //不管谁连上来了都广播给广场用户
-                wss.broadcast(JSON.stringify({path: '/plaza', suffix: '/join', members: _.isEmpty(message.user) ? [] : message.user, guest: onlineGuest}), '/plaza')
             }
 
 //            /*处理消息*/

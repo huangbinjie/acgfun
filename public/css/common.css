@@ -645,7 +645,7 @@ form .field label {
     overflow-x: hidden;
     overflow-y: auto;
     transition: width .4s;
-    z-index: 1;
+    z-index: 999;
 }
 
 #menu .row {
