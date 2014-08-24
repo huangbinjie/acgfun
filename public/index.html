@@ -7,7 +7,7 @@
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width">
-    <link href="css/acgfun.min.css" type="text/css" rel="stylesheet">
+    <link href="css/common.css" type="text/css" rel="stylesheet">
     <script src="js/vendor/jquery/jquery.min.js"></script>
     <script src="js/vendor/upload/angular-file-upload-html5-shim.min.js"></script>
     <script src="js/vendor/angularjs/angular.min.js"></script>
@@ -16,7 +16,13 @@
     <script src="js/vendor/angularjs/angular-route.min.js"></script>
     <script src="js/vendor/angularjs/angular-cookies.min.js"></script>
     <script src="js/vendor/base64/base64.min.js"></script>
-    <script src="js/acgfun.min.js"></script>
+    <!--<script src="js/acgfun.min.js"></script>-->
+    <script src="js/socket.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/services.js"></script>
+    <script src="js/controllers.js"></script>
+    <script src="js/directives.js"></script>
+    <script src="js/filters.js"></script>
     <base href="/index.html">
 </head>
 <body>
@@ -32,7 +38,8 @@
     <div id="close" class="row"><span>关闭</span></div>
     <label class="splite"></label>
 
-    <div id="open" class="row" ng-click="showEditor = true" ng-show="showOpenEditor&&User!==undefined"><span>发帖</span></div>
+    <div id="open" class="row" ng-click="showEditor = true" ng-show="showOpenEditor&&User!==undefined"><span>发帖</span>
+    </div>
     <label class="splite"></label>
 
     <div class="row face" ng-show="User!==undefined">
@@ -40,14 +47,20 @@
             <img ng-src="uploads/faces/{{User.face}}" src="images/default.jpg" alt="头像">
         </a></div>
     <label class="splite"></label>
+
     <div class="row"><a href="/plaza">广场</a></div>
     <label class="splite"></label>
+
+    <div class="row" id="chat"><span>消息<label class="badge hide">0</label></span></div>
+    <label class="splite"></label>
+
     <div class="row">
         <a href="/login" ng-if="User===undefined">登陆/注册</a>
         <span ng-click="signOut()" ng-if="User!==undefined">登出</span>
     </div>
 </div>
 <div id="menu-btn"></div>
+<!--容器-->
 <div class="container">
     <div class="crumbs" ng-show="showCrumb">
         <span ng-repeat="crumb in crumbs track by $index">
@@ -56,7 +69,35 @@
     </div>
     <div ng-view></div>
 </div>
+<!--消息-->
+<div class="modal-div" ng-show="showChat">
+    <div class="modal chat" chat>
+        <div class="modal-header clearfloat">
+            <h3 class="left">消息<span class="close" ng-click="showChat=false">x</span>
+            </h3>
+        </div>
+        <div class="modal-body message clearfloat">
+            <div class="left-panel clearfloat">
+                <div class="row">
+                    <span>夏恋Z</span>
+                </div>
+            </div>
+                <ul class="right-panel clearfloat">
+                    <li class="right">
+                        <a><img class="face" src="images/img1.jpg"></a>
+                        <div class="close">x</div>
+                    </li>
+                    <li>哈哈哈哈<div><small>一天前</small></div></li>
+                </ul>
+        </div>
+        <div class="modal-footer">
+            <input class="reply" placeholder="按回车键回复">
+            <button class="btn mini reply-btn">发送</button>
+        </div>
+    </div>
+</div>
 <div class="toTop"></div>
+<!--编辑器-->
 <div class="editor" ng-show="showEditor">
     <div class="editor_container">
         <textarea name="description" id="id_description" class="rte-zone"></textarea>

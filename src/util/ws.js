@@ -19,10 +19,10 @@ module.exports = function (server) {
             }
         }
     };
-    wss.to = function (data) {
+    wss.to = function (toId,message) {
         for (var i in this.clients) {
-            if (this.clients[i].user._id === data.to) {
-                this.clients[i].send(data.data);
+            if (this.clients[i].user._id === toId) {
+                this.clients[i].send(JSON.stringify({path: '/', suffix: '/to', members: message.user, message: message}));
             }
         }
     }
@@ -82,17 +82,16 @@ module.exports = function (server) {
                 }
             }
 
-//            /*处理消息*/
-//            //没有消息
-//            if (_.isUndefined(message.message)) {
-//                return;
-//            }
-//            //正常发消息
-//            if (message.to) {
-//                wss.to(data);
-//            } else {
-//                wss.broadcast(data);
-//            }
+            if(message.path.indexOf('/') != -1){
+                /*处理消息*/
+                //没有消息
+                if (_.isUndefined(message.message)||message.message==="") {
+                    return;
+                }
+                if (message.suffix === '/to'&& !_.isUndefined(message.to)) {
+                    wss.to(message.to,escape(message.message));
+                }
+            }
         })
     });
 }

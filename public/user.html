@@ -4,11 +4,16 @@
             <div>
                 <label>
                     <img ng-src="uploads/faces/{{userData.user.face}}" src="images/default.jpg" alt="face">
-
                     <div id="changeFace" ng-click="showModal=true" ng-show="showChangeFace">更换头像</div>
                 </label>
             </div>
             <div>{{userData.user.nick}}</div>
+            <div user-function>
+                <label class="follow" title="关注"></label>
+                <label class="offline" title="离线" ng-if="onlineStatus"></label>
+                <label class="online" title="在线"></label>
+                <label class="chat" title="聊天" ng-click="showChat(userData.user)"></label>
+            </div>
         </div>
         <div class="param">
             <div class="inline-block">

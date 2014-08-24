@@ -37,6 +37,11 @@ app.directive('nav', function ($rootScope, $routeParams) {
                     $(".editor_title").val("").removeAttr("disabled");
                 }
             });
+            $("#chat").click(function(){
+                $rootScope.$apply(function(){
+                    $rootScope.showChat = true;
+                })
+            })
         }
     }
 })
@@ -212,6 +217,40 @@ app.directive('chatInput',function($document,$rootScope,Auth){
                     }
                 }
             })
+        }
+    }
+})
+
+app.directive('chat',function($document,Auth){
+    var to_id;
+    return{
+        restrict:'A',
+        link:function($scope,element,attr){
+            $document.on('keydown',function(event){
+                if(event.which===13){
+                    if($(".modal .reply").val()!==""){
+                        if(to_id){
+                            ws.send(JSON.stringify({path:'/',suffix:'/to',user:Auth.getUser(),to:'',message:$(".modal .reply").val()}));
+                            $(".modal .reply").val("");
+                        }
+                    }
+                }
+            })
+        }
+    }
+})
+//用户面板聊天
+app.directive('userFunction',function($rootScope){
+    return{
+        link:function($scope,element,attr){
+        },
+        controller:function($scope){
+            //显示聊天框
+            $rootScope.showChat = function (user) {
+                $rootScope.showChat = true;
+            }
+            $scope.chat_title = [];
+            $scope.chat_title.push()
         }
     }
 })
