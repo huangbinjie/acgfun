@@ -51,7 +51,7 @@
     <div class="row"><a href="/plaza">广场</a></div>
     <label class="splite"></label>
 
-    <div class="row" id="chat"><span>消息<label class="badge hide">0</label></span></div>
+    <div class="row" id="chat"><span ng-click="showChatModal=true">消息<label class="badge hide">0</label></span></div>
     <label class="splite"></label>
 
     <div class="row">
@@ -70,10 +70,10 @@
     <div ng-view></div>
 </div>
 <!--消息-->
-<div class="modal-div" ng-show="showChat">
+<div class="modal-div" ng-show="showChatModal">
     <div class="modal chat" chat>
         <div class="modal-header clearfloat">
-            <h3 class="left">消息<span class="close" ng-click="showChat=false">x</span>
+            <h3 class="left">消息<span class="close" ng-click="showChatModal=false">x</span>
             </h3>
         </div>
         <div class="modal-body message clearfloat">
@@ -91,6 +91,7 @@
                 </ul>
         </div>
         <div class="modal-footer">
+            <input id="toId" type="hidden">
             <input class="reply" placeholder="按回车键回复">
             <button class="btn mini reply-btn">发送</button>
         </div>

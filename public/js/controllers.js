@@ -71,6 +71,7 @@ app.controller('pageCtrl', ['$scope', '$rootScope', '$message', '$location', 'Po
         $rootScope.editType = "post";
         $rootScope.showOpenEditor = true;
         $rootScope.showCrumb = true;
+        $rootScope.showChat = false;
         Auth.getUser();
         $crumb($location.path());
         $scope.url = $location.path();
@@ -119,6 +120,7 @@ app.controller('topicCtrl', ['$scope', '$rootScope', '$location', 'Topic', 'Auth
         $rootScope.showOpenEditor = true;
         $rootScope.showCrumb = true;
         $rootScope.showEditor = false;
+        $rootScope.showChat = false;
         Auth.getUser();
         $scope.User = $rootScope.User;
         $crumb($location.path());
@@ -202,8 +204,8 @@ app.controller('userCtrl', ['$scope', '$location', 'User', '$loadingBar', '$root
     function ($scope, $location, User, $loadingBar, $rootScope, Auth, $upload, $message, $crumb, $routeParams) {
         $rootScope.showCrumb = true;
         $rootScope.showOpenEditor = false;
-        $rootScope.showChat = false;
         $scope.showModal = false;
+        $rootScope.showChatModal = false;
         Auth.getUser();
         $crumb($location.path());
         $scope.showChangeFace = $routeParams.uid ? false : true;
@@ -266,5 +268,6 @@ app.controller('plazaCtrl', ['$scope', '$rootScope', 'Auth', function ($scope, $
     $rootScope.showEditor = false;
     $rootScope.showOpenEditor = false;
     $rootScope.showCrumb = false;
+    $rootScope.showChat = false;
     $scope.User = Auth.getUser();
 }])

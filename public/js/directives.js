@@ -37,11 +37,6 @@ app.directive('nav', function ($rootScope, $routeParams) {
                     $(".editor_title").val("").removeAttr("disabled");
                 }
             });
-            $("#chat").click(function(){
-                $rootScope.$apply(function(){
-                    $rootScope.showChat = true;
-                })
-            })
         }
     }
 })
@@ -105,7 +100,7 @@ app.directive('editor', ['Post', 'Topic', '$rootScope', '$message', '$routeParam
                         })
                     }
                     if ($rootScope.editType === "reply") {
-                        Topic($location.path()).add({content: content, post_id: $routeParams.pid,post_user_id:$("#post_user_id").val()}, function (data) {
+                        Topic($location.path()).add({content: content, post_id: $routeParams.pid, post_user_id: $("#post_user_id").val()}, function (data) {
                             if (data.result === "success") {
                                 $message("发帖成功");
                                 $(".editor iframe").contents().find("body").html("");
@@ -141,78 +136,78 @@ app.directive("dropdown", function () {
                 e.stopPropagation();
                 $(this).find(".dropdown-menu").slideDown();
             })
-            $(window).click(function(){
+            $(window).click(function () {
                 $(".dropdown-menu").slideUp();
             })
         }
     }
 })
 
-app.directive('toTop',function($window){
+app.directive('toTop', function ($window) {
     return{
-        restrict:'C',
-        link:function($scope,element,attr){
+        restrict: 'C',
+        link: function ($scope, element, attr) {
             var window = angular.element($window);
-            window.on('scroll',function(){
-                if(window.scrollTop()>window.height()){
-                    element.css('opacity',"1");
+            window.on('scroll', function () {
+                if (window.scrollTop() > window.height()) {
+                    element.css('opacity', "1");
                 } else {
-                    element.css('opacity',"0");
+                    element.css('opacity', "0");
                 }
             })
-            element.on('click',function(){
-                $window.scrollTo(0,0);
+            element.on('click', function () {
+                $window.scrollTo(0, 0);
             })
         }
     }
 })
 
 //广场状态
-app.directive('plaza-panel',function(){
+app.directive('plaza-panel', function () {
     return{
-        restrict:'C',
-        link:function($scope,element,attr){
+        restrict: 'C',
+        link: function ($scope, element, attr) {
 
         }
     }
 })
-app.directive('plazaPanelBtn',function(){
+app.directive('plazaPanelBtn', function () {
     return{
-        restrict:'C',
-        link:function($scope,element,attr){
-            element.on('click',function(){
-                if(angular.element(this).hasClass('light-orange')){
+        restrict: 'C',
+        link: function ($scope, element, attr) {
+            element.on('click', function () {
+                if (angular.element(this).hasClass('light-orange')) {
                     angular.element(this).removeClass('light-orange');
-                    angular.element(this).css('background','#52c569');
+                    angular.element(this).css('background', '#52c569');
                     $(".plaza-panel").slideUp();
                 } else {
                     angular.element(this).addClass('light-orange');
-                    angular.element(this).css('background','lightcoral');
+                    angular.element(this).css('background', 'lightcoral');
                     $(".plaza-panel").slideDown();
                 }
             })
         }
     }
 })
-app.directive('chatBtn',function(){
+app.directive('chatBtn', function () {
     return{
-        restrict:'C',
-        link:function($scope,element,attr){
-            element.on('click',function(){
+        restrict: 'C',
+        link: function ($scope, element, attr) {
+            element.on('click', function () {
                 $('.chat-panel').toggle(500);
             })
         }
     }
 })
 
-app.directive('chatInput',function($document,$rootScope,Auth){
+app.directive('chatInput', function ($document, $rootScope, Auth) {
     return{
-        restrict:'C',
-        link:function($scope,element,attr){
-            $document.on('keydown',function(event){
-                if(event.which===13){
-                    if(element.find('input').val()!==""){
-                        ws.send(JSON.stringify({path:'/plaza',suffix:'/chat',user:Auth.getUser(),message:element.find('input').val()}));
+        restrict: 'C',
+        link: function ($scope, element, attr) {
+            $document.on('keydown', function (event) {
+                if (event.which === 13) {
+                    if (element.find('input').val() !== "") {
+                        ws.send(JSON.stringify({path: '/plaza', suffix: '/chat', user: Auth.getUser(), message: element.find('input').val()}));
                         element.find('input').val("");
                     }
                 }
@@ -221,16 +216,15 @@ app.directive('chatInput',function($document,$rootScope,Auth){
     }
 })
 
-app.directive('chat',function($document,Auth){
-    var to_id;
+app.directive('chat', function ($document, Auth,$rootScope) {
     return{
-        restrict:'A',
-        link:function($scope,element,attr){
-            $document.on('keydown',function(event){
-                if(event.which===13){
-                    if($(".modal .reply").val()!==""){
-                        if(to_id){
-                            ws.send(JSON.stringify({path:'/',suffix:'/to',user:Auth.getUser(),to:'',message:$(".modal .reply").val()}));
+        restrict: 'A',
+        link: function ($scope, element, attr) {
+            $document.on('keydown', function (event) {
+                if (event.which === 13) {
+                    if ($(".modal .reply").val() !== "") {
+                        if (to_id) {
+                            ws.send(JSON.stringify({path: '/', suffix: '/to', user: Auth.getUser(), to: $('#toId').val(), message: $(".modal .reply").val()}));
                             $(".modal .reply").val("");
                         }
                     }
@@ -240,17 +234,16 @@ app.directive('chat',function($document,Auth){
     }
 })
 //用户面板聊天
-app.directive('userFunction',function($rootScope){
+app.directive('userFunction', function ($rootScope) {
     return{
-        link:function($scope,element,attr){
+        link: function ($scope, element, attr) {
         },
-        controller:function($scope){
+        controller: function ($scope) {
             //显示聊天框
             $rootScope.showChat = function (user) {
-                $rootScope.showChat = true;
+                $rootScope.showChatModal = true;
+                $('#toId').val(user._id);
             }
-            $scope.chat_title = [];
-            $scope.chat_title.push()
         }
     }
 })
