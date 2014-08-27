@@ -21,7 +21,7 @@ module.exports = function (server) {
     };
     wss.to = function (toId,message) {
         for (var i in this.clients) {
-            if (this.clients[i].user._id === toId) {
+            if (this.clients[i].user._id == toId) {
                 this.clients[i].send(JSON.stringify({path: '/', suffix: '/to', members: message.user, message: message}));
             }
         }

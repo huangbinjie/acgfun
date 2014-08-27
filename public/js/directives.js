@@ -223,7 +223,7 @@ app.directive('chat', function ($document, Auth,$rootScope) {
             $document.on('keydown', function (event) {
                 if (event.which === 13) {
                     if ($(".modal .reply").val() !== "") {
-                        if (to_id) {
+                        if ($('#toId').val()!==""&&$('#toId').val!==undefined) {
                             ws.send(JSON.stringify({path: '/', suffix: '/to', user: Auth.getUser(), to: $('#toId').val(), message: $(".modal .reply").val()}));
                             $(".modal .reply").val("");
                         }
