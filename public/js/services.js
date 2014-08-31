@@ -82,7 +82,7 @@ app.factory('Auth', function ($cookies, $rootScope, $http, $message) {
         signOut: function () {
             $http.post("/signout").success(function (data) {
                 if (data.result === "success") {
-                    $message("成功推出");
+                    $message("成功退出");
                     window.sessionStorage.removeItem("User");
                     $rootScope.User = window.sessionStorage.User;
                     ws.close();

@@ -71,6 +71,8 @@
 </div>
 <!--消息-->
 <div class="modal-div" ng-show="showChatModal">
+    <audio src="music/notification.wav">
+    </audio>
     <div class="modal chat" chat>
         <div class="modal-header clearfloat">
             <h3 class="left">消息<span class="close" ng-click="showChatModal=false">x</span>
@@ -78,17 +80,7 @@
         </div>
         <div class="modal-body message clearfloat">
             <div class="left-panel clearfloat">
-                <div class="row">
-                    <span>夏恋Z</span>
-                </div>
             </div>
-                <ul class="right-panel clearfloat">
-                    <li class="right">
-                        <a><img class="face" src="images/img1.jpg"></a>
-                        <div class="close">x</div>
-                    </li>
-                    <li>哈哈哈哈<div><small>一天前</small></div></li>
-                </ul>
         </div>
         <div class="modal-footer">
             <input id="toId" type="hidden">

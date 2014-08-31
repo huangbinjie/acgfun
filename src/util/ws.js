@@ -1,8 +1,8 @@
-var cookieParser = require('cookie');
+var async = require('async');
 var WebSocketServer = require('ws').Server
-var hat = require('hat');
 var _ = require('underscore');
 var escape = require('escape-html');
+var User = require('../database/user_model');
 var onlineMember = 0;
 var onlineGuest = 0;
 
@@ -19,12 +19,14 @@ module.exports = function (server) {
             }
         }
     };
-    wss.to = function (toId,message) {
+    wss.to = function (toId,user,message) {
         for (var i in this.clients) {
-            if (this.clients[i].user._id === toId) {
-                this.clients[i].send(JSON.stringify({path: '/', suffix: '/to', members: message.user, message: message}));
+            if (this.clients[i].user._id == toId) {
+                this.clients[i].send(JSON.stringify({path: '/', suffix: '/to', members: user,date:new Date(), message: message}));
+                return true;
             }
         }
+        return false;
     }
     wss.on('connection', function (ws) {
         //判断来源是不是acgfun
@@ -36,11 +38,14 @@ module.exports = function (server) {
             if (!_.isEmpty(ws.user)) {
                 --onlineMember;
                 wss.broadcast(JSON.stringify({path: '/plaza', suffix: '/left/member', members: ws.user, guest: onlineGuest}),'/plaza');
-                console.log('一个会员离开socket');
+                console.log('会员:'+onlineMember+'游客:'+onlineGuest);
+                User.update({_id:ws.user._id},{$set:{online:0}},{upsert:true},function(err,doc){
+                    if(err) throw err;
+                })
             } else {
                 --onlineGuest;
                 wss.broadcast(JSON.stringify({path: '/plaza', suffix: '/left/guest', members: [], guest: onlineGuest}), '/plaza');
-                console.log('一个游客离开socket');
+                console.log('会员:'+onlineMember+'游客:'+onlineGuest);
             }
         })
         ws.on('message', function (data) {
@@ -56,14 +61,44 @@ module.exports = function (server) {
                 ++onlineMember;
                 if (ws.guest === true) --onlineGuest;
                 wss.broadcast(JSON.stringify({path: '/plaza', suffix: '/join/member', members: _.isEmpty(message.user) ? [] : message.user, guest: onlineGuest}), '/plaza')
-                console.log('一个会员连接socket');
+                console.log('会员:'+onlineMember+'游客:'+onlineGuest);
+                //更新在线状态
+                User.update({_id:ws.user._id},{$set:{online:1}},{upsert:true},function(err,doc){
+                    if(err) throw err;
+                })
+                //查找未读消息
+                User.aggregate({$match:{_id:ws.user._id}},{$unwind:"$message"},{$match:{'message.read':0}},{$project:{message:1}},function(err,docs){
+                    if(err) throw err;
+                    if(docs.length>0){
+                        async.each(docs,function(message,callback){
+                            User.findOne({_id:message.message._id},{_id:1,email:1,face:1,nick:1},function(err,user){
+                                if(err) throw err;
+                                message.message.user = user;
+                                callback();
+                            })
+                        },function(err){
+                            if(err) throw err;
+                            //留言信息
+                            docs.forEach(function(message){
+                                //修改未读为已读
+                                User.update({_id:ws.user._id,message:{$elemMatch:{read:0}}},{$set:{"message.$.read":1}},{multi:true},function(err,num){
+                                    if(err) throw err;
+                                })
+                                ws.send(JSON.stringify({path:'/',suffix:'/to',members:message.message.user,message:message.message.message,date:message.message.date}));
+                            })
+//                            for(var i in doc._doc.message){
+//                                ws.send(JSON.stringify({path:'/',suffix:'/to',members:doc.message[i]._doc.user,message:doc.message[i]._doc.message,date:doc.message[i]._doc.date}));
+//                            }
+                        })
+                    }
+                })
             }
             //游客登录;
             if (_.isEmpty(ws.user) && ws.guest !== true) {
                 ws.guest = true;
                 ++onlineGuest;//如果user为空，则是游客;
                 wss.broadcast(JSON.stringify({path: '/plaza', suffix: '/join/guest', members: _.isEmpty(message.user) ? [] : message.user, guest: onlineGuest}), '/plaza')
-                console.log('一个游客连接socket');
+                console.log('游客:'+onlineGuest+'会员:'+onlineMember);
             }
             /*第一次连接处理结束*/
             if (message.path.indexOf('/plaza') != -1) {
@@ -74,8 +109,7 @@ module.exports = function (server) {
                     users.push(wss.clients[i].user);//如果存在在放进集合;
                 }
                 //发送在线会员信息;
-//                    wss.broadcast(JSON.stringify({path: '/plaza', suffix: '/join', members: _.isEmpty(message.user) ? [] : message.user, guest: onlineGuest}), '/plaza');
-                ws.send(JSON.stringify({path: '/plaza', members: users, guest: onlineGuest}));
+                ws.send(JSON.stringify({path: '/plaza',suffix:'/join', members: users, guest: onlineGuest}));
                 //如果是聊天
                 if (message.suffix === '/chat') {
                     wss.broadcast(JSON.stringify({path: '/plaza', suffix: '/chat', members: message.user, message: escape(message.message)}), '/plaza')
@@ -89,7 +123,22 @@ module.exports = function (server) {
                     return;
                 }
                 if (message.suffix === '/to'&& !_.isUndefined(message.to)) {
-                    wss.to(message.to,escape(message.message));
+                    var isSend = wss.to(message.to,message.user,escape(message.message));
+                    if(!isSend){
+                        //保留100条留言
+                        User.update({_id:message.to},{$push:{message:{$each:[{_id:message.user._id,read:0,message:message.message}],$slice: -100}}},function(err,num){
+                            if(err) throw  err;
+                            if(num>0){
+                                //系统信息
+                                User.findOne({_id:message.to},{_id:1,email:1,face:1,nick:1},function(err,user){
+                                    if(err) throw err;
+                                    if(user){
+                                        ws.send(JSON.stringify({path: '/', suffix: '/to', members: user,date:new Date(), message: '已留言--系统消息'}));
+                                    }
+                                })
+                            }
+                        })
+                    }
                 }
             }
         })

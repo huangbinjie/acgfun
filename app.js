@@ -3,13 +3,13 @@ var express = require('express');
 var environment = require('./src/config/environment');
 var settings = require('./src/config/settings');
 var mongodb = require('./src/database');
-var ws = require('./src/util/ws');
 var app = express();
 var http = require('http')
 var server = http.createServer(app)
 
 mongodb.config(settings.database);
 mongodb.init();
+var ws = require('./src/util/ws');
 environment(app);
 var routes = require('./src/config/routes');
 routes(app);

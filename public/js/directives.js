@@ -223,10 +223,19 @@ app.directive('chat', function ($document, Auth,$rootScope) {
             $document.on('keydown', function (event) {
                 if (event.which === 13) {
                     if ($(".modal .reply").val() !== "") {
-                        if (to_id) {
+                        if ($('#toId').val()!==undefined&&$('#toId').val()!=='') {
                             ws.send(JSON.stringify({path: '/', suffix: '/to', user: Auth.getUser(), to: $('#toId').val(), message: $(".modal .reply").val()}));
                             $(".modal .reply").val("");
                         }
+                    }
+                }
+            })
+
+            $("button.reply-btn").click(function(){
+                if ($(".modal .reply").val() !== "") {
+                    if ($('#toId').val()!==undefined&&$('#toId').val()!=='') {
+                        ws.send(JSON.stringify({path: '/', suffix: '/to', user: Auth.getUser(), to: $('#toId').val(), message: $(".modal .reply").val()}));
+                        $(".modal .reply").val("");
                     }
                 }
             })
@@ -234,13 +243,42 @@ app.directive('chat', function ($document, Auth,$rootScope) {
     }
 })
 //用户面板聊天
-app.directive('userFunction', function ($rootScope) {
+app.directive('userFunction', function ($rootScope,Auth,$message) {
     return{
         link: function ($scope, element, attr) {
         },
         controller: function ($scope) {
             //显示聊天框
             $rootScope.showChat = function (user) {
+                if(Auth.getUser()._id===undefined){
+                    $message("请先登录");
+                    return;
+                }
+                if($("#chat_title_"+user._id).size()>0){
+                    $("#chat_title_"+user._id).click();
+                } else {
+                    $('.modal.chat .left-panel').prepend('<div class="row active" data-id="' + user._id + '" id="chat_title_'+user._id+'"><span>'+user.nick+'</span></div>');
+                    $('.modal.chat .left-panel').after('<ul id="chat_content_'+user._id+'" class="right-panel clearfloat">' +
+                        '<li class="right"><a href="/user/'+user._id+'"><img class="face" src="uploads/faces/'+user.face+'"></a><div data-id="'+user._id+'" class="close">x</div></li>'+
+                        '</ul>');
+                    $('#chat_title_'+user._id).click(function(){
+                        $('.modal-body .message>ul.show').removeClass('show').addClass('hide');
+                        $('#chat_content_'+$(this)[0].dataset.id).removeClass("hide").addClass("show");
+                        //设置toId
+                        $("#toId").val($(this)[0].dataset.id);
+                    })
+                    //关闭个人对话框
+                    $('#chat_content_'+user._id).find('.close').click(function(){
+//                        显示下一个content
+                        $(this).next().removeClass('hide').addClass('show');
+//                        显示下个title
+                        $("#chat_title_"+$(this)[0].dataset.id).next().addClass('active');
+//                        删除此title
+                        $('#chat_title_'+$(this)[0].dataset.id).remove();
+//                        删除此content
+                        $('#chat_content_'+$(this)[0].dataset.id).remove();
+                    })
+                }
                 $rootScope.showChatModal = true;
                 $('#toId').val(user._id);
             }

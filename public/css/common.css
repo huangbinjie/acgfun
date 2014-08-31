@@ -1275,6 +1275,10 @@ form .field label {
     border-radius: 100%;
     vertical-align: sub;
 }
+.modal-body .close{
+    text-align: center;
+    cursor: pointer;
+}
 
 @media screen and (min-width: 480px) {
     .category-profile {

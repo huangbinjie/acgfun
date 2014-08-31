@@ -17,7 +17,9 @@ module.exports = function (app) {
         app.set('view engine', 'jade');
 
         app.use(favicon());
-        app.use(morgan('dev'));
+//        app.use(morgan('combined', {
+//            skip: function (req, res) { return res.statusCode < 400 }
+//        }));
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded());
         app.use(cookieParser());
@@ -56,11 +58,15 @@ module.exports = function (app) {
 // production error handler
 // no stacktraces leaked to user
         app.use(function (err, req, res, next) {
-            res.render('error', {
-                message: err.message,
-                error: err
-            });
-            logger.error("用户名:" + (req.session.user !== undefined ? req.session.user.email : "未登陆用户,请求地址:") + req.url + ",错误:" + err.message);
+            if(err.status===404){
+                res.redirect('index.html#/'+req.url);
+            } else {
+                res.render('error', {
+                    message: err.message,
+                    error: err
+                });
+                logger.error("用户名:" + (req.session.user !== undefined ? req.session.user.email : "未登陆用户,请求地址:") + req.url + ",错误:" + err.message);
+            }
         });
     });
 };
