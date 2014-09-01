@@ -19,7 +19,7 @@ var fs = require("fs");
         var uid = req.params.uid ? req.params.uid : req.session.user._id;
         async.parallel({
             user: function (callback) {
-                User.findOne({_id: uid}, {password: 0}, function (err, user) {
+                User.findOne({_id: uid}, {password: 0,message:0}, function (err, user) {
                     if (err) next(err);
                     if (user !== null) {
                         user.follow = user.follow.length;

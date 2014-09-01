@@ -992,6 +992,9 @@ form .field label {
     width: 35px;
     height: 35px;
 }
+.modal-body.message .personal{
+    color: lawngreen;
+}
 
 .progressbar {
     width: 0%;

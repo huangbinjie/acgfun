@@ -35,14 +35,15 @@ module.exports = function (server) {
             return;
         }
         ws.on('close', function () {
-            if (!_.isEmpty(ws.user)) {
+            if (ws.member) {
                 --onlineMember;
                 wss.broadcast(JSON.stringify({path: '/plaza', suffix: '/left/member', members: ws.user, guest: onlineGuest}),'/plaza');
                 console.log('会员:'+onlineMember+'游客:'+onlineGuest);
                 User.update({_id:ws.user._id},{$set:{online:0}},{upsert:true},function(err,doc){
                     if(err) throw err;
                 })
-            } else {
+            }
+            if(ws.guest){
                 --onlineGuest;
                 wss.broadcast(JSON.stringify({path: '/plaza', suffix: '/left/guest', members: [], guest: onlineGuest}), '/plaza');
                 console.log('会员:'+onlineMember+'游客:'+onlineGuest);

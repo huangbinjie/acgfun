@@ -38,17 +38,18 @@ ws.onopen = function () {
                 if ($('.modal.chat .left-panel').children().size() > 0) {
                     if ($("#chat_title_" + members._id).size() > 0) {
                         $("#chat_content_" + members._id).append('<li>' + message.message + '</li>');
+                        $("#chat_content_" + members._id).scrollTop($("#chat_content_" + members._id)[0].scrollHeight);
                     } else {
                         var date = new Date(message.date);
                         $('.modal.chat .left-panel').prepend('<div class="row" data-id="' + members._id + '" id="chat_title_' + members._id + '"><span>' + members.nick + '</span></div>');
                         $('.modal.chat .left-panel').after('<ul id="chat_content_' + members._id + '" class="right-panel clearfloat hide">' +
                             '<li class="right"><a href="/user/'+members._id+'"><img class="face" src="uploads/faces/' + members.face + '"></a><div data-id="' + members._id + '" class="close">x</div></li>' +
-                            '<li><small>' + date.getDate()+'日'+date.getHours()+'时'+date.getMinutes()+'分' + '</small><br/>'+message.message+'</li>'+
+                            '<li><small>' + date.getDate()+'号'+date.getHours()+'点'+date.getMinutes()+'分' + '</small><br/>'+message.message+'</li>'+
                             '</ul>');
                         $('#chat_title_' + members._id).click(function () {
                             $('.modal.chat .left-panel').find(".active").removeClass('active');
                             $(this).addClass('active');
-                            $('.modal-body.message>ul.show').removeClass('show').addClass('hide');
+                            $('.modal-body.message> ul').removeClass('show').addClass('hide');
                             $('#chat_content_' + $(this)[0].dataset.id).removeClass("hide").addClass("show");
                             //设置toId
                             $("#toId").val($(this)[0].dataset.id);
@@ -78,7 +79,7 @@ ws.onopen = function () {
                     $('#chat_title_' + members._id).click(function () {
                         $('.modal.chat .left-panel').find(".active").removeClass('active');
                         $(this).addClass('active');
-                        $('.modal-body.message>ul.show').removeClass('show').addClass('hide');
+                        $('.modal-body.message > ul').removeClass('show').addClass('hide');
                         $('#chat_content_' + $(this)[0].dataset.id).removeClass("hide").addClass("show");
                         //设置toId
                         $("#toId").val($(this)[0].dataset.id);

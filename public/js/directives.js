@@ -225,6 +225,8 @@ app.directive('chat', function ($document, Auth,$rootScope) {
                     if ($(".modal .reply").val() !== "") {
                         if ($('#toId').val()!==undefined&&$('#toId').val()!=='') {
                             ws.send(JSON.stringify({path: '/', suffix: '/to', user: Auth.getUser(), to: $('#toId').val(), message: $(".modal .reply").val()}));
+                            $('#chat_content_'+$('#toId').val()).append('<li class="personal">'+$(".modal .reply").val()+'</li>');
+                            $("#chat_content_" + $('#toId').val()).scrollTop($("#chat_content_" + $('#toId').val())[0].scrollHeight);
                             $(".modal .reply").val("");
                         }
                     }
@@ -235,6 +237,8 @@ app.directive('chat', function ($document, Auth,$rootScope) {
                 if ($(".modal .reply").val() !== "") {
                     if ($('#toId').val()!==undefined&&$('#toId').val()!=='') {
                         ws.send(JSON.stringify({path: '/', suffix: '/to', user: Auth.getUser(), to: $('#toId').val(), message: $(".modal .reply").val()}));
+                        $('#chat_content_'+$('#toId').val()).append('<li class="personal">'+$(".modal .reply").val()+'</li>');
+                        $("#chat_content_" + $('#toId').val()).scrollTop($("#chat_content_" + $('#toId').val())[0].scrollHeight);
                         $(".modal .reply").val("");
                     }
                 }
