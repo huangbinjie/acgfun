@@ -60,18 +60,14 @@ body {
     overflow: hidden;
 }
 
-/*#background-img {*/
-    /*top: 0 !important;*/
-    /*height: 100%;*/
-    /*width: 100%;*/
-    /*position: fixed;*/
-    /*background: url(../images/bg.jpg) fixed;*/
-    /*background-size: cover;*/
-/*}*/
+#background-img {
+    top: 0 !important;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    background-color: rgba(128,128,128,0.3);
+}
 
-/*.ng-view{*/
-/*position: relative;*/
-/*}*/
 .show {
     display: block;
 }
