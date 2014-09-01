@@ -80,15 +80,12 @@ module.exports = function (server) {
                             if(err) throw err;
                             //留言信息
                             docs.forEach(function(message){
-                                //修改未读为已读
-                                User.update({_id:ws.user._id,message:{$elemMatch:{read:0}}},{$set:{"message.$.read":1}},{multi:true},function(err,num){
-                                    if(err) throw err;
-                                })
                                 ws.send(JSON.stringify({path:'/',suffix:'/to',members:message.message.user,message:message.message.message,date:message.message.date}));
                             })
-//                            for(var i in doc._doc.message){
-//                                ws.send(JSON.stringify({path:'/',suffix:'/to',members:doc.message[i]._doc.user,message:doc.message[i]._doc.message,date:doc.message[i]._doc.date}));
-//                            }
+                            //清空消息
+                            User.update({_id:ws.user._id},{$set:{message:[]}},function(err,num){
+                                if(err) throw err;
+                            })
                         })
                     }
                 })
