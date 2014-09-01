@@ -21,7 +21,6 @@ var userModel = function(){
 		loginDate	: Date,//登陆时间
 		loginIp	: String,//登陆IP
 		rank		: {type:Number,default:1},//权限等级 0，admin，1普通用户
-        online     : Number,//在线，0不在线 1在线
 		createDate	: {type:Date,default:Date.now},//创建时间=注册时间
 		modifyDate	: Date//修改时间
 	});

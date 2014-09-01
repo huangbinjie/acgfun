@@ -43,8 +43,8 @@ ws.onopen = function () {
                         var date = new Date(message.date);
                         $('.modal.chat .left-panel').prepend('<div class="row" data-id="' + members._id + '" id="chat_title_' + members._id + '"><span>' + members.nick + '</span></div>');
                         $('.modal.chat .left-panel').after('<ul id="chat_content_' + members._id + '" class="right-panel clearfloat hide">' +
-                            '<li class="right"><a href="/user/'+members._id+'"><img class="face" src="uploads/faces/' + members.face + '"></a><div data-id="' + members._id + '" class="close">x</div></li>' +
-                            '<li><small>' + date.getDate()+'号'+date.getHours()+'点'+date.getMinutes()+'分' + '</small><br/>'+message.message+'</li>'+
+                            '<li class="right"><a href="/user/' + members._id + '"><img class="face" src="uploads/faces/' + members.face + '"></a><div data-id="' + members._id + '" class="close">x</div></li>' +
+                            '<li><small>' + date.getDate() + '号' + date.getHours() + '点' + date.getMinutes() + '分' + '</small><br/>' + message.message + '</li>' +
                             '</ul>');
                         $('#chat_title_' + members._id).click(function () {
                             $('.modal.chat .left-panel').find(".active").removeClass('active');
@@ -73,8 +73,8 @@ ws.onopen = function () {
                     var date = new Date(message.date);
                     $('.modal.chat .left-panel').prepend('<div class="row active" data-id="' + members._id + '" id="chat_title_' + members._id + '"><span>' + members.nick + '</span></div>');
                     $('.modal.chat .left-panel').after('<ul id="chat_content_' + members._id + '" class="right-panel clearfloat show">' +
-                        '<li class="right"><a href="/user/'+members._id+'"><img class="face" src="uploads/faces/' + members.face + '"></a><div data-id="' + members._id + '" class="close">x</div></li>' +
-                        '<li><small>' + date.getDate()+'日'+date.getHours()+'时'+date.getMinutes()+'分' + '</small><br/>'+message.message+'</li>'+
+                        '<li class="right"><a href="/user/' + members._id + '"><img class="face" src="uploads/faces/' + members.face + '"></a><div data-id="' + members._id + '" class="close">x</div></li>' +
+                        '<li><small>' + date.getDate() + '日' + date.getHours() + '时' + date.getMinutes() + '分' + '</small><br/>' + message.message + '</li>' +
                         '</ul>');
                     $('#chat_title_' + members._id).click(function () {
                         $('.modal.chat .left-panel').find(".active").removeClass('active');
@@ -98,6 +98,15 @@ ws.onopen = function () {
                     //第一次要设置toId
                     $("#toId").val(members._id);
                 }
+            }
+
+            //更新在线状态
+            if (message.suffix === 'join/member') {
+                $("#online_" + message.user_id).removeClass('offline').addClass('online');
+            }
+            //更新离线状态
+            if (message.suffix === 'left/member') {
+                $("#online_" + message.user_id).removeClass('online').addClass('offline');
             }
         }
     }

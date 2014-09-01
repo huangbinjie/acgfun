@@ -38,10 +38,9 @@ module.exports = function (server) {
             if (ws.member) {
                 --onlineMember;
                 wss.broadcast(JSON.stringify({path: '/plaza', suffix: '/left/member', members: ws.user, guest: onlineGuest}),'/plaza');
+                //更新离线状态
+                wss.broadcast(JSON.stringify({path:'/',suffix:'left/member',user_id:ws.user._id}));
                 console.log('会员:'+onlineMember+'游客:'+onlineGuest);
-                User.update({_id:ws.user._id},{$set:{online:0}},{upsert:true},function(err,doc){
-                    if(err) throw err;
-                })
             }
             if(ws.guest){
                 --onlineGuest;
@@ -62,11 +61,9 @@ module.exports = function (server) {
                 ++onlineMember;
                 if (ws.guest === true) --onlineGuest;
                 wss.broadcast(JSON.stringify({path: '/plaza', suffix: '/join/member', members: _.isEmpty(message.user) ? [] : message.user, guest: onlineGuest}), '/plaza')
+               //更新在线状态
+                wss.broadcast(JSON.stringify({path:'/',suffix:'join/member',user_id:ws.user._id}));
                 console.log('会员:'+onlineMember+'游客:'+onlineGuest);
-                //更新在线状态
-                User.update({_id:ws.user._id},{$set:{online:1}},{upsert:true},function(err,doc){
-                    if(err) throw err;
-                })
                 //查找未读消息
                 User.aggregate({$match:{_id:ws.user._id}},{$unwind:"$message"},{$match:{'message.read':0}},{$project:{message:1}},function(err,docs){
                     if(err) throw err;

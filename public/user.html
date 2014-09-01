@@ -10,8 +10,7 @@
             <div>{{userData.user.nick}}</div>
             <div user-function>
                 <label class="follow" title="关注"></label>
-                <label class="offline" title="离线" ng-if="userData.user.online===0"></label>
-                <label class="online" title="在线" ng-if="userData.user.online===1"></label>
+                <label id="online_{{userData.user._id}}" class="offline" title="离线"></label>
                 <label class="chat" title="聊天" ng-click="showChat(userData.user)"></label>
             </div>
         </div>
