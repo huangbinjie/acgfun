@@ -799,7 +799,6 @@ form .field label {
     width: 100%;
     border-bottom: 1px solid gray;
     display: block;
-    float: left;
 }
 
 .badge {
