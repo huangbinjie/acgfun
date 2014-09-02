@@ -1,4 +1,4 @@
-/* 
+﻿/* 
     Created on : Apr 16, 2014, 10:29:33 PM
     Author     : hbj
     */
@@ -1120,7 +1120,7 @@ form .field label {
     border-color: #428bca;
 }
 
-.topic-item > .followed {
+.topic-left .followed {
     background: url(../images/red_heart.png);
     width: 16px;
     height: 16px;
