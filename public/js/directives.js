@@ -261,12 +261,16 @@ app.directive('userFunction', function ($rootScope,Auth,$message) {
                 if($("#chat_title_"+user._id).size()>0){
                     $("#chat_title_"+user._id).click();
                 } else {
+                    $('.modal.chat .left-panel').find('.active').removeClass('active');
                     $('.modal.chat .left-panel').prepend('<div class="row active" data-id="' + user._id + '" id="chat_title_'+user._id+'"><span>'+user.nick+'</span></div>');
-                    $('.modal.chat .left-panel').after('<ul id="chat_content_'+user._id+'" class="right-panel clearfloat">' +
+                    $('.modal-body.message>ul.show').removeClass('show').addClass('hide');
+                    $('.modal.chat .left-panel').after('<ul id="chat_content_'+user._id+'" class="right-panel clearfloat show">' +
                         '<li class="right"><a href="/user/'+user._id+'"><img class="face" src="uploads/faces/'+user.face+'"></a><div data-id="'+user._id+'" class="close">x</div></li>'+
                         '</ul>');
                     $('#chat_title_'+user._id).click(function(){
-                        $('.modal-body .message>ul.show').removeClass('show').addClass('hide');
+                        $('.modal.chat .left-panel').find(".active").removeClass('active');
+                        $(this).addClass('active');
+                        $('.modal-body.message>ul.show').removeClass('show').addClass('hide');
                         $('#chat_content_'+$(this)[0].dataset.id).removeClass("hide").addClass("show");
                         //设置toId
                         $("#toId").val($(this)[0].dataset.id);

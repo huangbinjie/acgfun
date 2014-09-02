@@ -145,6 +145,9 @@ app.controller('topicCtrl', ['$scope', '$rootScope', '$location', 'Topic', 'Auth
         })
 
         $scope.star = function (pid) {
+            if(!window.sessionStorage.User){
+                $message("请先登录");
+            }
             Star.add({pid: pid}, function (data) {
                 if (data.result === "success") {
                     $message("收藏成功");
@@ -156,6 +159,9 @@ app.controller('topicCtrl', ['$scope', '$rootScope', '$location', 'Topic', 'Auth
         }
 
         $scope.follow = function (uid) {
+            if(!window.sessionStorage.User){
+                $message("请先登录");
+            }
             Follow.add({uid: uid}, function (data) {
                 if (data.result === "success") {
                     $message("关注成功");
@@ -200,8 +206,8 @@ app.controller('topicCtrl', ['$scope', '$rootScope', '$location', 'Topic', 'Auth
             }
         }
     }])
-app.controller('userCtrl', ['$scope', '$location', 'User', '$loadingBar', '$rootScope', 'Auth', '$upload', '$message', '$crumb', '$routeParams',
-    function ($scope, $location, User, $loadingBar, $rootScope, Auth, $upload, $message, $crumb, $routeParams) {
+app.controller('userCtrl', ['$scope', '$location', 'User', '$loadingBar', '$rootScope', 'Auth', '$upload', '$message', '$crumb', '$routeParams','Follow',
+    function ($scope, $location, User, $loadingBar, $rootScope, Auth, $upload, $message, $crumb, $routeParams,Follow) {
         $rootScope.showCrumb = true;
         $rootScope.showOpenEditor = false;
         $scope.showModal = false;
@@ -239,6 +245,20 @@ app.controller('userCtrl', ['$scope', '$location', 'User', '$loadingBar', '$root
                     $message("上传头像失败了");
                 }
             });
+        }
+
+        $scope.follow = function (uid) {
+            if(!window.sessionStorage.User){
+                $message("请先登录");
+            }
+            Follow.add({uid: uid}, function (data) {
+                if (data.result === "success") {
+                    $message("关注成功");
+                    $("body").click();
+                } else {
+                    $message(data.msg ? data.msg : "关注失败");
+                }
+            })
         }
     }])
 

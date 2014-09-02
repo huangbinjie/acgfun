@@ -19,7 +19,7 @@ var fs = require("fs");
         var uid = req.params.uid ? req.params.uid : req.session.user._id;
         async.parallel({
             user: function (callback) {
-                User.findOne({_id: uid}, {password: 0,message:0}, function (err, user) {
+                User.findOne({_id: uid}, {password: 0, message: 0}, function (err, user) {
                     if (err) next(err);
                     if (user !== null) {
                         user.follow = user.follow.length;
@@ -30,6 +30,20 @@ var fs = require("fs");
                         next();
                     }
                 })
+            },
+            isFollowed: function (callback) {
+                if(req.session.user){
+                    User.find({_id: req.session.user._id, follow: {$in: [req.session.user._id]}}, function (err, follow) {
+                        if (err) next(err);
+                        if (follow.length > 0) {
+                            callback(null, true);
+                        } else {
+                            callback(null, false);
+                        }
+                    })
+                } else {
+                    callback(null, false);
+                }
             },
             post: function (callback) {
                 async.parallel({
@@ -95,7 +109,7 @@ var fs = require("fs");
                     User.update(criteria, {$set: {loginDate: new Date(), loginIp: req.ip}}, function (err, num) {
                         if (err) next(err);
                         if (num > 0) {
-                            req.session.user = {_id:doc._id,rank:doc.rank};
+                            req.session.user = {_id: doc._id, rank: doc.rank};
                             res.json({"result": "success", "user": doc});
                         } else {
                             res.json({"result": "failed"});
@@ -141,8 +155,8 @@ var fs = require("fs");
                                     from: 'admin@acgfun.cn',
                                     to: criteria.email,
                                     subject: 'acgfun激活',
-                                    html: settings.email.register+
-                                            "<a href='http://www.acgfun.cn/user/active?email="+criteria.email+"&id="+id+"'>http://www.acgfun.cn/user/active?email="+criteria.email+"&id="+id
+                                    html: settings.email.register +
+                                        "<a href='http://www.acgfun.cn/user/active?email=" + criteria.email + "&id=" + id + "'>http://www.acgfun.cn/user/active?email=" + criteria.email + "&id=" + id
                                 });
                                 res.json({"result": "success"});
                             } else {
@@ -245,28 +259,28 @@ var fs = require("fs");
     }
 
     //激活邮箱
-    module.active = function(req,res,next){
+    module.active = function (req, res, next) {
         var email = req.body.email;
         var id = req.body.id;
-        if(email===undefined||email===""){
+        if (email === undefined || email === "") {
             res.json({"result": "failed"});
             return;
         }
-        if(id===undefined||id===""){
+        if (id === undefined || id === "") {
             res.json({"result": "failed"});
             return;
         }
-        User.update({email:email,hat_id:id},{$set:{status:0}},function(err,num){
-            if(err) next(err);
-            if(num>0){
-                res.json({"result": "success","msg":"激活成功"});
+        User.update({email: email, hat_id: id}, {$set: {status: 0}}, function (err, num) {
+            if (err) next(err);
+            if (num > 0) {
+                res.json({"result": "success", "msg": "激活成功"});
             } else {
-                res.json({"result": "failed","msg":"激活失败"});
+                res.json({"result": "failed", "msg": "激活失败"});
             }
         })
     }
     //忘记密码
-    module.reset = function(req,res,next) {
+    module.reset = function (req, res, next) {
         var email = req.body.email;
         var id = hat();
         User.update({email: email}, {$set: {hat_id: id}}, {upsert: true}, function (err, num) {
@@ -287,20 +301,20 @@ var fs = require("fs");
     }
 
     //发送邮箱验证
-    module.reActive = function(req,res,next){
+    module.reActive = function (req, res, next) {
         var criteria = req.body;
         var id = hat();
-        User.update({email:criteria.email},{$set:{hat_id:id}},{upsert:true},function(err,num){
-            if(err) next(err);
-            if(num>0){
+        User.update({email: criteria.email}, {$set: {hat_id: id}}, {upsert: true}, function (err, num) {
+            if (err) next(err);
+            if (num > 0) {
                 email.transporter.sendMail({
                     from: 'admin@acgfun.cn',
                     to: criteria.email,
                     subject: 'acgfun激活',
-                    html: settings.email.register+
-                        "<a href='http://www.acgfun.cn/user/active?email="+criteria.email+"&id="+id+"'>http://www.acgfun.cn/user/active?email="+criteria.email+"&id="+id
-                },function(err,info){
-                    if(err) res.json({"result": "failed"});
+                    html: settings.email.register +
+                        "<a href='http://www.acgfun.cn/user/active?email=" + criteria.email + "&id=" + id + "'>http://www.acgfun.cn/user/active?email=" + criteria.email + "&id=" + id
+                }, function (err, info) {
+                    if (err) res.json({"result": "failed"});
                     else res.json({"result": "success"});
                 });
             } else {
@@ -309,7 +323,7 @@ var fs = require("fs");
         })
     }
     //重置密码
-    module.resetPass = function(req,res,next){
+    module.resetPass = function (req, res, next) {
         var criteria = req.body;
         if (!/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(criteria.email) || criteria.email === undefined) {
             res.json({"result": "failed", "msg": "邮箱格式不正确"});
@@ -319,9 +333,9 @@ var fs = require("fs");
             res.json({"result": "failed", "msg": "密码格式不正确"});
             return;
         }
-        User.update({email:criteria.email},{$set:{password:MD5(criteria.password)}},function(err,num){
-            if(err) next(err);
-            if(num>0){
+        User.update({email: criteria.email}, {$set: {password: MD5(criteria.password)}}, function (err, num) {
+            if (err) next(err);
+            if (num > 0) {
                 res.json({"result": "success"});
             } else {
                 res.json({"result": "failed"});

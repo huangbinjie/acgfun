@@ -36,6 +36,7 @@ module.exports = function (server) {
         }
         ws.on('close', function () {
             if (ws.member) {
+                ws.member = false;
                 --onlineMember;
                 wss.broadcast(JSON.stringify({path: '/', suffix: '/left/member', members: ws.user, guest: onlineGuest}));
                 //更新离线状态到数据库
@@ -45,6 +46,7 @@ module.exports = function (server) {
                 console.log('会员:'+onlineMember+'游客:'+onlineGuest);
             }
             if(ws.guest){
+                ws.guest = false;
                 --onlineGuest;
                 wss.broadcast(JSON.stringify({path: '/plaza', suffix: '/left/guest', members: [], guest: onlineGuest}), '/plaza');
                 console.log('会员:'+onlineMember+'游客:'+onlineGuest);

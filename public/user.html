@@ -9,7 +9,8 @@
             </div>
             <div>{{userData.user.nick}}</div>
             <div user-function>
-                <label class="follow" title="关注"></label>
+                <label class="follow" ng-class="userData.isFollowed?'followed':'follow'"
+                       title="{{userData.isFollowed?'已关注':'关注'}}" ng-click="follow(userData.user._id)"></label>
                 <label id="online_{{userData.user._id}}" class="offline"
                        ng-class="userData.user.online===1?'online':'offline';" title="{{userData.user.online===1?'在线':'离线'}}"></label>
                 <label class="chat" title="聊天" ng-click="showChat(userData.user)"></label>
