@@ -183,7 +183,7 @@ var fs = require("fs");
             res.json({"result": "failed", "msg": "图片太大了"});
             return;
         }
-        var filename = req.session.user._id + "_" + Date.now() + "." + req.files.file.extension;
+        var filename = req.session.user._id + "_face." + req.files.file.extension;
         fs.rename(req.files.file.path, "public//uploads//faces//" + filename, function (err) {
             if (err) throw next(err);
             User.update({_id: req.session.user._id}, {$set: {face: filename}}, function (err, num) {
