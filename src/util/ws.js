@@ -37,11 +37,9 @@ module.exports = function (server) {
         ws.on('close', function () {
             if (ws.member) {
                 --onlineMember;
-                wss.broadcast(JSON.stringify({path: '/plaza', suffix: '/left/member', members: ws.user, guest: onlineGuest}),'/plaza');
-                //更新离线状态
-                wss.broadcast(JSON.stringify({path:'/',suffix:'left/member',user_id:ws.user._id}));
-                //更新到数据库
-                User.update({_id:ws.user._id},{$set:{online:0}},{upsert:true},function(){
+                wss.broadcast(JSON.stringify({path: '/', suffix: '/left/member', members: ws.user, guest: onlineGuest}));
+                //更新离线状态到数据库
+                User.update({_id:ws.user._id},{$set:{online:0}},{upsert:true},function(err ,num){
                 if(err) throw err;
                 })
                 console.log('会员:'+onlineMember+'游客:'+onlineGuest);
@@ -64,11 +62,9 @@ module.exports = function (server) {
                 ws.member = true;
                 ++onlineMember;
                 if (ws.guest === true) --onlineGuest;
-                wss.broadcast(JSON.stringify({path: '/plaza', suffix: '/join/member', members: _.isEmpty(message.user) ? [] : message.user, guest: onlineGuest}), '/plaza')
-               //更新在线状态
-                wss.broadcast(JSON.stringify({path:'/',suffix:'join/member',user_id:ws.user._id}));
-                //更新到数据库
-                User.update({_id:ws.user._id},{$set:{online:1}},{upsert:true},function(){
+                wss.broadcast(JSON.stringify({path: '/', suffix: '/join/member', members: _.isEmpty(message.user) ? [] : message.user, guest: onlineGuest}));
+                //更新在线状态到数据库
+                User.update({_id:ws.user._id},{$set:{online:1}},{upsert:true},function(err,num){
                     if(err) throw err;
                 })
                 console.log('会员:'+onlineMember+'游客:'+onlineGuest);

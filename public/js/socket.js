@@ -11,13 +11,7 @@ ws.onopen = function () {
         members = message.members;
         if ('/plaza'.indexOf(message.path) !== -1) {
             guests = message.guest;
-            if (message.suffix === "/join/member") {
-                if (members.length === 0) return;
-                if (members.face === undefined) members.face = "default.jpg";
-                $('#plaza-groups').append('<li class="inline-block" id="' + members._id + '"><a href="/user/' + members._id + '"><img src="uploads/faces/' + members.face + '"></a><p class="text-center">' + members.nick + '</p></li>')
-            } else if (message.suffix === "/left/member") {
-                $('#' + members._id).remove();
-            } else if (message.suffix === '/chat') {
+            if (message.suffix === '/chat') {
                 $(".chat-dialog").prepend('<li class="chat"><a href="/user/' + members._id + '"><img src="uploads/faces/' + members.face + '"></a><span class="username">' + members.nick + ':</span><span>' + message.message + '</span></li>');
             } else if (message.suffix === '/join') {
                 if (members.length === 0) {
@@ -101,12 +95,16 @@ ws.onopen = function () {
             }
 
             //更新在线状态
-            if (message.suffix === 'join/member') {
-                $("#online_" + message.user_id).removeClass('offline').addClass('online');
+            if (message.suffix === '/join/member') {
+                if (members.length === 0) return;
+                $("#online_" + members._id).removeClass('offline').addClass('online');
+                if (members.face === undefined) members.face = "default.jpg";
+                $('#plaza-groups').append('<li class="inline-block" id="' + members._id + '"><a href="/user/' + members._id + '"><img src="uploads/faces/' + members.face + '"></a><p class="text-center">' + members.nick + '</p></li>')
             }
             //更新离线状态
-            if (message.suffix === 'left/member') {
-                $("#online_" + message.user_id).removeClass('online').addClass('offline');
+            if (message.suffix === '/left/member') {
+                $("#online_" + members._id).removeClass('online').addClass('offline');
+                $('#' + members._id).remove();
             }
         }
     }
