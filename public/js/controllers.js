@@ -237,10 +237,12 @@ app.controller('userCtrl', ['$scope', '$location', 'User', '$loadingBar', '$root
             }).success(function (data, status, headers, config) {
                 if (data.result === "success") {
                     $message("上传头像成功");
-                    $rootScope.showModal = false;
-                    $scope.userData.user.face = data.face;
-                    $rootScope.User.face = data.face;
+                    $scope.showModal = false;
+                    $scope.userData.user.face = data.face+"?"+Date.now();
+                    $rootScope.User.face = data.face+"?"+Date.now();
                     window.sessionStorage.User = Base64.encode(JSON.stringify($rootScope.User))
+                    $('#file').val(null);
+                    $scope.file = undefined;
                 } else {
                     $message("上传头像失败了");
                 }
