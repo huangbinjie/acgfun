@@ -191,7 +191,7 @@ var async = require('async');
         var id = req.query.id;
         if (type === "p") {
             async.parallel([function (callback) {
-                Post.update({_id: id}, {$set: {deleteFlag: 1}}, {upsert: true}, function (err, num) {
+                Post.update({_id: id,user_id:req.session.user._id}, {$set: {deleteFlag: 1}}, {upsert: true}, function (err, num) {
                     if (err) next(err);
                     callback(null, num);
                 })
@@ -206,7 +206,7 @@ var async = require('async');
             })
         }
         if (type === "c") {
-            Comment.update({_id: id}, {$set: {deleteFlag: 1}}, {upsert: true}, function (err, num) {
+            Comment.update({_id: id,user_id:req.session.user._id}, {$set: {deleteFlag: 1}}, {upsert: true}, function (err, num) {
                 if (err) next(err);
                 if (num > 0) {
                     res.json({"result": "success"});

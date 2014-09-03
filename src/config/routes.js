@@ -17,7 +17,7 @@ module.exports = function (app) {
     app.put('/[acgm]',auth.ensureAuthenticated,controllers.post.put);
     app.post('/[acgm]/:pid/:title',controllers.post.getTopic);//获取文章
     app.put('/[acgm]/:pid/:title',auth.ensureAuthenticated,controllers.post.putComment);
-    app.delete('/[acgm]/:pid/:title',auth.ensureRank,controllers.post.delete);
+    app.delete('/[acgm]/:pid/:title',auth.ensureAuthenticated,controllers.post.delete);
 
     /*收藏，关注*/
     app.put('/user/star',auth.ensureAuthenticated,controllers.user.star);

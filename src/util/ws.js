@@ -30,8 +30,10 @@ module.exports = function (server) {
     }
     wss.find = function(_id){
         for(var i in this.clients){
-            if(this.clients[i].user._id === _id){
-            this.clients[i].send(JSON.stringify({path:'/error',suffix:'/joined'}));
+            if(this.clients[i].user){
+                if(this.clients[i].user._id === _id){
+                    this.clients[i].send(JSON.stringify({path:'/error',suffix:'/joined'}));
+                }
             }
         }
     }
@@ -62,13 +64,13 @@ module.exports = function (server) {
             var message = JSON.parse(data);
             //用户切换地址之后更新地址
             ws.path = message.path;//告诉你在那
-            ws.user = message.user;//告诉你是谁
             /*处理连接 第一次连接*/
             //用户登陆后应该发送把自己的用户信息发送过来,发送user信息且没有储存过用户信息
             //会员登录
-            if (!_.isEmpty(ws.user) && ws.member !== true) {
+            if (!_.isEmpty(message.user) && ws.member !== true) {
                 //查找是否已连接
-                wss.find(ws.user._id);
+                wss.find(message.user._id);
+                ws.user = message.user;//告诉你是谁
                 ws.member = true;
                 ++onlineMember;
                 if (ws.guest === true) --onlineGuest;
