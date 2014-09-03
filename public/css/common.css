@@ -53,7 +53,7 @@ body {
     font-family: '微软雅黑', Arial;
     color: #FFFFFF;
     font-size: 1rem;
-    background: url(../images/bg_sky.jpg) fixed no-repeat center center;
+    background: url(../images/theme/summer/sky_sunshine.jpg) fixed no-repeat center center;
     background-size: cover;
     width: 100%;
     height: 100%;
