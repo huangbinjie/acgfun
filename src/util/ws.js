@@ -32,10 +32,11 @@ module.exports = function (server) {
         for(var i in this.clients){
             if(this.clients[i].user){
                 if(this.clients[i].user._id === _id){
-                    this.clients[i].send(JSON.stringify({path:'/error',suffix:'/joined'}));
+                    return true;
                 }
             }
         }
+        return false;
     }
     wss.on('connection', function (ws) {
         //判断来源是不是acgfun
@@ -45,7 +46,6 @@ module.exports = function (server) {
         }
         ws.on('close', function () {
             if (ws.member) {
-                ws.member = false;
                 --onlineMember;
                 wss.broadcast(JSON.stringify({path: '/', suffix: '/left/member', members: ws.user, guest: onlineGuest}));
                 //更新离线状态到数据库
@@ -54,7 +54,6 @@ module.exports = function (server) {
                 })
                 console.log('会员:'+onlineMember+'游客:'+onlineGuest);
             } else if(ws.guest){
-                ws.guest = false;
                 --onlineGuest;
                 wss.broadcast(JSON.stringify({path: '/plaza', suffix: '/left/guest', members: [], guest: onlineGuest}), '/plaza');
                 console.log('会员:'+onlineMember+'游客:'+onlineGuest);
@@ -69,40 +68,41 @@ module.exports = function (server) {
             //会员登录
             if (!_.isEmpty(message.user) && ws.member !== true) {
                 //查找是否已连接
-                wss.find(message.user._id);
-                ws.user = message.user;//告诉你是谁
-                ws.member = true;
-                ++onlineMember;
-                if (ws.guest === true) --onlineGuest;
-                wss.broadcast(JSON.stringify({path: '/', suffix: '/join/member', members: _.isEmpty(message.user) ? [] : message.user, guest: onlineGuest}));
-                //更新在线状态到数据库
-                User.update({_id:ws.user._id},{$set:{online:1}},{upsert:true},function(err,num){
-                    if(err) throw err;
-                })
-                console.log('会员:'+onlineMember+'游客:'+onlineGuest);
-                //查找未读消息
-                User.aggregate({$match:{_id:ws.user._id}},{$unwind:"$message"},{$match:{'message.read':0}},{$project:{message:1}},function(err,docs){
-                    if(err) throw err;
-                    if(docs.length>0){
-                        async.each(docs,function(message,callback){
-                            User.findOne({_id:message.message._id},{_id:1,email:1,face:1,nick:1},function(err,user){
+                if(!wss.find(message.user._id)){
+                    ws.user = message.user;//告诉你是谁
+                    ws.member = true;
+                    ++onlineMember;
+                    if (ws.guest === true) --onlineGuest;
+                    wss.broadcast(JSON.stringify({path: '/', suffix: '/join/member', members: _.isEmpty(message.user) ? [] : message.user, guest: onlineGuest}));
+                    //更新在线状态到数据库
+                    User.update({_id:ws.user._id},{$set:{online:1}},{upsert:true},function(err,num){
+                        if(err) throw err;
+                    })
+                    console.log('会员:'+onlineMember+'游客:'+onlineGuest);
+                    //查找未读消息
+                    User.aggregate({$match:{_id:ws.user._id}},{$unwind:"$message"},{$match:{'message.read':0}},{$project:{message:1}},function(err,docs){
+                        if(err) throw err;
+                        if(docs.length>0){
+                            async.each(docs,function(message,callback){
+                                User.findOne({_id:message.message._id},{_id:1,email:1,face:1,nick:1},function(err,user){
+                                    if(err) throw err;
+                                    message.message.user = user;
+                                    callback();
+                                })
+                            },function(err){
                                 if(err) throw err;
-                                message.message.user = user;
-                                callback();
+                                //留言信息
+                                docs.forEach(function(message){
+                                    ws.send(JSON.stringify({path:'/',suffix:'/to',members:message.message.user,message:message.message.message,date:message.message.date}));
+                                })
+                                //清空消息
+                                User.update({_id:ws.user._id},{$set:{message:[]}},function(err,num){
+                                    if(err) throw err;
+                                })
                             })
-                        },function(err){
-                            if(err) throw err;
-                            //留言信息
-                            docs.forEach(function(message){
-                                ws.send(JSON.stringify({path:'/',suffix:'/to',members:message.message.user,message:message.message.message,date:message.message.date}));
-                            })
-                            //清空消息
-                            User.update({_id:ws.user._id},{$set:{message:[]}},function(err,num){
-                                if(err) throw err;
-                            })
-                        })
-                    }
-                })
+                        }
+                    })
+                }
             }
             //游客登录;
             if (_.isEmpty(ws.user) && ws.guest !== true) {

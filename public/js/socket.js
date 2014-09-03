@@ -8,14 +8,6 @@ ws.onopen = function () {
     socketed = true;
     ws.onmessage = function (data) {
         message = JSON.parse(data.data);
-        /*错误处理*/
-        if(message.path==='/error'){
-            if(message.suffix==='/joined'){
-                ws.close();
-                alert('账号在其他地方登陆了，聊天频道已断开');
-            }
-        }
-        /*错误处理结束*/
         members = message.members;
         if ('/plaza'.indexOf(message.path) !== -1) {
             guests = message.guest;
