@@ -40,7 +40,7 @@ module.exports = function (server) {
                 --onlineMember;
                 wss.broadcast(JSON.stringify({path: '/', suffix: '/left/member', members: ws.user, guest: onlineGuest}));
                 //更新离线状态到数据库
-                User.update({_id:ws.user._id},{$set:{online:0}},{upsert:true},function(err ,num){
+                User.update({_id:ws.user._id},{$set:{online:0,loginDate	: new Date()}},{upsert:true},function(err ,num){
                 if(err) throw err;
                 })
                 console.log('会员:'+onlineMember+'游客:'+onlineGuest);
