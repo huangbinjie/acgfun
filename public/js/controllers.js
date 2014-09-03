@@ -256,7 +256,7 @@ app.controller('userCtrl', ['$scope', '$location', 'User', '$loadingBar', '$root
             Follow.add({uid: uid}, function (data) {
                 if (data.result === "success") {
                     $message("关注成功");
-                    $("body").click();
+                    $scope.userData.isFollowed = true;
                 } else {
                     $message(data.msg ? data.msg : "关注失败");
                 }
