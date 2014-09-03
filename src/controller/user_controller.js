@@ -48,13 +48,13 @@ var fs = require("fs");
             post: function (callback) {
                 async.parallel({
                     topic: function (callback) {
-                        Post.find({user_id: uid}, {title: 1, parent_url: 1}, {sort: {createDate: -1}, skip: skip, limit: 10}, function (err, post) {
+                        Post.find({user_id: uid,deleteFlag:0}, {title: 1, parent_url: 1}, {sort: {createDate: -1}, skip: skip, limit: 10}, function (err, post) {
                             if (err) next(err);
                             callback(null, post);
                         })
                     },
                     comment: function (callback) {
-                        Comment.find({user_id: uid}, {content: 1, post_id: 1}, {sort: {createDate: -1}, skip: skip, limit: 10}).populate("post_id", {_id: 1, title: 1, createDate: 1, parent_url: 1}).exec(function (err, comment) {
+                        Comment.find({user_id: uid,deleteFlag:0}, {content: 1, post_id: 1}, {sort: {createDate: -1}, skip: skip, limit: 10}).populate("post_id", {_id: 1, title: 1, createDate: 1, parent_url: 1}).exec(function (err, comment) {
                             if (err) next(err);
                             callback(null, comment);
                         })

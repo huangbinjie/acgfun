@@ -13,7 +13,7 @@ var postModel = function(){
 		content		: {type:String,required:true},//文本
 		order		: {type:Number,default:0},//排序方式，应该按从大到小排
         view        :{type:Number,default:0},//浏览次数
-        deleteFlag  :{type:Number,default:0},//删除标志
+        deleteFlag  :{type:Number,default:0},//删除标志 0未删除 1已删除
 		createDate	: {type:Date,default:Date.now},
 		modifyDate	: Date
 	});
