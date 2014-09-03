@@ -28,6 +28,13 @@ module.exports = function (server) {
         }
         return false;
     }
+    wss.find = function(_id){
+        for(var i in this.clients){
+            if(this.clients[i].user._id === _id){
+            this.clients[i].send(JSON.stringify({path:'/error',suffix:'/joined'}));
+            }
+        }
+    }
     wss.on('connection', function (ws) {
         //判断来源是不是acgfun
         if (ws.upgradeReq.headers.origin !== "http://localhost" && ws.upgradeReq.headers.origin !== "http://www.acgfun.cn") {
@@ -60,6 +67,8 @@ module.exports = function (server) {
             //用户登陆后应该发送把自己的用户信息发送过来,发送user信息且没有储存过用户信息
             //会员登录
             if (!_.isEmpty(ws.user) && ws.member !== true) {
+                //查找是否已连接
+                wss.find(ws.user._id);
                 ws.member = true;
                 ++onlineMember;
                 if (ws.guest === true) --onlineGuest;
