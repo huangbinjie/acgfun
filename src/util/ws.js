@@ -44,8 +44,7 @@ module.exports = function (server) {
                 if(err) throw err;
                 })
                 console.log('会员:'+onlineMember+'游客:'+onlineGuest);
-            }
-            if(ws.guest){
+            } else if(ws.guest){
                 ws.guest = false;
                 --onlineGuest;
                 wss.broadcast(JSON.stringify({path: '/plaza', suffix: '/left/guest', members: [], guest: onlineGuest}), '/plaza');
