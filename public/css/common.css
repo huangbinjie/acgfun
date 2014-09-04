@@ -678,7 +678,20 @@ form .field label {
     max-width: 100%;
     height: auto;
 }
-
+.topic-right .reply_content {
+    position: relative;
+    padding-left: 1rem;
+    font-size: 18px;
+}
+.topic-right .reply_content:before{
+    content: "";
+    width: 5px;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #6ECFF5;
+}
 .topic-item footer {
     width: 100%;
     padding: .5rem;
