@@ -13,8 +13,8 @@ var async = require('async');
     module.list = function (req, res, next) {
         var skip = 0;
         async.parallel({
-            posts:function(callback){
-                Post.find({parent_url: req.url, deleteFlag: 0}, {_id: 1, user_id: 1, title: 1, view: 1, createDate: 1}, {sort: {order: 1, createDate: -1},skip: skip, limit: 30})
+            posts: function (callback) {
+                Post.find({parent_url: req.url, deleteFlag: 0}, {_id: 1, user_id: 1, title: 1, view: 1, createDate: 1}, {sort: {order: 1, createDate: -1}, skip: skip, limit: 30})
                     .populate('user_id', "face")
                     .exec(function (err, docs) {
                         if (err) next(err);
@@ -42,18 +42,18 @@ var async = require('async');
                             )
                         }, function (err) {
                             if (err) next(err);
-                            callback(null,docs)
+                            callback(null, docs)
                         })
                     })
             },
-            count:function(callback){
-                Post.find({parent_url: req.url, deleteFlag: 0}).count(function(err,num){
-                    if(err) next(err);
-                    callback(null,num);
+            count: function (callback) {
+                Post.find({parent_url: req.url, deleteFlag: 0}).count(function (err, num) {
+                    if (err) next(err);
+                    callback(null, num);
                 })
             }
-        },function(err,result){
-            if(err) next(err);
+        }, function (err, result) {
+            if (err) next(err);
             res.json(result);
         })
     }
@@ -84,13 +84,17 @@ var async = require('async');
         var skip = req.body.skip ? req.body.skip : 0;
         async.parallel({
             comments: function (callback) {
-                Comment.find({post_id: pid, deleteFlag: 0}, {_id: 1, user_id: 1, content: 1, createDate: 1}).populate("user_id", {face: 1, nick: 1}).sort({_id: 1})
+                Comment.find({post_id: pid, deleteFlag: 0}, {_id: 1, user_id: 1, content: 1, createDate: 1,parent_id:1})
+                    .populate("user_id", {face: 1, nick: 1})
+                    .populate("parent_id",{content:1})
+                    .sort({_id: 1})
                     .skip(skip)
                     .limit(30)
                     .exec(function (err, docs) {
                         if (err) next(err);
                         if (req.session.user) {
                             async.each(docs, function (doc, callback) {
+                                //是否已关注用户
                                 User.find({_id: req.session.user._id, follow: {$in: [doc.user_id._id]}}, function (err, follow) {
                                     if (err) next(err);
                                     if (follow.length > 0) {
@@ -191,7 +195,7 @@ var async = require('async');
         var id = req.query.id;
         if (type === "p") {
             async.parallel([function (callback) {
-                Post.update({_id: id,user_id:req.session.user._id}, {$set: {deleteFlag: 1}}, {upsert: true}, function (err, num) {
+                Post.update({_id: id, user_id: req.session.user._id}, {$set: {deleteFlag: 1}}, {upsert: true}, function (err, num) {
                     if (err) next(err);
                     callback(null, num);
                 })
@@ -206,7 +210,7 @@ var async = require('async');
             })
         }
         if (type === "c") {
-            Comment.update({_id: id,user_id:req.session.user._id}, {$set: {deleteFlag: 1}}, {upsert: true}, function (err, num) {
+            Comment.update({_id: id, user_id: req.session.user._id}, {$set: {deleteFlag: 1}}, {upsert: true}, function (err, num) {
                 if (err) next(err);
                 if (num > 0) {
                     res.json({"result": "success"});

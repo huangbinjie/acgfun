@@ -116,7 +116,7 @@ app.controller('pageCtrl', ['$scope', '$rootScope', '$message', '$location', 'Po
 
 app.controller('topicCtrl', ['$scope', '$rootScope', '$location', 'Topic', 'Auth', '$loadingBar', '$crumb', '$message', 'Follow', "Star",
     function ($scope, $rootScope, $location, Topic, Auth, $loadingBar, $crumb, $message, Follow, Star) {
-        $rootScope.editType = "reply";
+        $rootScope.editType = "comment";
         $rootScope.showOpenEditor = true;
         $rootScope.showCrumb = true;
         $rootScope.showEditor = false;
