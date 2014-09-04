@@ -10,7 +10,7 @@ app.factory('User', ['$resource', function ($resource) {
 app.factory('$message', function ($timeout) {
     var $message = function (message, top,time) {
         var width = ($("body").width() - $("#message").width()) / 2;
-        $('#message').empty().append(message).css({"opacity": ".8", "left": width, "top": top !== undefined ? top : 100});
+        $('#message').empty().append(message).css({"opacity": ".8", "left": width, "top": top !== undefined ? top : 100,"display":"block"});
         if(time!==0){
             $timeout(function () {
                 $('#message').css({"opacity": "0", "left": width, "top": -100});

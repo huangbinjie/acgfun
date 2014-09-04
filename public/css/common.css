@@ -237,6 +237,7 @@ form .field label {
     background-color: rgba(0, 48, 70, .8);
     transition: .4s;
     z-index: 1;
+    display: none;
 }
 
 .crumbs {
