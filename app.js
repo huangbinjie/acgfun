@@ -16,7 +16,7 @@ routes(app);
 
 app.set('port', settings.port);
 
-ws(server);
+var wss = ws.start(server);
 
 server.listen(settings.port,function(){
     console.log(('Acgfun is listening on port ' + settings.port).info);

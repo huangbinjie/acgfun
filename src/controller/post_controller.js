@@ -6,6 +6,7 @@ var Team = require('../database/team_model');
 var Comment = require('../database/comment_model');
 var User = require('../database/user_model');
 var async = require('async');
+var wss = require('../util/ws').getWss();
 (function (module) {
     /*
      返回结果:{_id,title,user_id:{face},createDate,view,profile:{replyCount,commenter:{face,createDate}}}
@@ -170,7 +171,7 @@ var async = require('async');
         delete comment.post_user_id;
         new Comment(comment).save(function (err, doc) {
             if (err) next(err);
-            if (doc !== undefined) {
+            if (doc) {
                 async.parallel([function (callback) {
                     User.update({_id: post_user_id}, {$inc: {exp: 1}}, function (err, num) {
                         if (err) next(err);
@@ -184,6 +185,9 @@ var async = require('async');
                 }], function (err, result) {
                     if (err) next(err);
                     res.json({"result": "success"});
+                    wss.to({to:req.session.user._id,user:{_id:0,face:"System.png"},message:
+                        req.session.user.nick+"在"+doc.title+"回复:&lt;br/&gt;&lt;a href='/"+doc.post_id.parent_url+"/"+
+                        doc.post_id._id+"/"+doc.post_id.title+"?scrollTo="+doc._id+"' target='_blank' compile='"+doc.content+"' &gt;&lt;a&gt;"});
                 })
             }
             else res.json({"result": "failed"});

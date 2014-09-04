@@ -5,9 +5,9 @@ var escape = require('escape-html');
 var User = require('../database/user_model');
 var onlineMember = 0;
 var onlineGuest = 0;
-
-module.exports = function (server) {
-    var wss = new WebSocketServer({server: server, path: "/"});
+var wss;
+module.exports.start = function (server) {
+    wss = new WebSocketServer({server: server, path: "/"});
     wss.broadcast = function (data, path) {
         for (var i in this.clients) {
             if (path) {
@@ -19,14 +19,27 @@ module.exports = function (server) {
             }
         }
     };
-    wss.to = function (toId,user,message) {
+    //{to:1,user:{_id,nick,face},message}
+    wss.to = function (message) {
         for (var i in this.clients) {
-            if (this.clients[i].user._id == toId) {
-                this.clients[i].send(JSON.stringify({path: '/', suffix: '/to', members: user,date:new Date(), message: message}));
-                return true;
+            if (this.clients[i].user._id == message.to) {
+                this.clients[i].send(JSON.stringify({path: '/', suffix: '/to', members: message.user,date:new Date(), message: escape(message.message)}));
+                return;
             }
         }
-        return false;
+        //保留100条留言
+        User.update({_id:message.to},{$push:{message:{$each:[{_id:message.user._id,read:0,message:message.message}],$slice: -100}}},function(err,num){
+            if(err) throw  err;
+            if(num>0){
+                //系统信息
+                User.findOne({_id:message.to},{_id:1,email:1,face:1,nick:1},function(err,user){
+                    if(err) throw err;
+                    if(user){
+                        ws.send(JSON.stringify({path: '/', suffix: '/to', members: user,date:new Date(), message: '已留言--系统消息'}));
+                    }
+                })
+            }
+        })
     }
     wss.find = function(_id){
         for(var i in this.clients){
@@ -134,26 +147,15 @@ module.exports = function (server) {
                     return;
                 }
                 if (message.suffix === '/to'&& !_.isUndefined(message.to)) {
-                    var isSend = wss.to(message.to,message.user,escape(message.message));
-                    if(!isSend){
-                        //保留100条留言
-                        User.update({_id:message.to},{$push:{message:{$each:[{_id:message.user._id,read:0,message:message.message}],$slice: -100}}},function(err,num){
-                            if(err) throw  err;
-                            if(num>0){
-                                //系统信息
-                                User.findOne({_id:message.to},{_id:1,email:1,face:1,nick:1},function(err,user){
-                                    if(err) throw err;
-                                    if(user){
-                                        ws.send(JSON.stringify({path: '/', suffix: '/to', members: user,date:new Date(), message: '已留言--系统消息'}));
-                                    }
-                                })
-                            }
-                        })
-                    }
+                    wss.to(message);
                 }
             }
         })
     });
+}
+
+module.exports.getWss = function(){
+    return wss;
 }
 
 /**

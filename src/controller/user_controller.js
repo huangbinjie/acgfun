@@ -109,7 +109,7 @@ var fs = require("fs");
                     User.update(criteria, {$set: {loginDate: new Date(), loginIp: req.ip}}, function (err, num) {
                         if (err) next(err);
                         if (num > 0) {
-                            req.session.user = {_id: doc._id, rank: doc.rank};
+                            req.session.user = {_id: doc._id, rank: doc.rank,nick:doc.nick};
                             res.json({"result": "success", "user": doc});
                         } else {
                             res.json({"result": "failed"});
