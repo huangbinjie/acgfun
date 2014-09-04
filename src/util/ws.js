@@ -24,21 +24,22 @@ module.exports.start = function (server) {
         for (var i in this.clients) {
             if (this.clients[i].user._id == message.to) {
                 this.clients[i].send(JSON.stringify({path: '/', suffix: '/to', members: message.user,date:new Date(), message: escape(message.message)}));
+                return true;
+            }
+        }
+        return false;
+    }
+    //系统消息
+    wss.message = function(message){
+        for (var i in this.clients) {
+            if (this.clients[i].user._id == message.to) {
+                this.clients[i].send(JSON.stringify({path: '/', suffix: '/to', members: message.user,date:new Date(), message: message.message}));
                 return;
             }
         }
         //保留100条留言
         User.update({_id:message.to},{$push:{message:{$each:[{_id:message.user._id,read:0,message:message.message}],$slice: -100}}},function(err,num){
             if(err) throw  err;
-            if(num>0){
-                //系统信息
-                User.findOne({_id:message.to},{_id:1,email:1,face:1,nick:1},function(err,user){
-                    if(err) throw err;
-                    if(user){
-                        ws.send(JSON.stringify({path: '/', suffix: '/to', members: user,date:new Date(), message: '已留言--系统消息'}));
-                    }
-                })
-            }
         })
     }
     wss.find = function(_id){
@@ -147,7 +148,21 @@ module.exports.start = function (server) {
                     return;
                 }
                 if (message.suffix === '/to'&& !_.isUndefined(message.to)) {
-                    wss.to(message);
+                    if(!wss.to(message)){
+                        //保留100条留言
+                        User.update({_id:message.to},{$push:{message:{$each:[{_id:message.user._id,read:0,message:message.message}],$slice: -100}}},function(err,num){
+                            if(err) throw  err;
+                            if(num>0){
+                                //系统信息
+                                User.findOne({_id:message.to},{_id:1,email:1,face:1,nick:1},function(err,user){
+                                    if(err) throw err;
+                                    if(user){
+                                        ws.send(JSON.stringify({path: '/', suffix: '/to', members: user,date:new Date(), message: '已留言--系统消息'}));
+                                    }
+                                })
+                            }
+                        })
+                    }
                 }
             }
         })

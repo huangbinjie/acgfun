@@ -100,7 +100,7 @@ app.directive('editor', ['Post', 'Topic', '$rootScope', '$message', '$routeParam
                         })
                     }
                     if ($rootScope.editType === "comment") {
-                        Topic($location.path()).add({content: content, post_id: $routeParams.pid, post_user_id: $("#post_user_id").val()}, function (data) {
+                        Topic($location.path()).add({content: content, post_user_id: $("#post_user_id").val()}, function (data) {
                             if (data.result === "success") {
                                 $message("发帖成功");
                                 $(".editor iframe").contents().find("body").html("");
@@ -112,7 +112,7 @@ app.directive('editor', ['Post', 'Topic', '$rootScope', '$message', '$routeParam
                         })
                     }
                     if($rootScope.editType ==="reply"){
-                        Topic($location.path()).add({parent_id:$("#reply_author_id").val(),content: content, post_id: $routeParams.pid, post_user_id: $("#post_user_id").val()}, function (data) {
+                        Topic($location.path()).add({parent_user_id:$("#reply_author_user_id").val(),parent_id:$("#reply_author_comment_id").val(),content: content, post_user_id: $("#post_user_id").val()}, function (data) {
                             if (data.result === "success") {
                                 $message("发帖成功");
                                 $(".editor iframe").contents().find("body").html("");
@@ -315,8 +315,9 @@ app.directive('reply', function ($rootScope) {
                     $rootScope.showEditor = true;
                 })
                 var commenter = attr.reply.split(',');//[_id,nick]
-                $(".editor_title").val("回复:" + commenter[1]).attr("disabled", "true");
-                $("#reply_author_id").val(commenter[0]);
+                $(".editor_title").val("回复:" + commenter[2]).attr("disabled", "true");
+                $("#reply_author_comment_id").val(commenter[1]);
+                $("#reply_author_user_id").val(commenter[0]);
             })
         },
         controller: function ($scope) {

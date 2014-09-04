@@ -1,7 +1,8 @@
 <ul class="topic-ul">
     <li class="topic-item clearfloat" ng-if="topic.topic!==null">
         <input type="hidden" id="post_user_id" value="{{topic.topic.user_id._id}}">
-        <input type="hidden" id="reply_author_id" value="">
+        <input type="hidden" id="reply_author_comment_id" value="">
+        <input type="hidden" id="reply_author_user_id" value="">
         <div class="topic-left">
             <i title="已关注" ng-show="topic.topic.user_id.isFollow" class="followed"></i>
             <a href="/user/{{topic.topic.user_id._id}}">
@@ -41,7 +42,7 @@
             <div compile="comment.content"></div>
         </div>
         <footer>
-            <label class="reply left" reply="{{comment._id}},{{comment.user_id.nick}}">回复</label>
+            <label class="reply left" reply="{{comment.user_id._id}},{{comment._id}},{{comment.user_id.nick}}">回复</label>
             <label class="operate" dropdown>
                 更多
                 <ul class="dropdown-menu">

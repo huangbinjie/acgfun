@@ -11,12 +11,11 @@ mongodb.config(settings.database);
 mongodb.init();
 var ws = require('./src/util/ws');
 environment(app);
+ws.start(server);
 var routes = require('./src/config/routes');
 routes(app);
 
 app.set('port', settings.port);
-
-var wss = ws.start(server);
 
 server.listen(settings.port,function(){
     console.log(('Acgfun is listening on port ' + settings.port).info);

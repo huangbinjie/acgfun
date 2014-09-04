@@ -85,9 +85,9 @@ var wss = require('../util/ws').getWss();
         var skip = req.body.skip ? req.body.skip : 0;
         async.parallel({
             comments: function (callback) {
-                Comment.find({post_id: pid, deleteFlag: 0}, {_id: 1, user_id: 1, content: 1, createDate: 1,parent_id:1})
+                Comment.find({post_id: pid, deleteFlag: 0}, {_id: 1, user_id: 1, content: 1, createDate: 1, parent_id: 1})
                     .populate("user_id", {face: 1, nick: 1})
-                    .populate("parent_id",{content:1})
+                    .populate("parent_id", {content: 1})
                     .sort({_id: 1})
                     .skip(skip)
                     .limit(30)
@@ -166,14 +166,12 @@ var wss = require('../util/ws').getWss();
             res.json({"result": "failed"});
             return;
         }
-        comment.user_id = req.session.user._id;
-        var post_user_id = comment.post_user_id;
-        delete comment.post_user_id;
-        new Comment(comment).save(function (err, doc) {
+        var url = req.url.split('/');//["",a,1,内容]
+        new Comment({post_id: url[2], user_id: req.session.user._id, content: comment.content, parent_id: comment.parent_id ? comment.parent_id : 0}).save(function (err, doc) {
             if (err) next(err);
             if (doc) {
                 async.parallel([function (callback) {
-                    User.update({_id: post_user_id}, {$inc: {exp: 1}}, function (err, num) {
+                    User.update({_id: comment.post_user_id}, {$inc: {exp: 1}}, function (err, num) {
                         if (err) next(err);
                         callback(null, num);
                     })
@@ -185,9 +183,15 @@ var wss = require('../util/ws').getWss();
                 }], function (err, result) {
                     if (err) next(err);
                     res.json({"result": "success"});
-                    wss.to({to:req.session.user._id,user:{_id:0,face:"System.png"},message:
-                        req.session.user.nick+"在"+doc.title+"回复:&lt;br/&gt;&lt;a href='/"+doc.post_id.parent_url+"/"+
-                        doc.post_id._id+"/"+doc.post_id.title+"?scrollTo="+doc._id+"' target='_blank' compile='"+doc.content+"' &gt;&lt;a&gt;"});
+                    if (comment.parent_id) {
+                        //告诉层主
+                        wss.message({to: comment.parent_user_id, user: {_id: 0,nick:'系统消息', face: "System.png"}, message: req.session.user.nick + "回复你:<br/><a href='/" + url[1] + "/" +
+                            url[2] + "/" + url[3] + "?scrollTo=" + doc._id + "' target='_blank'>"+doc.content+"</a>"});
+                    } else {
+                        //告诉楼主
+                        wss.message({to: comment.post_user_id, user: {_id: 0,nick:'系统消息', face: "System.png"}, message: req.session.user.nick + "回复你:<br/><a href='/" + url[1] + "/" +
+                            url[2] + "/" + url[3] + "?scrollTo=" + doc._id + "' target='_blank'">+doc.content+"</a>"});
+                    }
                 })
             }
             else res.json({"result": "failed"});
