@@ -98,7 +98,7 @@ app.factory('Auth', function ($cookies, $rootScope, $http, $message) {
     return auth;
 })
 
-app.factory('$crumb', function ($location, $rootScope) {
+app.factory('$crumb', function ($location, $rootScope,$escape) {
     return function (path) {
         $rootScope.crumbs = [];
         if (/^\/*/.test(path)) {
@@ -110,7 +110,7 @@ app.factory('$crumb', function ($location, $rootScope) {
         }
         if(/^\/c.*/.test(path)){
             $rootScope.crumbs.push("/");
-            $rootScope.crumbs.push("<a href='.c'>漫画</a>");
+            $rootScope.crumbs.push("<a href='/c'>漫画</a>");
         }
         if(/^\/g.*/.test(path)){
             $rootScope.crumbs.push("/");
@@ -122,12 +122,20 @@ app.factory('$crumb', function ($location, $rootScope) {
         }
         if(/^\/[acgm]\/+.*/.test(path)){
             $rootScope.crumbs.push("/");
-            $rootScope.crumbs.push(path.split("/").slice(-1)[0]);
+            var text = path.split("/").slice(-1)[0];
+            $rootScope.crumbs.push($escape(text));
         }
         if(/^\/(user).*/.test(path)){
             $rootScope.crumbs.push("/");
             $rootScope.crumbs.push("个人中心");
         }
+    }
+})
+
+app.factory('$escape',function(){
+    return function(str) {
+        return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 })
 
