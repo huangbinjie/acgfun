@@ -147,6 +147,9 @@ module.exports.start = function (server) {
                 if (_.isUndefined(message.message)||message.message==="") {
                     return;
                 }
+                if(_.isEmpty(message.user)){
+                    return;
+                }
                 if (message.suffix === '/to'&& !_.isUndefined(message.to)) {
                     if(!wss.to(message)){
                         //保留100条留言
