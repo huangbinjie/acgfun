@@ -213,7 +213,7 @@ var wss = require('../util/ws').getWss();
                     } else {
                         //告诉楼主
                         wss.message({to: comment.post_user_id, user: {_id: 0, nick: '系统消息', face: "System.png"}, message: req.session.user.nick + "回复你:<br/><a href='/" + url[1] + "/" +
-                            url[2] + "/" + url[3] + "?scrollTo=" + doc._id + "' target='_blank'" > +doc.content + "</a>"});
+                            url[2] + "/" + url[3] + "?scrollTo=" + doc._id + "' target='_blank'>" + doc.content + "</a>"});
                     }
                 })
             }
