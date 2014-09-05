@@ -33,7 +33,7 @@ var fs = require("fs");
             },
             isFollowed: function (callback) {
                 if(req.session.user){
-                    User.find({_id: req.session.user._id, follow: {$in: [req.session.user._id]}}, function (err, follow) {
+                    User.find({_id: req.session.user._id, follow: {$in: [uid]}}, function (err, follow) {
                         if (err) next(err);
                         if (follow.length > 0) {
                             callback(null, true);
