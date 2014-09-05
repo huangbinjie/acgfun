@@ -1282,6 +1282,15 @@ form .field label {
     font-size: 18px;
     font-weight: bold;
 }
+.plaza-panel .case.active>div>div{
+    margin: 5px;
+    display: inline-block;
+}
+.plaza-panel .case.active>div>div img{
+    width: 30px;
+    height:30px;
+    border-radius: 100%;
+}
 
 .chat-btn {
     z-index: 1;

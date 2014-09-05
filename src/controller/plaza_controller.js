@@ -42,4 +42,11 @@ var async = require('async');
             res.json(result);
         })
     }
+
+    module.active = function(req,res,next){
+        User.find({status:0},{face:1},{sort:{exp:-1,loginDate:-1},limit:5},function(err,docs){
+            if(err) next(err);
+            res.json(docs)
+        })
+    }
 }(exports))

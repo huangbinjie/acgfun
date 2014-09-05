@@ -299,4 +299,7 @@ app.controller('plazaCtrl', ['$scope', '$rootScope', 'Auth','$http', function ($
     $http.get('/plaza/status').success(function(data){
         $scope.status = data;
     })
+    $http.get('/plaza/active').success(function(data){
+        $scope.actives = data;
+    })
 }])

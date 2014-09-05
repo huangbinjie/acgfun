@@ -28,4 +28,5 @@ module.exports = function (app) {
     //最新主题
     app.get('/plaza/recent',controllers.plaza.recent);
     app.get('/plaza/status',controllers.plaza.status);
+    app.get('/plaza/active',controllers.plaza.active);
 }

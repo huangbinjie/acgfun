@@ -50,6 +50,16 @@
                 <footer>{{status.commentCount}}</footer>
             </div>
         </div>
+        <div class="case active">
+            <header>活跃用户</header>
+            <div class="clearfloat text-left">
+                <div ng-repeat="active in actives">
+                    <a href="/user/{{active._id}}">
+                        <img src="/uploads/faces/{{active.face}}">
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
     <ul id="plaza-groups">
     </ul>
