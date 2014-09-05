@@ -10,7 +10,7 @@ var userModel = function(){
 		email		: {type:String,match:/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,max:20,index:true,required:true,unique: true,sparse:true},//邮箱
 		password	: {type:String,required:true},//密码
 		nick		: {type:String,max:10},//昵称
-		face		: String,//头像
+		face		: {type:String,default:'default.jpg'},//头像
 		status		: {type:Number,default:1},//0 激活，1 关闭,
         hat_id     : String,//邮箱验证ID
 		exp	        : {type:Number,default:0},//经验
