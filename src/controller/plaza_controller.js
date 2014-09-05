@@ -7,7 +7,7 @@ var Comment = require("../database/comment_model");
 var async = require('async');
 (function (module) {
     module.recent = function(req,res,next){
-        Post.find({},{parent_url:1,user_id:1,title:1,createDate:1})
+        Post.find({deleteFlag:0},{parent_url:1,user_id:1,title:1,createDate:1})
             .sort({createDate:-1})
             .limit(5)
             .populate("user_id",{face:1,nick:1})
@@ -20,19 +20,19 @@ var async = require('async');
     module.status = function (req, res, next) {
         async.parallel({
             userCount: function (callback) {
-                User.find({status:0}).count(function (err, num) {
+                User.count({status:0},function (err, num) {
                     if (err) next(err);
                     callback(null,num);
                 })
             },
             postCount: function (callback) {
-                Post.find({deleteFlag:0}).count({deleteFlag:0},function (err, num) {
+                Post.count({deleteFlag:0},function (err, num) {
                     if (err) next(err);
                     callback(null,num);
                 })
             },
             commentCount: function (callback) {
-                Comment.find({deleteFlag:0}).count(function (err, num) {
+                Comment.count({deleteFlag:0},function (err, num) {
                     if (err) next(err);
                     callback(null,num);
                 })
