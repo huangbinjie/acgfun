@@ -38,7 +38,10 @@
             <p>{{comment.user_id.nick}}</p>
         </div>
         <div class="topic-right">
-            <div class="reply_content" compile="comment.parent_id.content"></div>
+            <div class="reply_content" ng-if="comment.parent_id!==null">
+                <span>{{comment.parent_id.user_nick}}说：</span>
+                <span  compile="comment.parent_id.content"></span>
+            </div>
             <div compile="comment.content"></div>
         </div>
         <footer>
