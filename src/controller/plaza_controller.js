@@ -9,7 +9,7 @@ var async = require('async');
     module.recent = function(req,res,next){
         Post.find({},{parent_url:1,user_id:1,title:1,createDate:1})
             .sort({createDate:-1})
-            .limit(10)
+            .limit(5)
             .populate("user_id",{face:1,nick:1})
             .exec(function(err,docs){
                 if(err) next(err);
@@ -20,19 +20,19 @@ var async = require('async');
     module.status = function (req, res, next) {
         async.parallel({
             userCount: function (callback) {
-                User.count({status:0},function (err, num) {
+                User.find({status:0}).count(function (err, num) {
                     if (err) next(err);
                     callback(null,num);
                 })
             },
             postCount: function (callback) {
-                Post.count({deleteFlag:0},function (err, num) {
+                Post.find({deleteFlag:0}).count({deleteFlag:0},function (err, num) {
                     if (err) next(err);
                     callback(null,num);
                 })
             },
             commentCount: function (callback) {
-                Comment.count({deleteFlag:0},function (err, num) {
+                Comment.find({deleteFlag:0}).count(function (err, num) {
                     if (err) next(err);
                     callback(null,num);
                 })
