@@ -17,6 +17,7 @@ ws.onopen = function () {
                 if (members.length === 0) {
                     return;
                 }
+                $('#onlineMembers').html(members.length)
                 $('#plaza-groups').empty();
                 for (var i in members) {
                     if (members[i].face === undefined) members[i].face = "default.jpg";
@@ -97,6 +98,7 @@ ws.onopen = function () {
             //更新在线状态
             if (message.suffix === '/join/member') {
                 if (members.length === 0) return;
+                $('#onlineMembers').html(members.length)
                 $("#online_" + members._id).removeClass('offline').addClass('online');
                 if (members.face === undefined) members.face = "default.jpg";
                 $('#plaza-groups').append('<li class="inline-block" id="' + members._id + '"><a href="/user/' + members._id + '"><img src="uploads/faces/' + members.face + '"></a><p class="text-center">' + members.nick + '</p></li>')

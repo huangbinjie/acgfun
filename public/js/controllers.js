@@ -286,10 +286,17 @@ app.controller('reActiveCtrl', ['$scope', '$http', '$message', function ($scope,
     }
 }])
 
-app.controller('plazaCtrl', ['$scope', '$rootScope', 'Auth', function ($scope, $rootScope, Auth) {
+app.controller('plazaCtrl', ['$scope', '$rootScope', 'Auth','$http', function ($scope, $rootScope, Auth,$http) {
     $rootScope.showEditor = false;
     $rootScope.showOpenEditor = false;
     $rootScope.showCrumb = false;
     $rootScope.showChat = false;
     $scope.User = Auth.getUser();
+
+    $http.get('/plaza/recent').success(function(data){
+        $scope.recents = data;
+    })
+    $http.get('/plaza/status').success(function(data){
+        $scope.status = data;
+    })
 }])

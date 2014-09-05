@@ -82,6 +82,9 @@ body {
 .text-center {
     text-align: center;
 }
+.text-left {
+    text-align: left;
+}
 
 .left {
     float: left;
@@ -1197,7 +1200,7 @@ form .field label {
 
 .plaza-nav li {
     float: left;
-    width: 20%;
+    width: 25%;
     text-align: center;
 }
 
@@ -1237,19 +1240,47 @@ form .field label {
 }
 
 .plaza-panel {
-    display: none;
     float: right;
-    max-width: 15rem;
+    width: 15rem;
     position: relative;
     z-index: 2;
+    display: none;
 }
 
 .plaza-panel .case {
-    padding: .5rem;
     margin-bottom: 1rem;
     border-top: 2px solid #98d6dd;
     background: rgba(37, 39, 48, 0.6);
 
+}
+.plaza-panel .case > header {
+    padding: .625rem;
+    border-bottom: 1px solid #d3d3d3;
+}
+.plaza-panel .case > div {
+    clear: both;
+    padding: .625rem;
+}
+.plaza-panel .case > div > div:first-child{
+    margin-right: .5rem;
+}
+.plaza-panel .case > div footer{
+    font-size: 12px;
+}
+.plaza-panel .case > div a{
+    text-decoration: none;
+}
+.plaza-panel .case .face {
+    width: 25px;
+    height: 25px;
+    border-radius: 100%;
+}
+.plaza-panel .case.status{
+    text-align: center;
+}
+.plaza-panel .case.status footer{
+    font-size: 18px;
+    font-weight: bold;
 }
 
 .chat-btn {
@@ -1342,6 +1373,9 @@ form .field label {
     }
 
     .topic-left {
+        display: block;
+    }
+    .plaza-panel{
         display: block;
     }
 

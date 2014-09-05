@@ -23,4 +23,9 @@ module.exports = function (app) {
     app.put('/user/star',auth.ensureAuthenticated,controllers.user.star);
     app.put('/user/follow',auth.ensureAuthenticated,controllers.user.follow);
     app.post('/upload/face',auth.ensureAuthenticated,controllers.user.uploadFace);
+
+    /*广场*/
+    //最新主题
+    app.get('/plaza/recent',controllers.plaza.recent);
+    app.get('/plaza/status',controllers.plaza.status);
 }

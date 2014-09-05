@@ -182,24 +182,24 @@ app.directive('plaza-panel', function () {
         }
     }
 })
-app.directive('plazaPanelBtn', function () {
-    return{
-        restrict: 'C',
-        link: function ($scope, element, attr) {
-            element.on('click', function () {
-                if (angular.element(this).hasClass('light-orange')) {
-                    angular.element(this).removeClass('light-orange');
-                    angular.element(this).css('background', '#52c569');
-                    $(".plaza-panel").slideUp();
-                } else {
-                    angular.element(this).addClass('light-orange');
-                    angular.element(this).css('background', 'lightcoral');
-                    $(".plaza-panel").slideDown();
-                }
-            })
-        }
-    }
-})
+//app.directive('plazaPanelBtn', function () {
+//    return{
+//        restrict: 'C',
+//        link: function ($scope, element, attr) {
+//            element.on('click', function () {
+//                if (angular.element(this).hasClass('light-orange')) {
+//                    angular.element(this).removeClass('light-orange');
+//                    angular.element(this).css('background', '#52c569');
+//                    $(".plaza-panel").slideUp();
+//                } else {
+//                    angular.element(this).addClass('light-orange');
+//                    angular.element(this).css('background', 'lightcoral');
+//                    $(".plaza-panel").slideDown();
+//                }
+//            })
+//        }
+//    }
+//})
 app.directive('chatBtn', function () {
     return{
         restrict: 'C',
