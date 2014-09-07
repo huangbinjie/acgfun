@@ -1,4 +1,4 @@
-<div class="case">
+<div class="case clearfloat">
     <header>已关注</header>
     <p>
         <ul class="user-group follow">
@@ -9,5 +9,6 @@
                 <p class="text-center">{{user.nick}}</p>
             </li>
         </ul>
+        <button class="btn right" ng-show="follow.length>30" ng-click="getFollow(followSkip+30)">更多</button>
     </p>
 </div>

@@ -1,0 +1,6 @@
+<div class="case" ng-controller="userTopicCtrl">
+    <header>主题</header>
+    <p ng-repeat="topic in userData.post.topic">
+        发表了主题:<br/><a href="{{topic.parent_url}}/{{topic._id}}/{{topic.title}}" target="_blank">{{topic.title}}</a>
+    </p>
+</div>

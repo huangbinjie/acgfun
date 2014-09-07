@@ -346,7 +346,7 @@ app.directive('profileContext', function ($http, $templateCache, $compile, $mess
                     })
                 }
                 if (url.indexOf('user-follow.html') !== -1) {
-                    $http.post('/user/follow').success(function (follows) {
+                    $http.post('/user/follow',{skip:0}).success(function (follows) {
                         $scope.follows = follows;
                     })
                 }
@@ -392,6 +392,15 @@ app.directive('profileContext', function ($http, $templateCache, $compile, $mess
                             $message('修改失败');
                         }
                     }
+                })
+            }
+
+            $scope.followSkip = 0;
+            $scope.follows = [];
+            $scope.getFollow = function(skip){
+                $http.post('/user/follow',{skip:skip}).success(function (follows) {
+                    $scope.follows = $scope.follows.concat(follows);
+                    $scope.followSkip = skip;
                 })
             }
         }

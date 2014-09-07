@@ -314,3 +314,7 @@ app.controller('plazaCtrl', ['$scope', '$rootScope', 'Auth', '$http', function (
         $scope.actives = data;
     })
 }])
+
+app.controller('userTopicCtrl', ['$scope', '$http', 'Topic', function ($scope, $http, Topic) {
+    Topic.get()
+}])
