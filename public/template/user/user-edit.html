@@ -1,0 +1,67 @@
+<div class="case">
+    <header>编辑</header>
+    <p>
+
+    <form ng-submit="save()">
+        <div class="field">
+            <label>姓名</label>
+            <input placeholder="姓名" ng-model="name">
+        </div>
+        <div class="field">
+            <label>性别</label>
+            <input type="hidden" ng-model="gender">
+            <input type="radio" value="汉子" name="gender" id="hanzi" ng-click="gender='汉子'">
+            <label style="display: inline;" ng-click="gender='汉子'" for="hanzi">汉子</label>
+            <input type="radio" value="妹子" name="gender" id="meizi" ng-click="gender='妹子'">
+            <label style="display: inline;" ng-click="gender='妹子'" for="meizi">妹子</label>
+        </div>
+        <div class="field">
+            <label>生日</label>
+            <input placeholder="单击选择" id="datepicker" readonly>
+        </div>
+        <div class="field">
+            <label title="0到30个字">签名</label>
+            <textarea placeholder="签名" maxlength="50"></textarea>
+        </div>
+        <div>
+            <button type="submit" class="btn blue">保存</button>
+        </div>
+    </form>
+    </p>
+</div>
+<div class="case">
+    <header>修改密码</header>
+    <p>
+
+    <form ng-submit="reset()">
+        <div class="field">
+            <label>当前密码</label>
+            <input placeholder="当前密码">
+        </div>
+        <div class="field">
+            <label>新密码</label>
+            <input placeholder="新密码">
+        </div>
+        <div>
+            <button type="submit" class="btn blue">提交</button>
+        </div>
+    </form>
+    </p>
+</div>
+<link href="../../vendor/datepicker/pikaday.css" type="text/css" rel="stylesheet">
+<script src="../../vendor/datepicker/moment.js"></script>
+<script src="../../vendor/datepicker/pikaday.js"></script>
+<script>
+    var picker = new Pikaday({
+        field: document.getElementById('datepicker'),
+        format: 'YYYY-MM-DD',
+        yearRange: [1900, 2020],
+        i18n: {
+            previousMonth: '上一页',
+            nextMonth: '下一页',
+            months: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            weekdays: ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期天'],
+            weekdaysShort: ['一', '二', '三', '四', '五', '六', '天']
+        }
+    });
+</script>

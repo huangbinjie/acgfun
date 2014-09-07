@@ -1,3 +1,14 @@
+<div class="text-right clearfloat" style="margin-bottom: .625rem" profile>
+    <div class="dropdown-group right">
+        <button class="btn dropdown">管理<i class="dropdown-icon-down"></i></button>
+        <ul class="dropdown-menu">
+            <li><span>主题</span></li>
+            <li><span>回复</span></li>
+            <li><span>关注</span></li>
+        </ul>
+    </div>
+    <button id="user-edit" class="btn right">编辑</button>
+</div>
 <div class="panel left text-center">
     <div class="case">
         <div class="face-panel">
@@ -8,12 +19,12 @@
                 </label>
             </div>
             <div>{{userData.user.nick}}</div>
-            <div user-function>
+            <div>
                 <label class="follow" ng-class="userData.isFollowed?'followed':'follow'"
                        title="{{userData.isFollowed?'已关注':'关注'}}" ng-click="follow(userData.user._id)"></label>
                 <label id="online_{{userData.user._id}}" class="offline"
                        ng-class="userData.user.online===1?'online':'offline';" title="{{userData.user.online===1?'在线':'离线'}}"></label>
-                <label class="chat" title="聊天" ng-click="showChat(userData.user)"></label>
+                <label class="chat" title="聊天" ng-click="showChat(userData.user)" open-chat-dialog></label>
             </div>
         </div>
         <div class="param">
@@ -50,22 +61,7 @@
         <div class="row"><h3>{{userData.user.loginDate|dateCustom}}</h3></div>
     </div>
 </div>
-<div class="panel right">
-    <div class="case">
-        <header>最近发表</header>
-        <p ng-repeat="topic in userData.post.topic">
-            发表了主题:<br/><a href="{{topic.parent_url}}/{{topic._id}}/{{topic.title}}" target="_blank">{{topic.title}}</a>
-        </p>
-    </div>
-    <div class="case">
-        <header>最近参与</header>
-        <p ng-repeat="comment in userData.post.comment">
-            在<a href="{{comment.post_id.parent_url}}/{{comment.post_id._id}}/{{comment.post_id.title}}" target="_blank">
-            {{comment.post_id.title}}</a>发表回复:<br/>
-            <a href="{{comment.post_id.parent_url}}/{{comment.post_id._id}}/{{comment.post_id.title}}?scrollTo={{comment._id}}"
-               target="_blank" compile="comment.content"></a>
-            </a></p>
-    </div>
+<div id="profile" class="panel right" profile-context url="{{url}}">
 </div>
 <div class="modal-div" ng-show="showModal">
     <div class="modal">

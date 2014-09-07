@@ -111,8 +111,8 @@ app.directive('editor', ['Post', 'Topic', '$rootScope', '$message', '$routeParam
                             }
                         })
                     }
-                    if($rootScope.editType ==="reply"){
-                        Topic($location.path()).add({parent_user_id:$("#reply_author_user_id").val(),parent_id:$("#reply_author_comment_id").val(),content: content, post_user_id: $("#post_user_id").val()}, function (data) {
+                    if ($rootScope.editType === "reply") {
+                        Topic($location.path()).add({parent_user_id: $("#reply_author_user_id").val(), parent_id: $("#reply_author_comment_id").val(), content: content, post_user_id: $("#post_user_id").val()}, function (data) {
                             if (data.result === "success") {
                                 $message("发帖成功");
                                 $(".editor iframe").contents().find("body").html("");
@@ -142,13 +142,16 @@ app.directive('compile', function ($compile) {
 
 app.directive("dropdown", function () {
     return{
+        restrict: 'C',
         link: function ($scope, element, attr) {
             element.on('click', function (e) {
                 e.stopPropagation();
-                $(this).find(".dropdown-menu").slideDown();
+                $(this).find('.dropdown-icon-down').removeClass('dropdown-icon-down').addClass('dropdown-icon-up');
+                $(this).next().slideDown('fast');
             })
             $(window).click(function () {
-                $(".dropdown-menu").slideUp();
+                $(document).find('.dropdown-icon-up').removeClass('dropdown-icon-up').addClass('dropdown-icon-down');
+                $(".dropdown-menu").slideUp('fast');
             })
         }
     }
@@ -257,8 +260,30 @@ app.directive('chat', function ($document, Auth, $rootScope) {
         }
     }
 })
+
+//回复
+app.directive('reply', function ($rootScope) {
+    return {
+        link: function ($scope, element, attr) {
+            element.on('click', function () {
+                $rootScope.$apply(function () {
+                    $rootScope.editType = "reply";
+                    $rootScope.showEditor = true;
+                })
+                var commenter = attr.reply.split(',');//[_id,nick]
+                $(".editor_title").val("回复:" + commenter[2]).attr("disabled", "true");
+                $("#reply_author_comment_id").val(commenter[1]);
+                $("#reply_author_user_id").val(commenter[0]);
+            })
+        },
+        controller: function ($scope) {
+        }
+    }
+})
+
+//用户中心 profile
 //用户面板聊天
-app.directive('userFunction', function ($rootScope, Auth, $message) {
+app.directive('openChatDialog', function ($rootScope, Auth, $message) {
     return{
         link: function ($scope, element, attr) {
         },
@@ -305,22 +330,45 @@ app.directive('userFunction', function ($rootScope, Auth, $message) {
     }
 })
 
-//回复
-app.directive('reply', function ($rootScope) {
+app.directive('profile', function ($rootScope) {
     return {
-        link: function ($scope, element, attr) {
-            element.on('click', function () {
-                $rootScope.$apply(function () {
-                    $rootScope.editType = "reply";
-                    $rootScope.showEditor = true;
+        link: function ($scope, element) {
+            element.find('#user-edit').on('click', function () {
+                $rootScope.$apply(function(){
+                    $scope.url = 'template/user/user-edit.html';
                 })
-                var commenter = attr.reply.split(',');//[_id,nick]
-                $(".editor_title").val("回复:" + commenter[2]).attr("disabled", "true");
-                $("#reply_author_comment_id").val(commenter[1]);
-                $("#reply_author_user_id").val(commenter[0]);
             })
+        }
+    }
+})
+
+app.directive('profileContext', function ($http, $templateCache, $compile,$timeout) {
+    return {
+        restrict: 'A',
+        link: function ($scope, element, attrs) {
+//            第一次加载
+//            load(attrs.url);
+//            监视url修改
+            $scope.$watch(function(){
+                return $scope.url;
+            }, function (url) {
+                if (url) {
+                    load(url);
+                }
+            });
+//            加载页面方法
+            function load(url) {
+                element.html('<div class="dimmer"><div class="loader">正在加载中......</div></div>');
+                $http({method: 'get', url: url, cache: $templateCache}).success(function (html) {
+                        element.html(($compile(html)($scope)));
+                });
+            }
         },
         controller: function ($scope) {
+            $scope.url = "template/user/user-post.html";
+            $scope.save = function(){
+            alert($scope.gender)
+            }
         }
     }
 })

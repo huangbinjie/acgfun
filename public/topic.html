@@ -16,8 +16,8 @@
         </div>
         <footer>
             <i class="stared left" title="已收藏" ng-show="topic.topic.user_id.isStar"></i>
-            <label class="operate" dropdown>
-                更多
+            <label class="dropdown-gruop">
+                <label class="dropdown">更多</label>
                 <ul class="dropdown-menu">
                     <li ng-if="User.rank>1||User.rank===0||User._id===topic.topic.user_id._id" ng-click="delete(topic.topic._id,'p')"><span>删除</span>
                     </li>
@@ -46,8 +46,8 @@
         </div>
         <footer>
             <label class="reply left" reply="{{comment.user_id._id}},{{comment._id}},{{comment.user_id.nick}}">回复</label>
-            <label class="operate" dropdown>
-                更多
+            <label class="dropdown-gruop">
+                <label class="dropdown">更多</label>
                 <ul class="dropdown-menu">
                     <li ng-if="User.rank>1||User.rank===0||User._id===comment.user_id._id" ng-click="delete(comment._id,'c')"><span>删除</span>
                     </li>
