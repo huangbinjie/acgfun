@@ -19,9 +19,9 @@ var fs = require("fs");
         var uid = req.params.uid ? req.params.uid : req.session.user._id;
         async.parallel({
             user: function (callback) {
-                User.findOne({_id: uid}, {password: 0, message: 0}, function (err, user) {
+                User.findOne({_id: uid}, {password: 0, message: 0, profile: 0, hat_id: 0}, function (err, user) {
                     if (err) next(err);
-                    if (user !== null) {
+                    if (user) {
                         user.follow = user.follow.length;
                         user.star = user.star.length;
                         user.fans = user.fans.length;
@@ -32,7 +32,7 @@ var fs = require("fs");
                 })
             },
             isFollowed: function (callback) {
-                if(req.session.user){
+                if (req.session.user) {
                     User.find({_id: req.session.user._id, follow: {$in: [uid]}}, function (err, follow) {
                         if (err) next(err);
                         if (follow.length > 0) {
@@ -48,13 +48,13 @@ var fs = require("fs");
             post: function (callback) {
                 async.parallel({
                     topic: function (callback) {
-                        Post.find({user_id: uid,deleteFlag:0}, {title: 1, parent_url: 1}, {sort: {createDate: -1}, skip: skip, limit: 10}, function (err, post) {
+                        Post.find({user_id: uid, deleteFlag: 0}, {title: 1, parent_url: 1}, {sort: {createDate: -1}, skip: skip, limit: 10}, function (err, post) {
                             if (err) next(err);
                             callback(null, post);
                         })
                     },
                     comment: function (callback) {
-                        Comment.find({user_id: uid,deleteFlag:0}, {content: 1, post_id: 1}, {sort: {createDate: -1}, skip: skip, limit: 10}).populate("post_id", {_id: 1, title: 1, createDate: 1, parent_url: 1}).exec(function (err, comment) {
+                        Comment.find({user_id: uid, deleteFlag: 0}, {content: 1, post_id: 1}, {sort: {createDate: -1}, skip: skip, limit: 10}).populate("post_id", {_id: 1, title: 1, createDate: 1, parent_url: 1}).exec(function (err, comment) {
                             if (err) next(err);
                             callback(null, comment);
                         })
@@ -109,7 +109,7 @@ var fs = require("fs");
                     User.update(criteria, {$set: {loginDate: new Date(), loginIp: req.ip}}, function (err, num) {
                         if (err) next(err);
                         if (num > 0) {
-                            req.session.user = {_id: doc._id, rank: doc.rank,nick:doc.nick};
+                            req.session.user = {_id: doc._id, rank: doc.rank, nick: doc.nick};
                             res.json({"result": "success", "user": doc});
                         } else {
                             res.json({"result": "failed"});
@@ -258,6 +258,62 @@ var fs = require("fs");
         })
     }
 
+    //取消关注
+    module.unfollow = function(req,res,next){
+        var uid = req.query.uid;
+        if (uid === undefined) {
+            res.json({"result": "failed"});
+            return;
+        }
+        async.parallel([function (callback) {
+            User.update({_id: req.session.user._id}, {$pull: {follow: uid}}, function (err, num) {
+                if (err) next(err);
+                if (num > 0) {
+                    callback(null, num);
+                } else {
+                    res.json({"result": "failed"});
+                }
+            })
+        }, function (callback) {
+            User.update({_id: uid}, {$pull: {fans: req.session.user._id}}, function (err, num) {
+                if (err) next(err);
+                if (num > 0) {
+                    callback(null, num);
+                } else {
+                    res.json({"result": "failed"});
+                }
+            })
+        }], function (err, result) {
+            if (err) next(err);
+            res.json({"result": "success"});
+        })
+    }
+
+    //已关注用户列表
+    module.followed = function (req, res, next) {
+        var skip = req.body.skip ? req.body.skip : 0;
+        var users = [];
+        User.findOne({_id: req.session.user._id}, {follow: {$slice: [skip, 10]},_id:1}, function (err, user) {
+            if (err) next(err);
+            if (user) {
+                async.each(user.follow, function (follow, callback) {
+                    User.findOne({_id: follow}, {_id: 1, face: 1, nick: 1}, function (err, doc) {
+                        if (err) next(err);
+                        if (doc) {
+                            users.push(doc);
+                            callback();
+                        }
+                    })
+                },function(err){
+                    if(err) next(err);
+                    res.send(users);
+                })
+            }else{
+                res.send(users);
+            }
+        })
+    }
+
     //激活邮箱
     module.active = function (req, res, next) {
         var email = req.body.email;
@@ -280,7 +336,7 @@ var fs = require("fs");
         })
     }
     //忘记密码
-    module.reset = function (req, res, next) {
+    module.forgot = function (req, res, next) {
         var email = req.body.email;
         var id = hat();
         User.update({email: email}, {$set: {hat_id: id}}, {upsert: true}, function (err, num) {
@@ -325,15 +381,55 @@ var fs = require("fs");
     //重置密码
     module.resetPass = function (req, res, next) {
         var criteria = req.body;
-        if (!/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(criteria.email) || criteria.email === undefined) {
-            res.json({"result": "failed", "msg": "邮箱格式不正确"});
+        if (!/^\w{6,20}$/.test(criteria.newPassword) || criteria.newPassword === undefined) {
+            res.json({"result": "failed", "msg": "新密码格式不正确"});
             return;
         }
-        if (!/^\w{6,20}$/.test(criteria.password) || criteria.password === undefined) {
-            res.json({"result": "failed", "msg": "密码格式不正确"});
+        if (!/^\w{6,20}$/.test(criteria.currentPassword) || criteria.currentPassword === undefined) {
+            res.json({"result": "failed", "msg": "当前密码格式不正确"});
             return;
         }
-        User.update({email: criteria.email}, {$set: {password: MD5(criteria.password)}}, function (err, num) {
+        User.findOne({_id: req.session.user._id, password: MD5(criteria.currentPassword)}, {password: 1}, function (err, user) {
+            if (err) next(err);
+            if (user) {
+                User.update({_id: req.session.user._id}, {$set: {password: MD5(criteria.newPassword)}}, function (err, num) {
+                    if (err) next(err);
+                    if (num > 0) {
+                        res.json({"result": "success"});
+                    } else {
+                        res.json({"result": "failed"});
+                    }
+                })
+            } else {
+                res.json({"result": "failed", "msg": "当前密码不正确"});
+            }
+        })
+    }
+    //忘记密码重置密码
+    module.forgotPass = function (req, res, next) {
+        if (!/^\w{6,20}$/.test(req.body.newPassword) || req.body.newPassword === undefined) {
+            res.json({"result": "failed", "msg": "新密码格式不正确"});
+            return;
+        }
+        User.update({email: req.body.email}, {$set: {password: MD5(req.body.newPassword)}}, function (err, num) {
+            if (err) next(err);
+            if (num > 0) {
+                res.json({"result": "success"});
+            } else {
+                res.json({"result": "failed"});
+            }
+        })
+    }
+    //用户属性
+    module.getProfile = function (req, res, next) {
+        User.findOne({_id: req.session.user._id}, {profile: 1}, function (err, user) {
+            if (err) next(err);
+            res.json(user.profile);
+        })
+    }
+    //设置用户属性
+    module.setProfile = function (req, res, next) {
+        User.update({_id: req.session.user._id}, {$set: {profile: req.body.profile}}, function (err, num) {
             if (err) next(err);
             if (num > 0) {
                 res.json({"result": "success"});

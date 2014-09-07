@@ -1,13 +1,13 @@
-<div class="text-right clearfloat" style="margin-bottom: .625rem" profile>
+<div class="text-right clearfloat" style="margin-bottom: .625rem" profile ng-show="User._id===userData.user._id">
     <div class="dropdown-group right">
         <button class="btn dropdown">管理<i class="dropdown-icon-down"></i></button>
         <ul class="dropdown-menu">
             <li><span>主题</span></li>
             <li><span>回复</span></li>
-            <li><span>关注</span></li>
+            <li><span ng-click="url = 'template/user/user-follow.html'">关注</span></li>
         </ul>
     </div>
-    <button id="user-edit" class="btn right">编辑</button>
+    <button class="btn right" ng-click="url = 'template/user/user-edit.html'">编辑</button>
 </div>
 <div class="panel left text-center">
     <div class="case">
@@ -21,7 +21,7 @@
             <div>{{userData.user.nick}}</div>
             <div>
                 <label class="follow" ng-class="userData.isFollowed?'followed':'follow'"
-                       title="{{userData.isFollowed?'已关注':'关注'}}" ng-click="follow(userData.user._id)"></label>
+                       title="{{userData.isFollowed?'已关注':'关注'}}" ng-click="follow(userData.user._id,userData.isFollowed)"></label>
                 <label id="online_{{userData.user._id}}" class="offline"
                        ng-class="userData.user.online===1?'online':'offline';" title="{{userData.user.online===1?'在线':'离线'}}"></label>
                 <label class="chat" title="聊天" ng-click="showChat(userData.user)" open-chat-dialog></label>

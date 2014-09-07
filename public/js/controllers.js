@@ -145,7 +145,7 @@ app.controller('topicCtrl', ['$scope', '$rootScope', '$location', 'Topic', 'Auth
         })
 
         $scope.star = function (pid) {
-            if(!window.sessionStorage.User){
+            if (!window.sessionStorage.User) {
                 $message("请先登录");
             }
             Star.add({pid: pid}, function (data) {
@@ -159,7 +159,7 @@ app.controller('topicCtrl', ['$scope', '$rootScope', '$location', 'Topic', 'Auth
         }
 
         $scope.follow = function (uid) {
-            if(!window.sessionStorage.User){
+            if (!window.sessionStorage.User) {
                 $message("请先登录");
             }
             Follow.add({uid: uid}, function (data) {
@@ -206,8 +206,8 @@ app.controller('topicCtrl', ['$scope', '$rootScope', '$location', 'Topic', 'Auth
             }
         }
     }])
-app.controller('userCtrl', ['$scope', '$location', 'User', '$loadingBar', '$rootScope', 'Auth', '$upload', '$message', '$crumb', '$routeParams','Follow',
-    function ($scope, $location, User, $loadingBar, $rootScope, Auth, $upload, $message, $crumb, $routeParams,Follow) {
+app.controller('userCtrl', ['$scope', '$location', 'User', '$loadingBar', '$rootScope', 'Auth', '$upload', '$message', '$crumb', '$routeParams', 'Follow',
+    function ($scope, $location, User, $loadingBar, $rootScope, Auth, $upload, $message, $crumb, $routeParams, Follow) {
         $rootScope.showCrumb = true;
         $rootScope.showOpenEditor = false;
         $scope.showModal = false;
@@ -238,8 +238,8 @@ app.controller('userCtrl', ['$scope', '$location', 'User', '$loadingBar', '$root
                 if (data.result === "success") {
                     $message("上传头像成功");
                     $scope.showModal = false;
-                    $scope.userData.user.face = data.face+"?"+Date.now();
-                    $rootScope.User.face = data.face+"?"+Date.now();
+                    $scope.userData.user.face = data.face + "?" + Date.now();
+                    $rootScope.User.face = data.face + "?" + Date.now();
                     window.sessionStorage.User = Base64.encode(JSON.stringify($rootScope.User))
                     $('#file').val(null);
                     $scope.file = undefined;
@@ -249,18 +249,29 @@ app.controller('userCtrl', ['$scope', '$location', 'User', '$loadingBar', '$root
             });
         }
 
-        $scope.follow = function (uid) {
-            if(!window.sessionStorage.User){
+        $scope.follow = function (uid, f) {
+            if (!window.sessionStorage.User) {
                 $message("请先登录");
             }
-            Follow.add({uid: uid}, function (data) {
-                if (data.result === "success") {
-                    $message("关注成功");
-                    $scope.userData.isFollowed = true;
-                } else {
-                    $message(data.msg ? data.msg : "关注失败");
-                }
-            })
+            if (f) {
+                Follow.delete({uid: uid}, function (data) {
+                    if (data.result === "success") {
+                        $message("已取消关注");
+                        $scope.userData.isFollowed = false;
+                    } else {
+                        $message(data.msg ? data.msg : "取消关注失败");
+                    }
+                })
+            } else {
+                Follow.add({uid: uid}, function (data) {
+                    if (data.result === "success") {
+                        $message("关注成功");
+                        $scope.userData.isFollowed = true;
+                    } else {
+                        $message(data.msg ? data.msg : "关注失败");
+                    }
+                })
+            }
         }
     }])
 
@@ -286,20 +297,20 @@ app.controller('reActiveCtrl', ['$scope', '$http', '$message', function ($scope,
     }
 }])
 
-app.controller('plazaCtrl', ['$scope', '$rootScope', 'Auth','$http', function ($scope, $rootScope, Auth,$http) {
+app.controller('plazaCtrl', ['$scope', '$rootScope', 'Auth', '$http', function ($scope, $rootScope, Auth, $http) {
     $rootScope.showEditor = false;
     $rootScope.showOpenEditor = false;
     $rootScope.showCrumb = false;
     $rootScope.showChat = false;
     $scope.User = Auth.getUser();
 
-    $http.get('/plaza/recent').success(function(data){
+    $http.get('/plaza/recent').success(function (data) {
         $scope.recents = data;
     })
-    $http.get('/plaza/status').success(function(data){
+    $http.get('/plaza/status').success(function (data) {
         $scope.status = data;
     })
-    $http.get('/plaza/active').success(function(data){
+    $http.get('/plaza/active').success(function (data) {
         $scope.actives = data;
     })
 }])

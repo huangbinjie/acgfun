@@ -376,6 +376,10 @@ form .field label {
 .panel .row small {
     color: #73E064;
 }
+.user-group.follow >li {
+    position: relative;
+    display: inline-block;
+}
 
 /*主页菜单阴影*/
 .case-border {
@@ -1262,11 +1266,11 @@ form .field label {
     background: rgba(37, 39, 48, 0.8);
 }
 
-.plaza-group li {
+.user-group li {
     margin: 0 0 1rem 1rem;
 }
 
-.plaza-group li > a > img {
+.user-group li > a > img {
     width: 80px;
     height: 80px;
     padding: 4px;

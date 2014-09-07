@@ -1,0 +1,13 @@
+<div class="case">
+    <header>已关注</header>
+    <p>
+        <ul class="user-group follow">
+            <li ng-repeat="user in follows">
+                <a href="/user/{{user._id}}">
+                    <img src="/uploads/faces/{{user.face}}">
+                </a>
+                <p class="text-center">{{user.nick}}</p>
+            </li>
+        </ul>
+    </p>
+</div>

@@ -5,23 +5,22 @@
     <form ng-submit="save()">
         <div class="field">
             <label>姓名</label>
-            <input placeholder="姓名" ng-model="name">
+            <input placeholder="姓名" ng-model="profile.name" maxlength="5">
         </div>
         <div class="field">
             <label>性别</label>
-            <input type="hidden" ng-model="gender">
-            <input type="radio" value="汉子" name="gender" id="hanzi" ng-click="gender='汉子'">
-            <label style="display: inline;" ng-click="gender='汉子'" for="hanzi">汉子</label>
-            <input type="radio" value="妹子" name="gender" id="meizi" ng-click="gender='妹子'">
-            <label style="display: inline;" ng-click="gender='妹子'" for="meizi">妹子</label>
+            <input type="radio" value="汉子" name="gender" id="hanzi" ng-model="profile.gender" value="汉子">
+            <label style="display: inline;" for="hanzi">汉子</label>
+            <input type="radio" value="妹子" name="gender" id="meizi" ng-model="profile.gender" value="妹子">
+            <label style="display: inline;" for="meizi">妹子</label>
         </div>
         <div class="field">
             <label>生日</label>
-            <input placeholder="单击选择" id="datepicker" readonly>
+            <input placeholder="单击选择" id="datepicker" ng-model="profile.birthday" readonly>
         </div>
         <div class="field">
             <label title="0到30个字">签名</label>
-            <textarea placeholder="签名" maxlength="50"></textarea>
+            <textarea placeholder="签名" maxlength="50" ng-model="profile.sign"></textarea>
         </div>
         <div>
             <button type="submit" class="btn blue">保存</button>
@@ -36,11 +35,11 @@
     <form ng-submit="reset()">
         <div class="field">
             <label>当前密码</label>
-            <input placeholder="当前密码">
+            <input type="password" placeholder="当前密码" pattern="\w{6,20}" ng-model="password.currentPassword">
         </div>
         <div class="field">
             <label>新密码</label>
-            <input placeholder="新密码">
+            <input type="password" placeholder="新密码" pattern="\w{6,20}" ng-model="password.newPassword">
         </div>
         <div>
             <button type="submit" class="btn blue">提交</button>
