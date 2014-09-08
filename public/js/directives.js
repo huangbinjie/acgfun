@@ -34,6 +34,9 @@ app.directive('nav', function ($rootScope, $routeParams) {
                 if ($rootScope.editType === "post") {
                     $(".editor_title").val("").removeAttr("disabled");
                 } else {
+                    $rootScope.$apply(function(){
+                        $rootScope.editType = "comment";
+                    })
                     $(".editor_title").val("回复:" + $routeParams.title).attr("disabled", "true");
                 }
             });
@@ -348,7 +351,7 @@ app.directive('profileContext', function ($http, $templateCache, $compile, $mess
                     })
                 }
                 if (url.indexOf('user-follow.html') !== -1) {
-                    $http.post('/user/follow',{skip:0}).success(function (follows) {
+                    $http.post('/user/follow', {skip: 0}).success(function (follows) {
                         $scope.follows = follows;
                     })
                 }
@@ -388,9 +391,9 @@ app.directive('profileContext', function ($http, $templateCache, $compile, $mess
                         $message('修改成功');
                         $scope.password = {};
                     } else {
-                        if(data.msg){
+                        if (data.msg) {
                             $message(data.msg);
-                        }else{
+                        } else {
                             $message('修改失败');
                         }
                     }
@@ -399,8 +402,8 @@ app.directive('profileContext', function ($http, $templateCache, $compile, $mess
 
             $scope.followSkip = 0;
             $scope.follows = [];
-            $scope.getFollow = function(skip){
-                $http.post('/user/follow',{skip:skip}).success(function (follows) {
+            $scope.getFollow = function (skip) {
+                $http.post('/user/follow', {skip: skip}).success(function (follows) {
                     $scope.follows = $scope.follows.concat(follows);
                     $scope.followSkip = skip;
                 })

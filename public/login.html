@@ -1,12 +1,12 @@
 <div id="login_content" login>
     <form id="login" ng-submit="login()">
         <div class="field">
-            <label>邮箱</label>
-            <input placeholder="邮箱" autofocus="true" pattern="^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$" title="例如:xxxx@qq.com" ng-model="login_email" tabindex="1">
+            <label>邮箱&nbsp;&nbsp;<span style="padding: 3px 10px;border-radius: 100%;" title="技术问题，目前谷歌上无法保存表单...请谅解">?</span></label>
+            <input placeholder="邮箱" autofocus="true" type="email" title="例如:xxxx@qq.com" ng-model="login_email" tabindex="1" required>
         </div>
         <div class="field">
             <label>密码</label>
-            <input type="password" placeholder="密码" pattern="\w{6,20}" ng-model="login_password" tabindex="2">
+            <input type="password" placeholder="密码" pattern="\w{6,20}" ng-model="login_password" tabindex="2" required>
         </div>
         <div>
             <button id="post" type="submit" class="btn blue" tabindex="3">登陆</button>
