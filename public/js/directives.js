@@ -340,6 +340,8 @@ app.directive('profileContext', function ($http, $templateCache, $compile, $mess
             $scope.$watch(function () {
                 return $scope.url;
             }, function (url) {
+                //日期插件bug
+                $('.pika-single').remove();
                 if (url.indexOf('user-edit.html') !== -1) {
                     $http.post('/user/profile').success(function (profile) {
                         $scope.profile = profile;
