@@ -126,6 +126,7 @@ module.exports.start = function (server) {
                 console.log('游客:'+onlineGuest+'会员:'+onlineMember);
             }
             /*第一次连接处理结束*/
+
             if (message.path.indexOf('/plaza') != -1) {
                 /*处理请求路径,切换页面的时候发送一个路径信息path*/
                 var users = [];
@@ -143,10 +144,6 @@ module.exports.start = function (server) {
 
             if(message.path.indexOf('/') != -1){
                 /*处理消息*/
-                //没有消息
-                if (_.isUndefined(message.message)||message.message==="") {
-                    return;
-                }
                 if(_.isEmpty(message.user)){
                     return;
                 }
@@ -166,6 +163,15 @@ module.exports.start = function (server) {
                             }
                         })
                     }
+                }
+                //退出
+                if(message.suffix === '/signOut'){
+                    ws.member = false;
+                    ws.guest = true;
+                    --onlineMember;
+                    ++onlineGuest;
+                    wss.broadcast(JSON.stringify({path: '/', suffix: '/left/member', members: ws.user, guest: onlineGuest}));
+                    ws.user = {};
                 }
             }
         })

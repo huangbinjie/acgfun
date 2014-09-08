@@ -71,7 +71,7 @@ app.factory('User', function ($resource) {
         })
     };
 })
-app.factory('Auth', function ($cookies, $rootScope, $http, $message) {
+app.factory('Auth', function ($cookies, $rootScope, $http, $message,$location) {
     var auth = {
         getUser: function () {
             if (window.sessionStorage.User !== undefined) {
@@ -83,9 +83,9 @@ app.factory('Auth', function ($cookies, $rootScope, $http, $message) {
             $http.post("/signout").success(function (data) {
                 if (data.result === "success") {
                     $message("成功退出");
-                    window.sessionStorage.removeItem("User");
                     $rootScope.User = window.sessionStorage.User;
-                    ws.close();
+                    ws.send(JSON.stringify({path:$location.path(),suffix:'/signOut',user:window.sessionStorage.User?JSON.parse(Base64.decode(window.sessionStorage.User)):{}}));
+                    window.sessionStorage.removeItem("User");
                 } else {
                     $message("退出失败");
                 }

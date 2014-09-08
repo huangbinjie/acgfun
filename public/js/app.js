@@ -49,7 +49,7 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider','$resourcePro
             otherwise({
                 templateUrl:'404.html'
             });
-    }]).run(function($rootScope,Auth,$loadingBar,$anchorScroll,$location,$routeParams,$timeout){
+    }]).run(function($rootScope,Auth,$loadingBar,$anchorScroll,$location,$routeParams,$timeout,$message){
     $rootScope.signOut = Auth.signOut;
     $rootScope.$on("$viewContentLoaded",function(){
         $loadingBar("100%",true);
@@ -70,4 +70,8 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider','$resourcePro
             },1000)
         },1000);
     });
+
+    ws.onclose = function(){
+        $message("聊天频道已断开");
+    }
 });
