@@ -43,6 +43,11 @@ var db = function () {
                 if (num > 0) console.log(('/m初始化成功.').green);
                 else console.log(('/m初始化失败.').green);
             })
+            Team.update({_id: -4}, {$set: {url: '/o', name: '其他'}}, {upsert: true}, function (err, num) {
+                if (err) logger.error(err);
+                if (num > 0) console.log(('/o初始化成功.').green);
+                else console.log(('/o初始化失败.').green);
+            })
         }
     };
 };
