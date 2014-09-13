@@ -61,7 +61,7 @@
         <span ng-click="signOut()" ng-if="User!==undefined">登出</span>
     </div>
 </div>
-<div id="menu-btn" ng-class="chatCount>0?'message':''"></div>
+<div id="menu-btn" ng-class="chatCount>0&&showChatModal===false?'message':''"></div>
 <!--容器-->
 <div class="container">
     <div class="crumbs" ng-show="showCrumb">

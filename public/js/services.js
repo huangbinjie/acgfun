@@ -188,9 +188,11 @@ app.factory('$socket', function ($rootScope,$location) {
             }
             if (message.suffix === '/to') {
                 $('audio')[0].play();
-                $rootScope.$apply(function(){
-                    ++$rootScope.chatCount;
-                })
+                if(!$rootScope.showChatModal){
+                    $rootScope.$apply(function(){
+                        ++$rootScope.chatCount;
+                    })
+                }
                 //            有聊天记录的时候
                 if ($('.modal.chat .left-panel').children().size() > 0) {
                     if ($("#chat_title_" + members._id).size() > 0) {

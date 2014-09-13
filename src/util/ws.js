@@ -11,6 +11,7 @@ module.exports.start = function (server) {
     wss = new WebSocketServer({server: server, path: "/"});
     wss.broadcast = function (data) {
         for (var i in this.clients) {
+            if (this.clients[i].readyState  != 1) continue;
             this.clients[i].send(data);
         }
     };
@@ -18,6 +19,7 @@ module.exports.start = function (server) {
     wss.to = function (message) {
         for (var i in this.clients) {
             if (this.clients[i].user._id == message.to) {
+                if (this.clients[i].readyState  != 1) continue;
                 this.clients[i].send(JSON.stringify({path: '/', suffix: '/to', members: message.user, date: new Date(), message: escape(message.message)}));
                 return true;
             }
@@ -28,6 +30,7 @@ module.exports.start = function (server) {
     wss.reply = function (message) {
         for (var i in this.clients) {
             if (this.clients[i].user._id == message.to) {
+                if (this.clients[i].readyState  != 1) continue;
                 this.clients[i].send(JSON.stringify({path: '/', suffix: '/to', members: message.user, date: new Date(), message: message.message}));
                 User.update({_id: message.to}, {$push: {reply: {$each: [
                     {_id: message.user._id, post_id: message.pid, comment_id: message.cid, read: 1}
@@ -47,6 +50,7 @@ module.exports.start = function (server) {
     wss.find = function (_id) {
         for (var i in this.clients) {
             if (this.clients[i].user) {
+                if (this.clients[i].readyState  != 1) continue;
                 if (this.clients[i].user._id === _id) {
                     return true;
                 }
