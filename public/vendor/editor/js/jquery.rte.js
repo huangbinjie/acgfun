@@ -202,6 +202,9 @@ if(typeof $.fn.rte === "undefined") {
                 if(command==='CreateLink'){
                     $(".editor iframe").contents().find("body a:last").attr("target","_bank");
                 }
+                if(command==='InsertImage'){
+                    $(".editor iframe").contents().find("img").addClass('response-img');
+                }
             }catch(e){
 //                console.log(e);
             }

@@ -5,7 +5,7 @@
             <div class="clearfloat" ng-repeat="a in main.a">
                 <div class="title"><a href="/a/{{a.post_id._id}}/{{a.post_id.title}}">{{a.post_id.title}}</a></div>
                 <article class="left"><a href="/user/{{a.user_id._id}}"><img src="uploads/faces/{{a.user_id.face}}"></a></article>
-                <div class="content">{{a.content}}</div>
+                <div class="content" compile="a.content"></div>
                 <footer class="right">
                     <small>{{a.createDate|dateCustom}}</small>
                     -
@@ -18,7 +18,7 @@
             <div class="clearfloat" ng-repeat="a in main.g">
                 <div class="title"><a href="/a/{{a.post_id._id}}/{{a.post_id.title}}">{{a.post_id.title}}</a></div>
                 <article class="left"><a href="/user/{{a.user_id._id}}"><img src="uploads/faces/{{a.user_id.face}}"></a></article>
-                <div class="content">{{a.content}}</div>
+                <div class="content" compile="a.content"></div>
                 <footer class="right">
                     <small>{{a.createDate|dateCustom}}</small>
                     -
@@ -33,7 +33,7 @@
             <div class="clearfloat" ng-repeat="a in main.c">
                 <div class="title"><a href="/a/{{a.post_id._id}}/{{a.post_id.title}}">{{a.post_id.title}}</a></div>
                 <article class="left"><a href="/user/{{a.user_id._id}}"><img src="uploads/faces/{{a.user_id.face}}"></a></article>
-                <div class="content">{{a.content}}</div>
+                <div class="content" compile="a.content"></div>
                 <footer class="right">
                     <small>{{a.createDate|dateCustom}}</small>
                     -
@@ -46,7 +46,7 @@
             <div class="clearfloat" ng-repeat="a in main.o">
                 <div class="title"><a href="/a/{{a.post_id._id}}/{{a.post_id.title}}">{{a.post_id.title}}</a></div>
                 <article class="left"><a href="/user/{{a.user_id._id}}"><img src="uploads/faces/{{a.user_id.face}}"></a></article>
-                <div class="content">{{a.content}}</div>
+                <div class="content" compile="a.content"></div>
                 <footer class="right">
                     <small>{{a.createDate|dateCustom}}</small>
                     -
@@ -61,7 +61,7 @@
             <div class="clearfloat" ng-repeat="a in main.m">
                 <div class="title"><a href="/a/{{a.post_id._id}}/{{a.post_id.title}}">{{a.post_id.title}}</a></div>
                 <article class="left"><a href="/user/{{a.user_id._id}}"><img src="uploads/faces/{{a.user_id.face}}"></a></article>
-                <div class="content">{{a.content}}</div>
+                <div class="content" compile="a.content"></div>
                 <footer class="right">
                     <small>{{a.createDate|dateCustom}}</small>
                     -

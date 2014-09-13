@@ -220,12 +220,10 @@ input.reply {
     transition: .6s linear;
 }
 
-.h0 {
-    height: 0px;
-}
-
-.w0 {
-    width: 0px;
+.response-img{
+    display: block;
+    max-width: 100%;
+    height: auto;
 }
 
 #login_content {
@@ -304,21 +302,6 @@ form .field label {
     padding: 0 .625rem;
     margin-bottom: .625rem;
 }
-/*.home .item.animation header{*/
-    /*background-color: #73d07d;*/
-/*}*/
-/*.home .item.game header{*/
-    /*background-color: #a485d6;*/
-/*}*/
-/*.home .item.comic header{*/
-    /*background-color: lightpink;*/
-/*}*/
-/*.home .item.other header{*/
-    /*background-color: #9ec4dd;*/
-/*}*/
-/*.home .item.music header{*/
-    /*background-color: #c0c24f;*/
-/*}*/
 .home .item > header{
     text-align: center;
     height: 3rem;
@@ -354,54 +337,6 @@ form .field label {
     overflow: hidden;
 }
 
-/*.item {*/
-    /*width: 222px;*/
-    /*max-height: 119px;*/
-    /*margin: .3rem;*/
-    /*border-radius: .4rem;*/
-    /*overflow: hidden;*/
-    /*display: inline-block;*/
-    /*position: relative;*/
-    /*background-color: rgba(37, 39, 48, 0.6);*/
-    /*transition: opacity 3s linear;*/
-    /*box-sizing: border-box;*/
-/*}*/
-
-/*.item:hover {*/
-    /*background-color: rgba(37, 39, 48, 0.8);*/
-/*}*/
-
-/*.item img {*/
-    /*width: 100%;*/
-    /*height: 100%;*/
-    /*float: left;*/
-/*}*/
-
-/*.item .content {*/
-    /*width: 100%;*/
-    /*height: 100%;*/
-    /*padding: .4rem;*/
-    /*position: absolute;*/
-    /*box-sizing: border-box;*/
-    /*font-size: 2em;*/
-/*}*/
-
-/*.item header {*/
-    /*font-weight: bold;*/
-    /*color: #ffffff;*/
-    /*font-size: .8em;*/
-/*}*/
-
-/*.item footer {*/
-    /*font-weight: bold;*/
-    /*color: #ffffff;*/
-    /*text-align: right;*/
-    /*font-size: 4rem;*/
-/*}*/
-
-/*.item footer div {*/
-    /*font-size: 2rem;*/
-/*}*/
 
 .face {
     width: 30px;
@@ -442,170 +377,6 @@ form .field label {
     position: relative;
     display: inline-block;
 }
-
-/*主页菜单阴影*/
-.case-border {
-    transition: .1s linear;
-}
-
-.case-border:hover {
-    -webkit-box-shadow: 0 0 4px #33FF66;
-    -o-box-shadow: 0 0 4px #074A99;
-    -moz-box-shadow: 0 0 4px #074A99;
-    box-shadow: 0 0 4px #0066ff;
-}
-
-@-ms-keyframes spin {
-    from {
-        -ms-transform: rotate(0deg);
-    }
-    to {
-        -ms-transform: rotate(360deg);
-    }
-}
-
-@-moz-keyframes spin {
-    from {
-        -moz-transform: rotate(0deg);
-    }
-    to {
-        -moz-transform: rotate(360deg);
-    }
-}
-
-@-webkit-keyframes spin {
-    from {
-        -webkit-transform: rotate(0deg);
-    }
-    to {
-        -webkit-transform: rotate(360deg);
-    }
-}
-
-@keyframes spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-/*主页*/
-@media screen and (max-width: 624px), screen and (max-height: 624px) {
-    #menu-wrapper {
-        width: 100%;
-        height: auto;
-        position: relative;
-    }
-
-    .menu {
-        width: 100px;
-        height: 100px;
-        border-radius: 6px;
-        position: absolute;
-    }
-
-    #pig-canvas {
-        display: none;
-    }
-
-    #menu1 {
-        background-image: url(../images/animation.jpg);
-        background-size: contain;
-    }
-
-    #menu2 {
-        background-image: url(../images/comic.jpg);
-        background-size: contain;
-    }
-
-    #menu3 {
-        background-image: url(../images/game.jpg);
-        background-size: contain;
-    }
-
-    #menu4 {
-        background-image: url(../images/music.jpg);
-        background-size: contain;
-    }
-}
-
-@media screen and (min-width: 625px) and (min-height: 625px) {
-    #menu-wrapper {
-        margin-top: 30px;
-        width: 500px;
-        height: 500px;
-        margin: 0 auto;
-        overflow: hidden;
-        position: relative;
-        transition: .3s linear;
-        /*旋转*/
-        -webkit-animation-name: spin;
-        -webkit-animation-duration: 50000ms;
-        -webkit-animation-iteration-count: infinite;
-        -webkit-animation-timing-function: linear;
-        -moz-animation-name: spin;
-        -moz-animation-duration: 50000ms;
-        -moz-animation-iteration-count: infinite;
-        -moz-animation-timing-function: linear;
-        -ms-animation-name: spin;
-        -ms-animation-duration: 50000ms;
-        -ms-animation-iteration-count: infinite;
-        -ms-animation-timing-function: linear;
-
-        animation-name: spin;
-        animation-duration: 50000ms;
-        animation-iteration-count: infinite;
-        animation-timing-function: linear;
-    }
-
-    .menu {
-        width: 200px;
-        height: 200px;
-        border-radius: 100%;
-        display: inline-block;
-        position: absolute;
-    }
-
-    #menu1 {
-        background-image: url(../images/animation.jpg);
-        background-size: contain;
-        top: 20px;
-        left: 20px;
-    }
-
-    #menu2 {
-        background-image: url(../images/comic.jpg);
-        background-size: contain;
-        bottom: 20px;
-        left: 20px;
-    }
-
-    #menu3 {
-        background-image: url(../images/game.jpg);
-        background-size: contain;
-        top: 20px;
-        right: 20px;
-    }
-
-    #menu4 {
-        background-image: url(../images/music.jpg);
-        background-size: contain;
-        bottom: 20px;
-        right: 20px;
-    }
-
-    #pig-canvas {
-        position: fixed;
-        bottom: 0px !important;
-        width: 100%;
-        height: 64px;
-        left: 0px;
-    }
-}
-
-/*主页结束*/
 .category {
     width: 100%;
     height: auto;
