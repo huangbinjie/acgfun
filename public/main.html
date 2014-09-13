@@ -1,67 +1,133 @@
-<div>
+<div class="home">
+    <div class="col25">
+        <div class="item animation">
+            <header>动画</header>
+            <div class="clearfloat" ng-repeat="a in main.a">
+                <div class="title"><a href="/a/{{a.post_id._id}}/{{a.post_id.title}}">{{a.post_id.title}}</a></div>
+                <article class="left"><a href="/user/{{a.user_id._id}}"><img src="uploads/faces/{{a.user_id.face}}"></a></article>
+                <div class="content">{{a.content}}</div>
+                <footer class="right">
+                    <small>{{a.createDate|dateCustom}}</small>
+                    -
+                    <small><a href="/a/{{a.post_id._id}}/{{a.post_id.title}}?scrollTo={{a._id}}">详情</a></small>
+                </footer>
+            </div>
+        </div>
+        <div class="item game">
+            <header>游戏</header>
+            <div class="clearfloat" ng-repeat="a in main.g">
+                <div class="title"><a href="/a/{{a.post_id._id}}/{{a.post_id.title}}">{{a.post_id.title}}</a></div>
+                <article class="left"><a href="/user/{{a.user_id._id}}"><img src="uploads/faces/{{a.user_id.face}}"></a></article>
+                <div class="content">{{a.content}}</div>
+                <footer class="right">
+                    <small>{{a.createDate|dateCustom}}</small>
+                    -
+                    <small><a href="/a/{{a.post_id._id}}/{{a.post_id.title}}?scrollTo={{a._id}}">详情</a></small>
+                </footer>
+            </div>
+        </div>
+    </div>
+    <div class="col25">
+        <div class="item comic">
+            <header>漫画</header>
+            <div class="clearfloat" ng-repeat="a in main.c">
+                <div class="title"><a href="/a/{{a.post_id._id}}/{{a.post_id.title}}">{{a.post_id.title}}</a></div>
+                <article class="left"><a href="/user/{{a.user_id._id}}"><img src="uploads/faces/{{a.user_id.face}}"></a></article>
+                <div class="content">{{a.content}}</div>
+                <footer class="right">
+                    <small>{{a.createDate|dateCustom}}</small>
+                    -
+                    <small><a href="/a/{{a.post_id._id}}/{{a.post_id.title}}?scrollTo={{a._id}}">详情</a></small>
+                </footer>
+            </div>
+        </div>
+        <div class="item other">
+            <header>其他</header>
+            <div class="clearfloat" ng-repeat="a in main.o">
+                <div class="title"><a href="/a/{{a.post_id._id}}/{{a.post_id.title}}">{{a.post_id.title}}</a></div>
+                <article class="left"><a href="/user/{{a.user_id._id}}"><img src="uploads/faces/{{a.user_id.face}}"></a></article>
+                <div class="content">{{a.content}}</div>
+                <footer class="right">
+                    <small>{{a.createDate|dateCustom}}</small>
+                    -
+                    <small><a href="/a/{{a.post_id._id}}/{{a.post_id.title}}?scrollTo={{a._id}}">详情</a></small>
+                </footer>
+            </div>
+        </div>
+    </div>
+    <div class="col25">
+        <div class="item music">
+            <header>音乐</header>
+            <div class="clearfloat" ng-repeat="a in main.m">
+                <div class="title"><a href="/a/{{a.post_id._id}}/{{a.post_id.title}}">{{a.post_id.title}}</a></div>
+                <article class="left"><a href="/user/{{a.user_id._id}}"><img src="uploads/faces/{{a.user_id.face}}"></a></article>
+                <div class="content">{{a.content}}</div>
+                <footer class="right">
+                    <small>{{a.createDate|dateCustom}}</small>
+                    -
+                    <small><a href="/a/{{a.post_id._id}}/{{a.post_id.title}}?scrollTo={{a._id}}">详情</a></small>
+                </footer>
+            </div>
+        </div>
+    </div>
+    <div class="col25 sidebar">
+            <div class="case">
+                <header><h3>欢迎来到Acgfun</h3></header>
+            </div>
+            <div class="case">
+                <header>最新主题</header>
+                <div ng-repeat="recent in recents" class="clearfloat">
+                    <div class="left"><a href="/user/{{recent.user_id._id}}"><img class="face" ng-src="{{recent.user_id.face?'/uploads/faces/'+recent.user_id.face:'/uploads/faces/default.jpg'}}"></a></div>
+                    <div><a href="{{recent.parent_url}}/{{recent._id}}/{{recent.title}}">{{recent.title}}</a></div>
+                    <footer class="right">{{recent.createDate|dateCustom}}</footer>
+                </div>
+            </div>
+            <div class="case status clearfloat">
+                <header class="text-left">论坛状态</header>
+                <div>
+                    <header>在线</header>
+                    <footer id="onlineMembers">0</footer>
+                </div>
+                <div>
+                    <header>用户</header>
+                    <footer>{{status.userCount}}</footer>
+                </div>
+                <div>
+                    <header>文章</header>
+                    <footer>{{status.postCount}}</footer>
+                </div>
+                <div>
+                    <header>评论</header>
+                    <footer>{{status.commentCount}}</footer>
+                </div>
+            </div>
+            <div class="case active">
+                <header>活跃用户</header>
+                <div class="clearfloat text-left">
+                    <div ng-repeat="active in actives">
+                        <a href="/user/{{active._id}}">
+                            <img src="/uploads/faces/{{active.face}}">
+                        </a>
+                    </div>
+                </div>
+            </div>
+    </div>
 </div>
-<div id="menu-wrapper">
-    <a href="/a" title="动画">
-        <div id="menu1" class="menu case-border"></div>
-    </a>
-    <a href="/c" title="漫画">
-        <div id="menu2" class="menu case-border"></div>
-    </a>
-    <a href="/g" title="游戏">
-        <div id="menu3" class="menu case-border"></div>
-    </a>
-    <a href="/m" title="音乐">
-        <div id="menu4" class="menu case-border"></div>
-    </a>
-</div>
+<!--<div id="menu-wrapper">-->
+<!--<a href="/a" title="动画">-->
+<!--<div id="menu1" class="menu case-border"></div>-->
+<!--</a>-->
+<!--<a href="/c" title="漫画">-->
+<!--<div id="menu2" class="menu case-border"></div>-->
+<!--</a>-->
+<!--<a href="/g" title="游戏">-->
+<!--<div id="menu3" class="menu case-border"></div>-->
+<!--</a>-->
+<!--<a href="/m" title="音乐">-->
+<!--<div id="menu4" class="menu case-border"></div>-->
+<!--</a>-->
+<!--</div>-->
 <!--<canvas id="pig-canvas"></canvas>-->
 <!--<script type="text/javascript" src="static/plugins/squarepig/js/squarepig.js"></script>-->
 <!--<script type="text/javascript" src="static/plugins/squarepig/js/randall.js"></script>-->
-<script>
-    var windowWidth = window.innerWidth;
-    var windowHeight = window.innerHeight;
-    var menuArray = ['#menu1', '#menu2', '#menu3', '#menu4'];
-    if (windowWidth >= 625 && windowHeight >= 625) {
-        $('#menu-wrapper').css('margin-top', (window.innerHeight - $('#menu-wrapper').height()) / 2 + 'px');
-    } else {
-        $('#menu-wrapper').css("margin-top", "30px");
-        var column = Math.floor((windowWidth - 60) / 100);
-        var ccount = Math.floor(((windowWidth - 60) - (column - 1) * 10) / 100);
-        var rcount = Math.ceil(menuArray.length / ccount);
-        //row
-        for (var i = 0; i < rcount; i++) {
-            //column
-            for (var k = 0; k < ccount; k++) {
-                var rpx = 110 * i + "px";
-                var cpx = 30 + 110 * k + "px";
-                $(menuArray[i * ccount + k]).css({top: rpx, left: cpx});
-            }
-        }
-    }
-    window.onresize = function () {
-        var width = window.innerWidth;
-        var height = window.innerHeight;
-        if (width >= 625 && height >= 625) {
-            $('#menu-wrapper').css('margin-top', (window.innerHeight - $('#menu-wrapper').height()) / 2 + 'px');
-            $(menuArray[0]).css({top: "20px", left: "20px"});
-            $(menuArray[2]).css({top: "20px", left: "280px", right: "20px"});
-            $(menuArray[1]).css({top: "280px", bottom: "20px", left: "20px"});
-            $(menuArray[3]).css({top: "280px", bottom: "20px", left: "280px", right: "20px"});
-        } else {
-            $('#menu-wrapper').css("margin-top", "30px");
-            var column1 = Math.floor((width - 60) / 100);
-            var ccount1 = Math.floor(((width - 60) - (column1 - 1) * 10) / 100);
-            var rcount1 = Math.ceil(menuArray.length / ccount1);
-            //row
-            for (var i = 0; i < rcount1; i++) {
-                //column
-                for (var k = 0; k < ccount1; k++) {
-                    var rpx = 110 * i + "px";
-                    var cpx = 30 + 110 * k + "px";
-                    $(menuArray[i * ccount1 + k]).css({top: rpx, left: cpx});
-                }
-            }
-        }
-    };
-</script>
 <div class="beian">Power By NodeJS&&Angularjs，沪ICP备14032680号</div>

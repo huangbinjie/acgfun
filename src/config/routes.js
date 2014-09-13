@@ -39,9 +39,9 @@ module.exports = function (app) {
 
     app.post('/upload/face',auth.ensureAuthenticated,controllers.user.uploadFace);
 
-    /*广场*/
-    //最新主题
-    app.post('/plaza/recent',controllers.plaza.recent);
-    app.post('/plaza/status',controllers.plaza.status);
-    app.post('/plaza/active',controllers.plaza.active);
+    /*主页*/
+    app.post('/home',controllers.home.main);
+    app.post('/home/recent',controllers.home.recent);
+    app.post('/home/status',controllers.home.status);
+    app.post('/home/active',controllers.home.active);
 }

@@ -190,7 +190,7 @@ var wss = require('../util/ws').getWss();
             return;
         }
         var url = req.url.split('/');//["",a,1,内容]
-        new Comment({post_id: url[2], user_id: req.session.user._id, content: comment.content, parent_id: comment.parent_id ? comment.parent_id : 0}).save(function (err, doc) {
+        new Comment({parent_url:url[1],post_id: url[2], user_id: req.session.user._id, content: comment.content, parent_id: comment.parent_id ? comment.parent_id : 0}).save(function (err, doc) {
             if (err) next(err);
             if (doc) {
                 async.parallel([function (callback) {

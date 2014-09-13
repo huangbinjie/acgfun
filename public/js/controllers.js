@@ -57,13 +57,27 @@ app.controller('loginCtrl', ['$scope', '$http', '$message', '$loadingBar', '$roo
             });
         }
     }]);
-app.controller('mainCtrl', ['$scope', '$rootScope', '$message', 'Auth', '$loadingBar',
-    function ($scope, $rootScope, $message, Auth, $loadingBar) {
+app.controller('mainCtrl', ['$scope', '$rootScope', '$message', 'Auth', '$loadingBar','$http',
+    function ($scope, $rootScope, $message, Auth, $loadingBar,$http) {
         $rootScope.showEditor = false;
         $rootScope.showOpenEditor = false;
         $rootScope.showCrumb = false;
         $rootScope.showChat = false;
         Auth.getUser();
+
+        $http.post('/home').success(function(data){
+            $scope.main = data;
+        })
+
+        $http.post('/home/recent').success(function (data) {
+            $scope.recents = data;
+        })
+        $http.post('/home/status').success(function (data) {
+            $scope.status = data;
+        })
+        $http.post('/home/active').success(function (data) {
+            $scope.actives = data;
+        })
     }])
 app.controller('pageCtrl', ['$scope', '$rootScope', '$message', '$location', 'Post', 'Auth', '$loadingBar', '$crumb',
     function ($scope, $rootScope, $message, $location, Post, Auth, $loadingBar, $crumb) {
