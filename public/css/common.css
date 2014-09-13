@@ -1178,15 +1178,13 @@ form .field label {
     background: rgba(37, 39, 48, 0.6);
 }
 
-.pagination > li > a:hover {
-    background: rgba(37, 39, 48, 0.7);
-}
-
 .pagination > li.active > a {
     color: #fff;
-    cursor: default;
-    background-color: #428bca;
-    border-color: #428bca;
+    cursor: pointer;
+    background: rgba(37, 39, 48, 0.8);
+}
+.pagination a:hover{
+    background: rgba(37, 39, 48, .7);
 }
 
 .topic-left .followed {

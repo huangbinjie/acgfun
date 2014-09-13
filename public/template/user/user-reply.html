@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
-
-</body>
-</html>
+<div class="case clearfloat" ng-controller="userReplyCtrl">
+    <header>收到回复</header>
+    <p ng-repeat="reply in replys track by $index">
+        <a href="/user/{{reply._id._id}}">{{reply._id.nick}}</a>在<a href="{{reply.post_id.parent_url}}/{{reply.post_id._id}}/{{reply.post_id.title}}" target="_blank">
+        {{reply.post_id.title}}</a>回复你:<br/>
+        <a href="{{reply.post_id.parent_url}}/{{reply.post_id._id}}/{{reply.post_id.title}}?scrollTo={{reply.comment_id._id}}"
+           target="_blank" compile="reply.comment_id.content"></a>
+        </a>
+    </p>
+    <button class="btn right" ng-show="replys.length>20" ng-click="getReply(skip+1)">更多</button>
+</div>

@@ -82,10 +82,10 @@ app.factory('Auth', function ($cookies, $rootScope, $http, $message,$location) {
         signOut: function () {
             $http.post("/signout").success(function (data) {
                 if (data.result === "success") {
-                    $message("成功退出");
-                    $rootScope.User = window.sessionStorage.User;
                     ws.send(JSON.stringify({path:$location.path(),suffix:'/signOut',user:window.sessionStorage.User?JSON.parse(Base64.decode(window.sessionStorage.User)):{}}));
                     window.sessionStorage.removeItem("User");
+                    $rootScope.User = undefined;
+                    $message("成功退出");
                 } else {
                     $message("退出失败");
                 }

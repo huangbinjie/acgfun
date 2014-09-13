@@ -24,6 +24,8 @@ var userModel = function(){
             sign     :      {type:String,max:50}
         },//个人属性
         message    : [{_id:Number,message:{type:String,max:200},read:{type:Number,default:0},date:{type:Date,default:Date.now}}],//消息 read 0 未读，1 已读,_id:from来源用户ID
+        notification    : [{_id:Number,message:{type:String,max:200},read:{type:Number,default:0},date:{type:Date,default:Date.now}}],//通知 read 0 未读，1 已读,_id:from来源用户ID
+        reply    : [{_id:Number,post_id:Number,comment_id:Number,read:{type:Number,default:0},date:{type:Date,default:Date.now}}],//被回复 read 0 未读，1 已读,_id:from来源用户ID
 		loginDate	: Date,//登陆时间
 		loginIp	: String,//登陆IP
 		rank		: {type:Number,default:1},//权限等级 0，admin，1普通用户

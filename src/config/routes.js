@@ -11,6 +11,12 @@ module.exports = function (app) {
     /*个人属性*/
     app.post('/user/profile',auth.ensureAuthenticated,controllers.user.getProfile);
     app.put('/user/profile',auth.ensureAuthenticated,controllers.user.setProfile)
+    /*文章管理*/
+    app.post('/user/topic',auth.ensureAuthenticated,controllers.user.topicManage)
+    /*评论管理*/
+    app.post('/user/comment',auth.ensureAuthenticated,controllers.user.commentManage)
+    /*回复管理*/
+    app.post('/user/reply',auth.ensureAuthenticated,controllers.user.replyManage)
 
     /*重置密码*/
     app.post('/user/resetPass',auth.ensureAuthenticated,controllers.user.resetPass);
@@ -35,7 +41,7 @@ module.exports = function (app) {
 
     /*广场*/
     //最新主题
-    app.get('/plaza/recent',controllers.plaza.recent);
-    app.get('/plaza/status',controllers.plaza.status);
-    app.get('/plaza/active',controllers.plaza.active);
+    app.post('/plaza/recent',controllers.plaza.recent);
+    app.post('/plaza/status',controllers.plaza.status);
+    app.post('/plaza/active',controllers.plaza.active);
 }

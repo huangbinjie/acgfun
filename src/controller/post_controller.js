@@ -12,7 +12,7 @@ var wss = require('../util/ws').getWss();
      返回结果:{_id,title,user_id:{face},createDate,view,profile:{replyCount,commenter:{face,createDate}}}
      */
     module.list = function (req, res, next) {
-        var skip = 0;
+        var skip = req.body.skip?req.body.skip:0;
         async.parallel({
             posts: function (callback) {
                 Post.find({parent_url: req.url, deleteFlag: 0}, {_id: 1, user_id: 1, title: 1, view: 1, createDate: 1}, {sort: {order: 1, createDate: -1}, skip: skip, limit: 30})
@@ -131,7 +131,7 @@ var wss = require('../util/ws').getWss();
                             })
                         }], function (err, result) {
                             if (err) next(err);
-                            callback(null,docs);
+                            callback(null, docs);
                         })
                     })
             },
@@ -194,12 +194,14 @@ var wss = require('../util/ws').getWss();
             if (err) next(err);
             if (doc) {
                 async.parallel([function (callback) {
+                    //给楼主加经验
                     User.update({_id: comment.post_user_id}, {$inc: {exp: 1}}, function (err, num) {
                         if (err) next(err);
                         callback(null, num);
                     })
                 }, function (callback) {
-                    User.update({_id: comment.user_id}, {$inc: {exp: 1}}, function (err, num) {
+                    //给自己加经验
+                    User.update({_id: req.session.user._id}, {$inc: {exp: 1}}, function (err, num) {
                         if (err) next(err);
                         callback(null, num);
                     })
@@ -208,11 +210,11 @@ var wss = require('../util/ws').getWss();
                     res.json({"result": "success"});
                     if (comment.parent_id) {
                         //告诉层主
-                        wss.message({to: comment.parent_user_id, user: {_id: 0, nick: '系统消息', face: "System.png"}, message: req.session.user.nick + "回复你:<br/><a href='/" + url[1] + "/" +
+                        wss.reply({pid:url[2],to: comment.parent_user_id, user: {_id: 0, nick: '系统消息', face: "System.png"}, message: req.session.user.nick + "回复你:<br/><a href='/" + url[1] + "/" +
                             url[2] + "/" + url[3] + "?scrollTo=" + doc._id + "' target='_blank'>" + doc.content + "</a>"});
                     } else {
                         //告诉楼主
-                        wss.message({to: comment.post_user_id, user: {_id: 0, nick: '系统消息', face: "System.png"}, message: req.session.user.nick + "回复你:<br/><a href='/" + url[1] + "/" +
+                        wss.reply({pid:url[2],cid:doc._id,to: comment.post_user_id, user: {_id: 0, nick: '系统消息', face: "System.png"}, message: req.session.user.nick + "回复你:<br/><a href='/" + url[1] + "/" +
                             url[2] + "/" + url[3] + "?scrollTo=" + doc._id + "' target='_blank'>" + doc.content + "</a>"});
                     }
                 })

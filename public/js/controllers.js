@@ -81,9 +81,9 @@ app.controller('pageCtrl', ['$scope', '$rootScope', '$message', '$location', 'Po
         })
 
         $scope.query = function (skip) {
-            Post($location.path()).list(function (data) {
+            $scope.currentPage = skip;
+            Post($location.path()).list({skip: skip * 30}, function (data) {
                 $scope.topics = data.posts;
-
                 $scope.pageCounts = [];
                 for (var i = 0; i < Math.ceil(data.count / 30); i++) {
                     $scope.pageCounts.push(i);
@@ -106,7 +106,7 @@ app.controller('pageCtrl', ['$scope', '$rootScope', '$message', '$location', 'Po
             } else {
                 $scope.left = true;
             }
-            if ($scope.currentPage >= $scope.pageCounts.length) {
+            if ($scope.currentPage >= $scope.pageCounts.length - 1) {
                 $scope.right = false;
             } else {
                 $scope.right = true;
@@ -304,17 +304,144 @@ app.controller('plazaCtrl', ['$scope', '$rootScope', 'Auth', '$http', function (
     $rootScope.showChat = false;
     $scope.User = Auth.getUser();
 
-    $http.get('/plaza/recent').success(function (data) {
+    $http.post('/plaza/recent').success(function (data) {
         $scope.recents = data;
     })
-    $http.get('/plaza/status').success(function (data) {
+    $http.post('/plaza/status').success(function (data) {
         $scope.status = data;
     })
-    $http.get('/plaza/active').success(function (data) {
+    $http.post('/plaza/active').success(function (data) {
         $scope.actives = data;
     })
 }])
 
-app.controller('userTopicCtrl', ['$scope', '$http', 'Topic', function ($scope, $http, Topic) {
-    Topic.get()
+app.controller('userTopicCtrl', ['$scope', '$http', function ($scope, $http) {
+    $scope.currentPage = 0;
+    $scope.query = function (skip) {
+        $scope.currentPage = skip;
+        $http.post('/user/topic', {skip: skip * 20}).success(function (data) {
+            $scope.topics = data.topics;
+            $scope.pageCounts = [];
+            for (var i = 0; i < Math.ceil(data.count / 20); i++) {
+                $scope.pageCounts.push(i);
+            }
+            $scope.pagination = true;
+            dis($scope.currentPage);
+        })
+    }
+    $scope.query(0);
+    function dis() {
+        if ($scope.pageCounts.length === 1) {
+            $scope.left = false;
+            $scope.right = false;
+            return;
+        }
+        if ($scope.currentPage === 0) {
+            $scope.left = false;
+        } else {
+            $scope.left = true;
+        }
+        if ($scope.currentPage >= $scope.pageCounts.length - 1) {
+            $scope.right = false;
+        } else {
+            $scope.right = true;
+        }
+    }
+}])
+
+app.controller('userCommentCtrl', ['$scope', '$http', function ($scope, $http) {
+    $scope.currentPage = 0;
+    $scope.query = function (skip) {
+        $scope.currentPage = skip;
+        $http.post('/user/comment', {skip: skip * 20}).success(function (data) {
+            $scope.comments = data.comments;
+            $scope.pageCounts = [];
+            for (var i = 0; i < Math.ceil(data.count / 20); i++) {
+                $scope.pageCounts.push(i);
+            }
+            $scope.pagination = true;
+            dis($scope.currentPage);
+        })
+    }
+    $scope.query(0);
+    function dis() {
+        if ($scope.pageCounts.length === 1) {
+            $scope.left = false;
+            $scope.right = false;
+            return;
+        }
+        if ($scope.currentPage === 0) {
+            $scope.left = false;
+        } else {
+            $scope.left = true;
+        }
+        if ($scope.currentPage >= $scope.pageCounts.length - 1) {
+            $scope.right = false;
+        } else {
+            $scope.right = true;
+        }
+    }
+}])
+
+app.controller('userReplyCtrl', ['$scope', '$http', function ($scope, $http) {
+    $scope.replys = [];
+    $scope.skip = 0;
+    $scope.getReply = function(skip){
+        $http.post('/user/reply', {skip: skip * 20}).success(function (data) {
+            $scope.replys = $scope.replys.concat(data.reply);
+            $scope.skip = skip;
+        })
+    }
+    $scope.getReply(0);
+}])
+
+app.controller('userFollowCtrl', ['$scope', '$http', function ($scope, $http) {
+    $scope.skip = 0;
+    $scope.follows = []
+    $scope.getFollow = function (skip) {
+        $http.post('/user/follow', {skip: skip*20}).success(function (follows) {
+            $scope.follows = $scope.follows.concat(follows);
+            $scope.skip = skip;
+        })
+    }
+    $scope.getFollow(0);
+}])
+
+app.controller('userEditCtrl', ['$scope', '$http','$message', function ($scope, $http,$message) {
+    $http.post('/user/profile').success(function (profile) {
+        $scope.profile = profile;
+    })
+
+    $scope.save = function () {
+        $http.put('/user/profile', {profile: $scope.profile}).success(function (data) {
+            if (data.result === "success") {
+                $message('保存成功');
+            } else {
+                $message('保存失败');
+            }
+        })
+    }
+
+    $scope.reset = function () {
+        if ($scope.password.currentPassword === undefined || $scope.password.currentPassword === "") {
+            $message("请填写当前密码");
+            return;
+        }
+        if ($scope.password.newPassword === undefined || $scope.password.newPassword === "") {
+            $message("请填写新密码");
+            return;
+        }
+        $http.post('/user/resetPass', $scope.password).success(function (data) {
+            if (data.result === "success") {
+                $message('修改成功');
+                $scope.password = {};
+            } else {
+                if (data.msg) {
+                    $message(data.msg);
+                } else {
+                    $message('修改失败');
+                }
+            }
+        })
+    }
 }])

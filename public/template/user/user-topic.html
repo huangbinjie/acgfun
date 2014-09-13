@@ -1,6 +1,13 @@
-<div class="case" ng-controller="userTopicCtrl">
+<div class="case clearfloat" ng-controller="userTopicCtrl">
     <header>主题</header>
-    <p ng-repeat="topic in userData.post.topic">
+    <p ng-repeat="topic in topics track by $index">
         发表了主题:<br/><a href="{{topic.parent_url}}/{{topic._id}}/{{topic.title}}" target="_blank">{{topic.title}}</a>
     </p>
+    <ul class="pagination" ng-show="pagination">
+        <li ng-show="left"><a ng-click="query(currentPage-1);">&laquo;</a></li>
+        <li ng-repeat="pageCount in pageCounts" ng-class="currentPage===pageCount?'active':''">
+            <a ng-click="query(pageCount)">{{pageCount+1}}</a>
+        </li>
+        <li ng-show="right"><a ng-click="query(currentPage+1);">&raquo;</a></li>
+    </ul>
 </div>

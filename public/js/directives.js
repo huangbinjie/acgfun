@@ -337,24 +337,12 @@ app.directive('profileContext', function ($http, $templateCache, $compile, $mess
     return {
         restrict: 'A',
         link: function ($scope, element, attrs) {
-//            第一次加载
-//            load(attrs.url);
 //            监视url修改
             $scope.$watch(function () {
                 return $scope.url;
             }, function (url) {
                 //日期插件bug
                 $('.pika-single').remove();
-                if (url.indexOf('user-edit.html') !== -1) {
-                    $http.post('/user/profile').success(function (profile) {
-                        $scope.profile = profile;
-                    })
-                }
-                if (url.indexOf('user-follow.html') !== -1) {
-                    $http.post('/user/follow', {skip: 0}).success(function (follows) {
-                        $scope.follows = follows;
-                    })
-                }
                 load(url);
             });
 //            加载页面方法
@@ -367,47 +355,6 @@ app.directive('profileContext', function ($http, $templateCache, $compile, $mess
         },
         controller: function ($scope) {
             $scope.url = "template/user/user-post.html";
-            $scope.save = function () {
-                $http.put('/user/profile', {profile: $scope.profile}).success(function (data) {
-                    if (data.result === "success") {
-                        $message('保存成功');
-                    } else {
-                        $message('保存失败');
-                    }
-                })
-            }
-
-            $scope.reset = function () {
-                if ($scope.password.currentPassword === undefined || $scope.password.currentPassword === "") {
-                    $message("请填写当前密码");
-                    return;
-                }
-                if ($scope.password.newPassword === undefined || $scope.password.newPassword === "") {
-                    $message("请填写新密码");
-                    return;
-                }
-                $http.post('/user/resetPass', $scope.password).success(function (data) {
-                    if (data.result === "success") {
-                        $message('修改成功');
-                        $scope.password = {};
-                    } else {
-                        if (data.msg) {
-                            $message(data.msg);
-                        } else {
-                            $message('修改失败');
-                        }
-                    }
-                })
-            }
-
-            $scope.followSkip = 0;
-            $scope.follows = [];
-            $scope.getFollow = function (skip) {
-                $http.post('/user/follow', {skip: skip}).success(function (follows) {
-                    $scope.follows = $scope.follows.concat(follows);
-                    $scope.followSkip = skip;
-                })
-            }
         }
     }
 })

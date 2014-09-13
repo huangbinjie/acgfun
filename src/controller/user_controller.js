@@ -259,7 +259,7 @@ var fs = require("fs");
     }
 
     //取消关注
-    module.unfollow = function(req,res,next){
+    module.unfollow = function (req, res, next) {
         var uid = req.query.uid;
         if (uid === undefined) {
             res.json({"result": "failed"});
@@ -293,7 +293,7 @@ var fs = require("fs");
     module.followed = function (req, res, next) {
         var skip = req.body.skip ? req.body.skip : 0;
         var users = [];
-        User.findOne({_id: req.session.user._id}, {follow: {$slice: [skip, 10]},_id:1}, function (err, user) {
+        User.findOne({_id: req.session.user._id}, {follow: {$slice: [skip, 10]}, _id: 1}, function (err, user) {
             if (err) next(err);
             if (user) {
                 async.each(user.follow, function (follow, callback) {
@@ -304,11 +304,11 @@ var fs = require("fs");
                             callback();
                         }
                     })
-                },function(err){
-                    if(err) next(err);
+                }, function (err) {
+                    if (err) next(err);
                     res.send(users);
                 })
-            }else{
+            } else {
                 res.send(users);
             }
         })
@@ -438,6 +438,90 @@ var fs = require("fs");
             }
         })
     }
+
+    //文章管理
+    module.topicManage = function (req, res, next) {
+        var skip = req.body.skip ? req.body.skip : 0;
+        async.parallel({
+            topics: function (callback) {
+                Post.find({deleteFlag: 0}, {_id: 1, user_id: 1, title: 1, view: 1, createDate: 1}, {sort: {order: 1, createDate: -1}, skip: skip, limit: 20}, function (err, docs) {
+                    if (err) next(err);
+                    callback(null, docs)
+                })
+            },
+            count: function (callback) {
+                Post.count({user_id: req.session.user._id, deleteFlag: 0}, function (err, num) {
+                    if (err) next(err);
+                    callback(null, num);
+                })
+            }
+        }, function (err, result) {
+            if (err) next(err);
+            res.json(result);
+        })
+    }
+
+    //评论管理
+    module.commentManage = function (req, res, next) {
+        var skip = req.body.skip ? req.body.skip : 0;
+        async.parallel({
+            comments: function (callback) {
+                Comment.find({user_id: req.session.user._id, deleteFlag: 0}, {content: 1, post_id: 1}, {sort: {createDate: -1}, skip: skip, limit: 10}).populate("post_id", {_id: 1, title: 1, createDate: 1, parent_url: 1}).exec(function (err, comment) {
+                    if (err) next(err);
+                    callback(null, comment);
+                })
+            },
+            count: function (callback) {
+                Comment.count({user_id: req.session.user._id, deleteFlag: 0}, function (err, num) {
+                    if (err) next(err);
+                    callback(null, num);
+                })
+            }
+        }, function (err, result) {
+            if (err) next(err);
+            res.json(result);
+        })
+    }
+
+    //回复管理
+    module.replyManage = function (req, res, next) {
+        var skip = req.body.skip ? req.body.skip : 0;
+        User.findOne({_id: req.session.user._id}, {_id: 1, reply: {$slice: [skip, 20]}}, function (err, user) {
+            if (err) next(err);
+            if (user) {
+                async.each(user.reply, function (reply, callback) {
+                    async.parallel([function (callback) {
+                        User.findOne({_id: reply._doc._id}, {nick: 1}, function (err, user) {
+                            if (err) next(err);
+                            reply._doc._id = {_id:reply._doc._id,nick:user.nick};
+                            callback();
+                        })
+                    }, function (callback) {
+                        Post.findOne({_id: reply._doc.post_id}, {parent_url:1,title: 1}, function (err, post) {
+                            if (err) next(err);
+                            reply._doc.post_id = {_id: reply._doc.post_id, title:post.title,parent_url:post.parent_url};
+                            callback();
+                        });
+                    }, function (callback) {
+                        Comment.findOne({_id: reply._doc.comment_id}, {content: 1}, function (err, comment) {
+                            if (err) next(err);
+                            reply._doc.comment_id = {_id: reply._doc.comment_id, content:comment.content};
+                            callback();
+                        });
+                    }], function (err, result) {
+                        if (err) next(err);
+                        callback();
+                    })
+                }, function (err) {
+                    if (err) next(err);
+                    res.json(user);
+                })
+            } else {
+                res.json(user);
+            }
+        })
+    }
+
     //退出
     module.signOut = function (req, res) {
         req.session.destroy();

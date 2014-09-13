@@ -1,10 +1,17 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
-
-</body>
-</html>
+<div class="case clearfloat" ng-controller="userCommentCtrl">
+    <header>最近评论</header>
+    <p ng-repeat="comment in comments track by $index">
+        在<a href="{{comment.post_id.parent_url}}/{{comment.post_id._id}}/{{comment.post_id.title}}" target="_blank">
+        {{comment.post_id.title}}</a>发表回复:<br/>
+        <a href="{{comment.post_id.parent_url}}/{{comment.post_id._id}}/{{comment.post_id.title}}?scrollTo={{comment._id}}"
+           target="_blank" compile="comment.content"></a>
+        </a>
+    </p>
+    <ul class="pagination" ng-show="pagination">
+        <li ng-show="left"><a ng-click="query(currentPage-1);">&laquo;</a></li>
+        <li ng-repeat="pageCount in pageCounts" ng-class="currentPage===pageCount?'active':''">
+            <a ng-click="query(pageCount)">{{pageCount+1}}</a>
+        </li>
+        <li ng-show="right"><a ng-click="query(currentPage+1);">&raquo;</a></li>
+    </ul>
+</div>
