@@ -120,7 +120,11 @@ app.factory('$crumb', function ($location, $rootScope, $escape) {
             $rootScope.crumbs.push("/");
             $rootScope.crumbs.push("<a href='/m'>音乐</a>");
         }
-        if (/^\/[acgm]\/+.*/.test(path)) {
+        if (/^\/o.*/.test(path)) {
+            $rootScope.crumbs.push("/");
+            $rootScope.crumbs.push("<a href='/m'>其他</a>");
+        }
+        if (/^\/[acgmo]\/+.*/.test(path)) {
             $rootScope.crumbs.push("/");
             var text = path.split("/").slice(-1)[0];
             $rootScope.crumbs.push($escape(text));

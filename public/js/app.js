@@ -18,11 +18,11 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', '$resourcePr
                 templateUrl: 'login.html',
                 controller: 'loginCtrl'
             }).
-            when('/[acgm]', {
+            when('/[acgmo]', {
                 templateUrl: 'page.html',
                 controller: 'pageCtrl'
             }).
-            when('/[acgm]/:pid/:title', {
+            when('/[acgmo]/:pid/:title', {
                 templateUrl: 'topic.html',
                 controller: 'topicCtrl'
             }).

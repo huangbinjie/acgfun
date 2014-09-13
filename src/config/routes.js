@@ -31,11 +31,11 @@ module.exports = function (app) {
     app.post('/user/:uid',controllers.user.get);
 
     /*文章相关功能*/
-    app.post('/[acgm]',controllers.post.list);
-    app.put('/[acgm]',auth.ensureAuthenticated,controllers.post.put);
-    app.post('/[acgm]/:pid/:title',controllers.post.getTopic);//获取文章
-    app.put('/[acgm]/:pid/:title',auth.ensureAuthenticated,controllers.post.putComment);
-    app.delete('/[acgm]/:pid/:title',auth.ensureAuthenticated,controllers.post.delete);
+    app.post('/[acgmo]',controllers.post.list);
+    app.put('/[acgmo]',auth.ensureAuthenticated,controllers.post.put);
+    app.post('/[acgmo]/:pid/:title',controllers.post.getTopic);//获取文章
+    app.put('/[acgmo]/:pid/:title',auth.ensureAuthenticated,controllers.post.putComment);
+    app.delete('/[acgmo]/:pid/:title',auth.ensureAuthenticated,controllers.post.delete);
 
     app.post('/upload/face',auth.ensureAuthenticated,controllers.user.uploadFace);
 
