@@ -6,7 +6,7 @@ app.filter('dateCustom', function () {
         var date = Date.now() - new Date(input).getTime();
         //3600000
         if (date < 60000)
-            return Math.round(date / 1000) + "秒前";
+            return "刚刚";
         if (date < 3600000)
             return Math.round(date / 60000) + "分钟前";
         if (date < 86400000)

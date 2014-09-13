@@ -61,18 +61,25 @@ var wss = require('../util/ws').getWss();
 
     module.put = function (req, res, next) {
         var criteria = req.body;
-        if (criteria.title === undefined || criteria.title === "" || criteria.title === null) {
+        if (!/^[A-Za-z0-9\u4e00-\u9fa5]{1,50}$/.test(criteria.title) || criteria.title === undefined||criteria.title === "") {
+            res.json({"result": "failed", "msg": "标题格式不正确"});
             return;
         }
-        if (criteria.content === undefined || criteria.content === "" || criteria.content === null) {
+        if (criteria.content === undefined || criteria.content === "") {
+            res.json({"result": "failed","msg":"内容格式不正确"});
+            return;
+        }
+        if(criteria.content.length>2000||criteria.content.length<=0){
+            res.json({"result": "failed","msg":"内容格式不正确"});
             return;
         }
         criteria.parent_url = req.url;
         criteria.user_id = req.session.user._id;
         new Post(criteria).save(function (err, doc) {
             if (err) next(err);
-            if (doc !== undefined) {
+            if (doc) {
                 res.json({"result": "success"});
+                wss.broadcast(JSON.stringify({path:'/',suffix:'/join/topic',message:req.url}));
             } else {
                 res.json({"result": "failed"});
             }
@@ -81,11 +88,11 @@ var wss = require('../util/ws').getWss();
 
     /*topic页面*/
     module.getTopic = function (req, res, next) {
-        var pid = req.params.pid;
+        var url = req.url.split('/')
         var skip = req.body.skip ? req.body.skip : 0;
         async.parallel({
             comments: function (callback) {
-                Comment.find({post_id: pid, deleteFlag: 0}, {_id: 1, user_id: 1, content: 1, createDate: 1, parent_id: 1})
+                Comment.find({post_id: url[2], deleteFlag: 0}, {_id: 1, user_id: 1, content: 1, createDate: 1, parent_id: 1})
                     .populate("user_id", {face: 1, nick: 1})
                     .populate("parent_id", {user_id: 1, content: 1})
                     .sort({_id: 1})
@@ -136,11 +143,7 @@ var wss = require('../util/ws').getWss();
                     })
             },
             topic: function (callback) {
-                if (skip > 0) {
-                    callback(null, null);
-                    return;
-                }
-                Post.findOne({_id: pid, deleteFlag: 0}, {_id: 1, user_id: 1, title: 1, content: 1, createDate: 1}).populate('user_id', {face: 1, nick: 1}).exec(function (err, doc) {
+                Post.findOne({_id: url[2], deleteFlag: 0,parent_url:"/"+url[1]}, {_id: 1, user_id: 1, title: 1, content: 1, createDate: 1}).populate('user_id', {face: 1, nick: 1}).exec(function (err, doc) {
                     if (err) next(err);
                     //如果登陆用户则还要查找是否是关注的人和收藏的文章
                     if (req.session.user) {
@@ -153,7 +156,7 @@ var wss = require('../util/ws').getWss();
                                 callback(null, doc);
                             })
                         }, function (callback) {
-                            User.find({_id: req.session.user._id, star: {$in: [pid]}}, function (err, follow) {
+                            User.find({_id: req.session.user._id, star: {$in: [url[2]]}}, function (err, follow) {
                                 if (err) next(err);
                                 if (follow.length > 0) {
                                     doc._doc.user_id._doc.isStar = true;
@@ -170,7 +173,7 @@ var wss = require('../util/ws').getWss();
                 })
             },
             count: function (callback) {
-                Comment.find({post_id: pid, deleteFlag: 0}).count(function (err, num) {
+                Comment.find({post_id: url[2], deleteFlag: 0}).count(function (err, num) {
                     if (err) next(err);
                     callback(null, num);
                 })
@@ -178,7 +181,7 @@ var wss = require('../util/ws').getWss();
             if (err) next(err);
             res.json(result);
         })
-        Post.update({_id: pid}, {$inc: {view: 1}}, function (err, num) {
+        Post.update({_id: url[2]}, {$inc: {view: 1}}, function (err, num) {
             if (err) next(err);
         })
     }
@@ -217,6 +220,7 @@ var wss = require('../util/ws').getWss();
                         wss.reply({pid:url[2],cid:doc._id,to: comment.post_user_id, user: {_id: 0, nick: '系统消息', face: "System.png"}, message: req.session.user.nick + "回复你:<br/><a href='/" + url[1] + "/" +
                             url[2] + "/" + url[3] + "?scrollTo=" + doc._id + "' target='_blank'>" + doc.content + "</a>"});
                     }
+                    wss.broadcast(JSON.stringify({path:'/',suffix:'/join/comment',message:url[2]}));
                 })
             }
             else res.json({"result": "failed"});

@@ -78,6 +78,19 @@ app.controller('mainCtrl', ['$scope', '$rootScope', '$message', 'Auth', '$loadin
         $http.post('/home/active').success(function (data) {
             $scope.actives = data;
         })
+
+        $scope.$on('newTopic',function(){
+            $http.post('/home/recent').success(function (data) {
+                $scope.recents = data;
+                $scope.status.postCount++;
+            })
+        })
+        $scope.$on('newComment',function(){
+            $http.post('/home').success(function(data){
+                $scope.main = data;
+                $scope.status.commentCount++;
+            })
+        })
     }])
 app.controller('pageCtrl', ['$scope', '$rootScope', '$message', '$location', 'Post', 'Auth', '$loadingBar', '$crumb',
     function ($scope, $rootScope, $message, $location, Post, Auth, $loadingBar, $crumb) {
@@ -95,9 +108,9 @@ app.controller('pageCtrl', ['$scope', '$rootScope', '$message', '$location', 'Po
         })
 
         $scope.query = function (skip) {
-            $scope.currentPage = skip;
             Post($location.path()).list({skip: skip * 30}, function (data) {
                 $scope.topics = data.posts;
+                $scope.currentPage = skip;
                 $scope.pageCounts = [];
                 for (var i = 0; i < Math.ceil(data.count / 30); i++) {
                     $scope.pageCounts.push(i);
@@ -126,10 +139,25 @@ app.controller('pageCtrl', ['$scope', '$rootScope', '$message', '$location', 'Po
                 $scope.right = true;
             }
         }
+
+        $scope.$on('newTopic',function(event,url){
+            if($location.path().indexOf(url)){
+                Post($location.path()).list({skip: $scope.currentPage * 30}, function (data) {
+                    $scope.topics = data.posts;
+                    $scope.pageCounts = [];
+                    for (var i = 0; i < Math.ceil(data.count / 30); i++) {
+                        $scope.pageCounts.push(i);
+                    }
+                    $scope.pagination = true;
+                    dis($scope.currentPage);
+                    $message("已刷新");
+                });
+            }
+        })
     }])
 
-app.controller('topicCtrl', ['$scope', '$rootScope', '$location', 'Topic', 'Auth', '$loadingBar', '$crumb', '$message', 'Follow', "Star",
-    function ($scope, $rootScope, $location, Topic, Auth, $loadingBar, $crumb, $message, Follow, Star) {
+app.controller('topicCtrl', ['$scope', '$rootScope', '$location', 'Topic', 'Auth', '$loadingBar', '$crumb', '$message', 'Follow', "Star",'$routeParams',
+    function ($scope, $rootScope, $location, Topic, Auth, $loadingBar, $crumb, $message, Follow, Star,$routeParams) {
         $rootScope.editType = "comment";
         $rootScope.showOpenEditor = true;
         $rootScope.showCrumb = true;
@@ -219,6 +247,25 @@ app.controller('topicCtrl', ['$scope', '$rootScope', '$location', 'Topic', 'Auth
                 $scope.right = true;
             }
         }
+
+        $scope.$on('newComment',function(event,pid){
+            if($routeParams.pid===pid){
+                if($scope.currentPage===$scope.pageCounts.length-1){
+                    Topic($location.path()).get({skip: $scope.currentPage * 30}, function (data) {
+                        $scope.topic = data;
+                        $scope.pageCounts = [];
+                        for (var i = 0; i < Math.ceil($scope.topic.count / 30); i++) {
+                            $scope.pageCounts.push(i);
+                        }
+                        $scope.pagination = true;
+                        dis($scope.currentPage);
+                        $message("已刷新");
+                    })
+                } else {
+                    $message("有新评论");
+                }
+            }
+        })
     }])
 app.controller('userCtrl', ['$scope', '$location', 'User', '$loadingBar', '$rootScope', 'Auth', '$upload', '$message', '$crumb', '$routeParams', 'Follow',
     function ($scope, $location, User, $loadingBar, $rootScope, Auth, $upload, $message, $crumb, $routeParams, Follow) {

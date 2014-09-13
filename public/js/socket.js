@@ -2,30 +2,34 @@ var ws = new WebSocket('ws://localhost');
 var message = {};
 var user = {};
 var members = [];//在线用户组
-var guests = 0;//来宾数量
 var socketed = false;//socket连接状态
 ws.onopen = function () {
     socketed = true;
     ws.onmessage = function (data) {
         message = JSON.parse(data.data);
         members = message.members;
-        if ('/plaza'.indexOf(message.path) !== -1) {
-            guests = message.guest;
+        if ('/plaza' === message.path) {
             if (message.suffix === '/chat') {
                 $(".chat-dialog").prepend('<li class="chat"><a href="/user/' + members._id + '"><img src="uploads/faces/' + members.face + '"></a><span class="username">' + members.nick + ':</span><span>' + message.message + '</span></li>');
             } else if (message.suffix === '/join') {
                 if (members.length === 0) {
                     return;
                 }
-                $('#onlineMembers').html(members.length)
                 $('#plaza-groups').empty();
                 for (var i in members) {
                     if (members[i].face === undefined) members[i].face = "default.jpg";
                     $('#plaza-groups').append('<li class="inline-block" id="' + members[i]._id + '"><a href="/user/' + members[i]._id + '"><img src="uploads/faces/' + members[i].face + '"></a><p class="text-center">' + members[i].nick + '</p></li>')
                 }
             }
+        } else if (message.path === '/') {
+            //新主题
+            if (message.suffix === '/join/topic') {
+                if (location.href==='/') {
+                $(".case.recent>header").after('');
+                }
+            }
         }
-        if ('/'.indexOf(message.path) !== -1) {
+        else {
             if (message.suffix === '/to') {
                 $('audio')[0].play();
                 $("#chat .badge").val(parseInt($("#chat .badge").val()) + 1);
@@ -95,19 +99,32 @@ ws.onopen = function () {
                 }
             }
 
+            //加入主页
+            if (message.suffix === '/join') {
+                $('#onlineMembers').html(message.members);
+                $('#onlineGuests').html(message.guests);
+            }
             //更新在线状态
             if (message.suffix === '/join/member') {
                 if (members.length === 0) return;
-                $('#onlineMembers').html(parseInt($('#onlineMembers').html())+1);
+                $('#onlineMembers').html(parseInt($('#onlineMembers').html()) + 1);
                 $("#online_" + members._id).removeClass('offline').addClass('online');
                 if (members.face === undefined) members.face = "default.jpg";
                 $('#plaza-groups').append('<li class="inline-block" id="' + members._id + '"><a href="/user/' + members._id + '"><img src="uploads/faces/' + members.face + '"></a><p class="text-center">' + members.nick + '</p></li>')
             }
             //更新离线状态
             if (message.suffix === '/left/member') {
-                $('#onlineMembers').html(parseInt($('#onlineMembers').html())-1);
+                $('#onlineMembers').html(parseInt($('#onlineMembers').html()) - 1);
                 $("#online_" + members._id).removeClass('online').addClass('offline');
                 $('#' + members._id).remove();
+            }
+            //离开来宾
+            if (message.suffix === '/left/guest') {
+                $('#onlineGuests').html(parseInt($('#onlineGuests').html()) - 1);
+            }
+            //加入来宾
+            if (message.suffix === '/join/guest') {
+                $('#onlineGuests').html(parseInt($('#onlineGuests').html()) + 1);
             }
         }
     }

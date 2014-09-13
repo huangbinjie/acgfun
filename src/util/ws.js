@@ -9,15 +9,9 @@ var onlineGuest = 0;
 var wss;
 module.exports.start = function (server) {
     wss = new WebSocketServer({server: server, path: "/"});
-    wss.broadcast = function (data, path) {
+    wss.broadcast = function (data) {
         for (var i in this.clients) {
-            if (path) {
-                if (this.clients[i].path.indexOf(path) !== -1) {
-                    this.clients[i].send(data);
-                }
-            } else {
-                this.clients[i].send(data);
-            }
+            this.clients[i].send(data);
         }
     };
     //{to:1,user:{_id,nick,face},message}
@@ -35,6 +29,12 @@ module.exports.start = function (server) {
         for (var i in this.clients) {
             if (this.clients[i].user._id == message.to) {
                 this.clients[i].send(JSON.stringify({path: '/', suffix: '/to', members: message.user, date: new Date(), message: message.message}));
+                User.update({_id: message.to}, {$push: {reply: {$each: [
+                    {_id: message.user._id, post_id: message.pid, comment_id: message.cid, read: 1}
+                ], $slice: -200}}}, {upsert: true}, function (err, num) {
+                    if (err) throw  err;
+                })
+                return;
             }
         }
         //保留200条留言
@@ -71,7 +71,7 @@ module.exports.start = function (server) {
                 console.log('会员:' + onlineMember + '游客:' + onlineGuest);
             } else if (ws.guest) {
                 --onlineGuest;
-                wss.broadcast(JSON.stringify({path: '/plaza', suffix: '/left/guest', members: [], guest: onlineGuest}), '/plaza');
+                wss.broadcast(JSON.stringify({path: '/', suffix: '/left/guest', members: [], guest: onlineGuest}));
                 console.log('会员:' + onlineMember + '游客:' + onlineGuest);
             }
         })
@@ -143,7 +143,7 @@ module.exports.start = function (server) {
                                             if (err) next(err);
                                             callback(null, doc.content);
                                         })
-                                    }], function (err,result) {
+                                    }], function (err, result) {
                                         ws.send(JSON.stringify({path: '/', suffix: '/to', members: reply.reply.user, message: result[1], date: reply.reply.date}));
                                     })
                                 })
@@ -155,13 +155,14 @@ module.exports.start = function (server) {
             //游客登录;
             if (_.isEmpty(ws.user) && ws.guest !== true) {
                 ws.guest = true;
+                ws.user = {};
                 ++onlineGuest;//如果user为空，则是游客;
-                wss.broadcast(JSON.stringify({path: '/plaza', suffix: '/join/guest', members: _.isEmpty(message.user) ? [] : message.user, guest: onlineGuest}), '/plaza')
+                wss.broadcast(JSON.stringify({path: '/', suffix: '/join/guest', members: _.isEmpty(message.user) ? [] : message.user, guest: onlineGuest}))
                 console.log('游客:' + onlineGuest + '会员:' + onlineMember);
             }
             /*第一次连接处理结束*/
 
-            if (message.path.indexOf('/plaza') != -1) {
+            if (message.path.indexOf('/plaza') > -1) {
                 /*处理请求路径,切换页面的时候发送一个路径信息path*/
                 var users = [];
                 for (var i in wss.clients) {
@@ -172,11 +173,14 @@ module.exports.start = function (server) {
                 ws.send(JSON.stringify({path: '/plaza', suffix: '/join', members: users, guest: onlineGuest}));
                 //如果是聊天
                 if (message.suffix === '/chat') {
-                    wss.broadcast(JSON.stringify({path: '/plaza', suffix: '/chat', members: message.user, message: escape(message.message)}), '/plaza')
+                    wss.broadcast(JSON.stringify({path: '/plaza', suffix: '/chat', members: message.user, message: escape(message.message)}))
                 }
             }
 
-            if (message.path.indexOf('/') != -1) {
+            if (message.path.indexOf('/') > -1) {
+                if (message.path === '/') {
+                    ws.send(JSON.stringify({path: '/', suffix: '/join', members: onlineMember, guests: onlineGuest}))
+                }
                 /*处理消息*/
                 if (_.isEmpty(message.user)) {
                     return;

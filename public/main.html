@@ -74,7 +74,7 @@
             <div class="case">
                 <header><h3>欢迎来到Acgfun</h3></header>
             </div>
-            <div class="case">
+            <div class="case recent">
                 <header>最新主题</header>
                 <div ng-repeat="recent in recents" class="clearfloat">
                     <div class="left"><a href="/user/{{recent.user_id._id}}"><img class="face" ng-src="{{recent.user_id.face?'/uploads/faces/'+recent.user_id.face:'/uploads/faces/default.jpg'}}"></a></div>
@@ -87,6 +87,10 @@
                 <div>
                     <header>在线</header>
                     <footer id="onlineMembers">0</footer>
+                </div>
+                <div>
+                    <header>游客</header>
+                    <footer id="onlineGuests">0</footer>
                 </div>
                 <div>
                     <header>用户</header>
