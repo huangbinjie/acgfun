@@ -304,25 +304,33 @@ form .field label {
     padding: 0 .625rem;
     margin-bottom: .625rem;
 }
-.home .item.animation header{
-    background-color: #73d07d;
-}
-.home .item.game header{
-    background-color: #a485d6;
-}
-.home .item.comic header{
-    background-color: lightpink;
-}
-.home .item.other header{
-    background-color: #9ec4dd;
-}
-.home .item.music header{
-    background-color: #c0c24f;
-}
+/*.home .item.animation header{*/
+    /*background-color: #73d07d;*/
+/*}*/
+/*.home .item.game header{*/
+    /*background-color: #a485d6;*/
+/*}*/
+/*.home .item.comic header{*/
+    /*background-color: lightpink;*/
+/*}*/
+/*.home .item.other header{*/
+    /*background-color: #9ec4dd;*/
+/*}*/
+/*.home .item.music header{*/
+    /*background-color: #c0c24f;*/
+/*}*/
 .home .item > header{
     text-align: center;
     height: 3rem;
     line-height: 3rem;
+    background-color: rgba(37, 39, 48, 0.6);
+    border-bottom: 1px solid #98d6dd;
+}
+.home .item > header a{
+    color: #ffffff;
+}
+.home .item > header a:hover{
+    text-decoration: none;
 }
 .home .item > div {
     padding: 8px;
