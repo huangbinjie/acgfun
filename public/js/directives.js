@@ -21,6 +21,7 @@ app.directive('login', function () {
 app.directive('nav', function ($rootScope, $routeParams) {
     return {
         link: function ($scope, element, attr) {
+            $rootScope.chatCount=0;
             $("#menu-btn").click(function () {
                 $("#menu").width("100px");
                 $(this).hide();
@@ -34,7 +35,7 @@ app.directive('nav', function ($rootScope, $routeParams) {
                 if ($rootScope.editType === "post") {
                     $(".editor_title").val("").removeAttr("disabled");
                 } else {
-                    $rootScope.$apply(function(){
+                    $rootScope.$apply(function () {
                         $rootScope.editType = "comment";
                     })
                     $(".editor_title").val("回复:" + $routeParams.title).attr("disabled", "true");
@@ -217,14 +218,14 @@ app.directive('chatBtn', function () {
     }
 })
 
-app.directive('chatInput', function ($document, $rootScope, Auth) {
+app.directive('chatInput', function ($document, $rootScope, Auth, $socket) {
     return{
         restrict: 'C',
         link: function ($scope, element, attr) {
             $document.on('keydown', function (event) {
                 if (event.which === 13) {
                     if (element.find('input').val() !== "") {
-                        ws.send(JSON.stringify({path: '/plaza', suffix: '/chat', user: Auth.getUser(), message: element.find('input').val()}));
+                        $socket.send(JSON.stringify({path: '/plaza', suffix: '/chat', user: Auth.getUser(), message: element.find('input').val()}));
                         element.find('input').val("");
                     }
                 }
@@ -233,7 +234,7 @@ app.directive('chatInput', function ($document, $rootScope, Auth) {
     }
 })
 
-app.directive('chat', function ($document, Auth, $rootScope) {
+app.directive('chat', function ($document, Auth, $socket) {
     return{
         restrict: 'A',
         link: function ($scope, element, attr) {
@@ -241,7 +242,7 @@ app.directive('chat', function ($document, Auth, $rootScope) {
                 if (event.which === 13) {
                     if ($(".modal .reply").val() !== "") {
                         if ($('#toId').val() !== undefined && $('#toId').val() !== '') {
-                            ws.send(JSON.stringify({path: '/', suffix: '/to', user: Auth.getUser(), to: $('#toId').val(), message: $(".modal .reply").val()}));
+                            $socket.send(JSON.stringify({path: '/', suffix: '/to', user: Auth.getUser(), to: $('#toId').val(), message: $(".modal .reply").val()}));
                             $('#chat_content_' + $('#toId').val()).append('<li class="personal">' + $(".modal .reply").val() + '</li>');
                             $("#chat_content_" + $('#toId').val()).scrollTop($("#chat_content_" + $('#toId').val())[0].scrollHeight);
                             $(".modal .reply").val("");
@@ -253,7 +254,7 @@ app.directive('chat', function ($document, Auth, $rootScope) {
             $("button.reply-btn").click(function () {
                 if ($(".modal .reply").val() !== "") {
                     if ($('#toId').val() !== undefined && $('#toId').val() !== '') {
-                        ws.send(JSON.stringify({path: '/', suffix: '/to', user: Auth.getUser(), to: $('#toId').val(), message: $(".modal .reply").val()}));
+                        $socket.send(JSON.stringify({path: '/', suffix: '/to', user: Auth.getUser(), to: $('#toId').val(), message: $(".modal .reply").val()}));
                         $('#chat_content_' + $('#toId').val()).append('<li class="personal">' + $(".modal .reply").val() + '</li>');
                         $("#chat_content_" + $('#toId').val()).scrollTop($("#chat_content_" + $('#toId').val())[0].scrollHeight);
                         $(".modal .reply").val("");

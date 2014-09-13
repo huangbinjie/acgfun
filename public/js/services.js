@@ -188,7 +188,9 @@ app.factory('$socket', function ($rootScope,$location) {
             }
             if (message.suffix === '/to') {
                 $('audio')[0].play();
-                $("#chat .badge").val(parseInt($("#chat .badge").val()) + 1);
+                $rootScope.$apply(function(){
+                    ++$rootScope.chatCount;
+                })
                 //            有聊天记录的时候
                 if ($('.modal.chat .left-panel').children().size() > 0) {
                     if ($("#chat_title_" + members._id).size() > 0) {

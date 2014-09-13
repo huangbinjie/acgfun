@@ -311,9 +311,11 @@ form .field label {
 }
 .home .item > header a{
     color: #ffffff;
+    display: block;
 }
 .home .item > header a:hover{
     text-decoration: none;
+    background-color: rgba(37, 39, 48, 0.8);
 }
 .home .item > div {
     padding: 8px;
@@ -632,6 +634,9 @@ form .field label {
     display: inline-block;
     z-index: 500;
     visibility: visible;
+}
+#menu-btn.message{
+    background-color: rgba(37, 250, 48, 0.6);
 }
 
 #menu-btn:before {

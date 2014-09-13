@@ -51,7 +51,9 @@
     <div class="row"><a href="/plaza">广场</a></div>
     <label class="splite"></label>
 
-    <div class="row" id="chat"><span ng-click="showChatModal=true">消息<label class="badge hide">0</label></span></div>
+    <div class="row" id="chat" ng-show="User!==undefined">
+        <span ng-click="showChatModal=true;chatCount=0">消息<label class="badge" ng-class="chatCount>0?'show':'hide'">{{chatCount}}</label></span>
+    </div>
     <label class="splite"></label>
 
     <div class="row">
@@ -59,7 +61,7 @@
         <span ng-click="signOut()" ng-if="User!==undefined">登出</span>
     </div>
 </div>
-<div id="menu-btn"></div>
+<div id="menu-btn" ng-class="chatCount>0?'message':''"></div>
 <!--容器-->
 <div class="container">
     <div class="crumbs" ng-show="showCrumb">
