@@ -16,13 +16,13 @@
         <div class="item game">
             <header><a href="/g">游戏</a></header>
             <div class="clearfloat" ng-repeat="a in main.g">
-                <div class="title"><a href="/a/{{a.post_id._id}}/{{a.post_id.title}}">{{a.post_id.title}}</a></div>
+                <div class="title"><a href="/g/{{a.post_id._id}}/{{a.post_id.title}}">{{a.post_id.title}}</a></div>
                 <article class="left"><a href="/user/{{a.user_id._id}}"><img src="uploads/faces/{{a.user_id.face}}"></a></article>
                 <div class="content" compile="a.content"></div>
                 <footer class="right">
                     <small>{{a.createDate|dateCustom}}</small>
                     -
-                    <small><a href="/a/{{a.post_id._id}}/{{a.post_id.title}}?scrollTo={{a._id}}">详情</a></small>
+                    <small><a href="/g/{{a.post_id._id}}/{{a.post_id.title}}?scrollTo={{a._id}}">详情</a></small>
                 </footer>
             </div>
         </div>
@@ -31,26 +31,26 @@
         <div class="item comic">
             <header><a href="/c">漫画</a></header>
             <div class="clearfloat" ng-repeat="a in main.c">
-                <div class="title"><a href="/a/{{a.post_id._id}}/{{a.post_id.title}}">{{a.post_id.title}}</a></div>
+                <div class="title"><a href="/c/{{a.post_id._id}}/{{a.post_id.title}}">{{a.post_id.title}}</a></div>
                 <article class="left"><a href="/user/{{a.user_id._id}}"><img src="uploads/faces/{{a.user_id.face}}"></a></article>
                 <div class="content" compile="a.content"></div>
                 <footer class="right">
                     <small>{{a.createDate|dateCustom}}</small>
                     -
-                    <small><a href="/a/{{a.post_id._id}}/{{a.post_id.title}}?scrollTo={{a._id}}">详情</a></small>
+                    <small><a href="/c/{{a.post_id._id}}/{{a.post_id.title}}?scrollTo={{a._id}}">详情</a></small>
                 </footer>
             </div>
         </div>
         <div class="item other">
             <header><a href="/o">其他</a></header>
             <div class="clearfloat" ng-repeat="a in main.o">
-                <div class="title"><a href="/a/{{a.post_id._id}}/{{a.post_id.title}}">{{a.post_id.title}}</a></div>
+                <div class="title"><a href="/o/{{a.post_id._id}}/{{a.post_id.title}}">{{a.post_id.title}}</a></div>
                 <article class="left"><a href="/user/{{a.user_id._id}}"><img src="uploads/faces/{{a.user_id.face}}"></a></article>
                 <div class="content" compile="a.content"></div>
                 <footer class="right">
                     <small>{{a.createDate|dateCustom}}</small>
                     -
-                    <small><a href="/a/{{a.post_id._id}}/{{a.post_id.title}}?scrollTo={{a._id}}">详情</a></small>
+                    <small><a href="/o/{{a.post_id._id}}/{{a.post_id.title}}?scrollTo={{a._id}}">详情</a></small>
                 </footer>
             </div>
         </div>
@@ -59,13 +59,13 @@
         <div class="item music">
             <header><a href="/m">音乐</a></header>
             <div class="clearfloat" ng-repeat="a in main.m">
-                <div class="title"><a href="/a/{{a.post_id._id}}/{{a.post_id.title}}">{{a.post_id.title}}</a></div>
+                <div class="title"><a href="/m/{{a.post_id._id}}/{{a.post_id.title}}">{{a.post_id.title}}</a></div>
                 <article class="left"><a href="/user/{{a.user_id._id}}"><img src="uploads/faces/{{a.user_id.face}}"></a></article>
                 <div class="content" compile="a.content"></div>
                 <footer class="right">
                     <small>{{a.createDate|dateCustom}}</small>
                     -
-                    <small><a href="/a/{{a.post_id._id}}/{{a.post_id.title}}?scrollTo={{a._id}}">详情</a></small>
+                    <small><a href="/m/{{a.post_id._id}}/{{a.post_id.title}}?scrollTo={{a._id}}">详情</a></small>
                 </footer>
             </div>
         </div>
@@ -117,21 +117,4 @@
             </div>
     </div>
 </div>
-<!--<div id="menu-wrapper">-->
-<!--<a href="/a" title="动画">-->
-<!--<div id="menu1" class="menu case-border"></div>-->
-<!--</a>-->
-<!--<a href="/c" title="漫画">-->
-<!--<div id="menu2" class="menu case-border"></div>-->
-<!--</a>-->
-<!--<a href="/g" title="游戏">-->
-<!--<div id="menu3" class="menu case-border"></div>-->
-<!--</a>-->
-<!--<a href="/m" title="音乐">-->
-<!--<div id="menu4" class="menu case-border"></div>-->
-<!--</a>-->
-<!--</div>-->
-<!--<canvas id="pig-canvas"></canvas>-->
-<!--<script type="text/javascript" src="static/plugins/squarepig/js/squarepig.js"></script>-->
-<!--<script type="text/javascript" src="static/plugins/squarepig/js/randall.js"></script>-->
 <div class="beian">Power By NodeJS&&Angularjs，沪ICP备14032680号</div>
