@@ -986,9 +986,11 @@ form .field label {
 
 /*备案*/
 .beian {
-    position: fixed;
-    bottom: 0;
-    left: 0;
+    text-align: center;
+    position: relative;
+}
+.beian a {
+    color: #fff;
 }
 
 /*低版本提示*/

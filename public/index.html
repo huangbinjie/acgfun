@@ -63,7 +63,7 @@
 </div>
 <div id="menu-btn" ng-class="chatCount>0&&showChatModal===false?'message':''"></div>
 <!--容器-->
-<div class="container">
+<div class="container clearfloat">
     <div class="crumbs" ng-show="showCrumb">
         <span ng-repeat="crumb in crumbs track by $index">
             <label compile="crumb"></label>
@@ -105,5 +105,6 @@
         media_url: "vendor/editor/images/"
     });
 </script>
+<div class="beian">Power By NodeJS&&Angularjs，<a href="http://www.miibeian.gov.cn/?spm=a1z1s.6843761.1110930425.48.vv3kPM" target="_blank">沪ICP备14032680号</a></div>
 </body>
 </html>

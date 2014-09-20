@@ -49,9 +49,11 @@ app.directive('a', function ($loadingBar) {
     return {
         restrict: 'E',
         link: function ($scope, element, attr) {
-            element.on("click", function (e) {
-                $loadingBar("80%");
-            })
+            if(attr.target!=="_blank"){
+                element.on("click", function (e) {
+                    $loadingBar("80%");
+                })
+            }
         }
     }
 })
