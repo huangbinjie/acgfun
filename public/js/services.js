@@ -272,6 +272,7 @@ app.factory('$socket', function ($rootScope,$location) {
             if (message.suffix === '/join/member') {
                 if (members.length === 0) return;
                 $('#onlineMembers').html(parseInt($('#onlineMembers').html()) + 1);
+                $('#onlineGuests').html(message.guests);
                 $("#online_" + members._id).removeClass('offline').addClass('online');
                 if (members.face === undefined) members.face = "default.jpg";
                 $('#plaza-groups').append('<li class="inline-block" id="' + members._id + '"><a href="/user/' + members._id + '"><img src="uploads/faces/' + members.face + '"></a><p class="text-center">' + members.nick + '</p></li>')

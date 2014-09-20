@@ -92,8 +92,11 @@ module.exports.start = function (server) {
                     ws.user = message.user;//告诉你是谁
                     ws.member = true;
                     ++onlineMember;
-                    if (ws.guest === true) --onlineGuest;
-                    wss.broadcast(JSON.stringify({path: '/', suffix: '/join/member', members: _.isEmpty(message.user) ? [] : message.user, guest: onlineGuest}));
+                    if (ws.guest === true){
+                        --onlineGuest;
+                        ws.guest === false;
+                    }
+                    wss.broadcast(JSON.stringify({path: '/', suffix: '/join/member', members: _.isEmpty(message.user) ? [] : message.user, guests: onlineGuest}));
                     //更新在线状态到数据库
                     User.update({_id: ws.user._id}, {$set: {online: 1}}, {upsert: true}, function (err, num) {
                         if (err) throw err;
