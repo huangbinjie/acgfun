@@ -10,7 +10,7 @@ var async = require('async');
     module.main = function (req, res, next) {
         async.parallel({
             'a': function (callback) {
-                Comment.find({parent_url: '/a'}, {post_id:1,user_id:1,content: 1, createDate: 1})
+                Comment.find({parent_url: '/a',deleteFlag:0}, {post_id:1,user_id:1,content: 1, createDate: 1})
                     .populate('post_id', {title: 1})
                     .populate('user_id', {face: 1})
                     .sort({createDate: -1})
@@ -21,7 +21,7 @@ var async = require('async');
                     })
             },
             'c': function (callback) {
-                Comment.find({parent_url: '/c'}, {post_id:1,user_id:1,content: 1, createDate: 1})
+                Comment.find({parent_url: '/c',deleteFlag:0}, {post_id:1,user_id:1,content: 1, createDate: 1})
                     .populate('post_id', {title: 1})
                     .populate('user_id', {face: 1})
                     .sort({createDate: -1})
@@ -32,7 +32,7 @@ var async = require('async');
                     })
             },
             'g': function (callback) {
-                Comment.find({parent_url: '/g'}, {post_id:1,user_id:1,content: 1, createDate: 1})
+                Comment.find({parent_url: '/g',deleteFlag:0}, {post_id:1,user_id:1,content: 1, createDate: 1})
                     .populate('post_id', {title: 1})
                     .populate('user_id', {face: 1})
                     .sort({createDate: -1})
@@ -43,7 +43,7 @@ var async = require('async');
                     })
             },
             'm': function (callback) {
-                Comment.find({parent_url: '/m'}, {post_id:1,user_id:1,content: 1, createDate: 1})
+                Comment.find({parent_url: '/m',deleteFlag:0}, {post_id:1,user_id:1,content: 1, createDate: 1})
                     .populate('post_id', {title: 1})
                     .populate('user_id', {face: 1})
                     .sort({createDate: -1})
@@ -54,7 +54,7 @@ var async = require('async');
                     })
             },
             'o': function (callback) {
-                Comment.find({parent_url: '/o'}, {post_id:1,user_id:1,content: 1, createDate: 1})
+                Comment.find({parent_url: '/o',deleteFlag:0}, {post_id:1,user_id:1,content: 1, createDate: 1})
                     .populate('post_id', {title: 1})
                     .populate('user_id', {face: 1})
                     .sort({createDate: -1})

@@ -99,7 +99,7 @@ app.directive('editor', ['Post', 'Topic', '$rootScope', '$message', '$routeParam
                                 $rootScope.showEditor = false;
                                 $rootScope.$broadcast("postSuccess");
                             } else {
-                                $message("发帖失败");
+                                $message(data.msg?data.msg:"发帖失败");
                             }
                         })
                     }
@@ -111,7 +111,7 @@ app.directive('editor', ['Post', 'Topic', '$rootScope', '$message', '$routeParam
                                 $rootScope.showEditor = false;
                                 $rootScope.$broadcast("postSuccess");
                             } else {
-                                $message("发帖失败");
+                                $message(data.msg?data.msg:"发帖失败");
                             }
                         })
                     }
@@ -123,7 +123,7 @@ app.directive('editor', ['Post', 'Topic', '$rootScope', '$message', '$routeParam
                                 $rootScope.showEditor = false;
                                 $rootScope.$broadcast("postSuccess");
                             } else {
-                                $message("发帖失败");
+                                $message(data.msg?data.msg:"发帖失败");
                             }
                         })
                     }

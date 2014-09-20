@@ -299,7 +299,6 @@ form .field label {
 }
 /*主页*/
 .home .item {
-    padding: 0 .625rem;
     margin-bottom: .625rem;
 }
 .home .item > header{
@@ -1312,6 +1311,9 @@ form .field label {
     .col25 {
         width: 25%;
         float: left;
+    }
+    .home .item {
+        padding: 0 .625rem;
     }
 }
 
