@@ -141,7 +141,7 @@ app.controller('pageCtrl', ['$scope', '$rootScope', '$message', '$location', 'Po
         }
 
         $scope.$on('newTopic',function(event,url){
-            if($location.path().indexOf(url)){
+            if($location.path().indexOf(url)>-1){
                 Post($location.path()).list({skip: $scope.currentPage * 30}, function (data) {
                     $scope.topics = data.posts;
                     $scope.pageCounts = [];
@@ -170,6 +170,10 @@ app.controller('topicCtrl', ['$scope', '$rootScope', '$location', 'Topic', 'Auth
         $scope.query = function (skip) {
             $scope.currentPage = skip;
             Topic($location.path()).get({skip: skip * 30}, function (data) {
+                if(data.topic===null){
+                    $location.path('404.html');
+                    $rootScope.showOpenEditor = false;
+                }
                 $scope.topic = data;
                 $scope.pageCounts = [];
                 for (var i = 0; i < Math.ceil($scope.topic.count / 30); i++) {

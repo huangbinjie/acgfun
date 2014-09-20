@@ -61,15 +61,11 @@ var wss = require('../util/ws').getWss();
 
     module.put = function (req, res, next) {
         var criteria = req.body;
-        if (!/^[A-Za-z0-9\u4e00-\u9fa5]{1,50}$/.test(criteria.title) || criteria.title === undefined||criteria.title === "") {
+        if (criteria.title === undefined||criteria.title === ""||criteria.title.length>50) {
             res.json({"result": "failed", "msg": "标题格式不正确"});
             return;
         }
-        if (criteria.content === undefined || criteria.content === "") {
-            res.json({"result": "failed","msg":"内容格式不正确"});
-            return;
-        }
-        if(criteria.content.length>2000||criteria.content.length<=0){
+        if (criteria.content === undefined || criteria.content === ""||criteria.content.length>1000) {
             res.json({"result": "failed","msg":"内容格式不正确"});
             return;
         }
@@ -145,29 +141,33 @@ var wss = require('../util/ws').getWss();
             topic: function (callback) {
                 Post.findOne({_id: url[2], deleteFlag: 0,parent_url:"/"+url[1]}, {_id: 1, user_id: 1, title: 1, content: 1, createDate: 1}).populate('user_id', {face: 1, nick: 1}).exec(function (err, doc) {
                     if (err) next(err);
-                    //如果登陆用户则还要查找是否是关注的人和收藏的文章
-                    if (req.session.user) {
-                        async.parallel([function (callback) {
-                            User.find({_id: req.session.user._id, follow: {$in: [doc.user_id._id]}}, function (err, follow) {
+                    if(doc){
+                        //如果登陆用户则还要查找是否是关注的人和收藏的文章
+                        if (req.session.user) {
+                            async.parallel([function (callback) {
+                                User.find({_id: req.session.user._id, follow: {$in: [doc.user_id._id]}}, function (err, follow) {
+                                    if (err) next(err);
+                                    if (follow.length > 0) {
+                                        doc._doc.user_id._doc.isFollow = true;
+                                    }
+                                    callback(null, doc);
+                                })
+                            }, function (callback) {
+                                User.find({_id: req.session.user._id, star: {$in: [url[2]]}}, function (err, follow) {
+                                    if (err) next(err);
+                                    if (follow.length > 0) {
+                                        doc._doc.user_id._doc.isStar = true;
+                                    }
+                                    callback(null, doc);
+                                })
+                            }], function (err, result) {
                                 if (err) next(err);
-                                if (follow.length > 0) {
-                                    doc._doc.user_id._doc.isFollow = true;
-                                }
                                 callback(null, doc);
                             })
-                        }, function (callback) {
-                            User.find({_id: req.session.user._id, star: {$in: [url[2]]}}, function (err, follow) {
-                                if (err) next(err);
-                                if (follow.length > 0) {
-                                    doc._doc.user_id._doc.isStar = true;
-                                }
-                                callback(null, doc);
-                            })
-                        }], function (err, result) {
-                            if (err) next(err);
+                        } else {
                             callback(null, doc);
-                        })
-                    } else {
+                        }
+                    }else{
                         callback(null, doc);
                     }
                 })

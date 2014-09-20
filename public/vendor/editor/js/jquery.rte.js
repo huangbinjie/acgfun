@@ -130,7 +130,7 @@ if(typeof $.fn.rte === "undefined") {
         function toolbar() {
             var tb;
                 $(".editor").css("padding-bottom","85px");
-                tb = $("<div><input class='editor_title'></div>\
+                tb = $("<div><input class='editor_title' maxlength='50'></div>\
                 <div class='rte-toolbar' id='toolbar-"+ element_id +"'><div>\
                 <p>\
                     <span class='bold'><img src='data:image/gif;base64,R0lGODlhGAAYAMZGAAAAAAEBAQICAgMDAw8PDxERESMjIyUlJSwsLC4uLjk5OT09PUBAQEZGRkpKSkxMTFlZWWFhYWRkZGVlZXFxcXp6en9/f4WFhYyMjJOTk5eXl56enqampqqqqri4uLu7u729vb+/v8nJyc7OztXV1dnZ2dvb2+Dg4OHh4eLi4uPj4+Tk5OXl5ebm5ufn5+jo6Onp6erq6uvr6+zs7O3t7e7u7u/v7/Dw8PHx8fLy8vPz8/T09PX19fb29vf39/j4+Pn5+fr6+vv7+/z8/P39/f7+/v///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////yH+FUNyZWF0ZWQgd2l0aCBUaGUgR0lNUAAh+QQBCgB/ACwAAAAAGAAYAAAH/oB/AIOEhYaGf4kAKTmNOTqQO5I8lD09Pj47JgCKNycnKCkqKywtLi8vMDEyMzQ1NjScgjkooaOlp6qrra83OLIAOaK3LRmFGrw2vjnAOre4C4UMrso4j82kpi4jAYUBJNWPO824qRWDAoQWONY6OzzAO6apMQaDCvYAB4/uPD3xuWJ4IFRBAqEQ7/z5AMaDnowIhD5wIDRBoY8fDFXJYEFgEAEaKwYMKnDj4g8gDHdtIPSgkQJCHE4GCQKsBysaDQ4VcgAkiJAhwHzQoFFCpM5BA1b8JBL01QVCFN5dgkAIwxAiRYD98IXg4KWTHQglKGLEiNZ2k772XIq1rFlFK436Wbq49ipZtzOAiaDxQ+EPmUvvlq0BQpago4gHJVrMuLHjx5AjS54sORAAOw==' alt='bold' /></span>\

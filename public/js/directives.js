@@ -86,8 +86,20 @@ app.directive('editor', ['Post', 'Topic', '$rootScope', '$message', '$routeParam
                         $message("标题不能为空");
                         return;
                     }
+                    if(title.indexOf('/')>-1){
+                        $message("标题不能包含斜杠");
+                        return;
+                    }
+                    if(title.length>50){
+                        $message("标题不能大于50个字");
+                        return;
+                    }
                     if (content === undefined || content === "" || content === null) {
                         $message("请填写内容..");
+                        return;
+                    }
+                    if(content.length>1000){
+                        $message("标题不能大于1000个字");
                         return;
                     }
                     if ($rootScope.editType === "post") {
