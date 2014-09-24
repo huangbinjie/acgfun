@@ -122,7 +122,7 @@ app.factory('$crumb', function ($location, $rootScope, $escape) {
         }
         if (/^\/o.*/.test(path)) {
             $rootScope.crumbs.push("/");
-            $rootScope.crumbs.push("<a href='/m'>其他</a>");
+            $rootScope.crumbs.push("<a href='/o'>其他</a>");
         }
         if (/^\/[acgmo]\/+.*/.test(path)) {
             $rootScope.crumbs.push("/");
