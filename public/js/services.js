@@ -71,7 +71,7 @@ app.factory('User', function ($resource) {
         })
     };
 })
-app.factory('Auth', function ($cookies, $rootScope, $http, $message, $location,$socket) {
+app.factory('Auth', function ($cookies, $rootScope, $http, $message, $location, $socket) {
     var auth = {
         getUser: function () {
             if (window.sessionStorage.User !== undefined) {
@@ -158,12 +158,20 @@ app.factory('Follow', function ($resource) {
     })
 })
 
-app.factory('$socket', function ($rootScope,$location) {
-    var ws = new WebSocket('ws://localhost');
+app.factory('$socket', function ($rootScope, $location,$message) {
+    var ws = new ReconnectingWebSocket('ws://localhost');
     var message = {};
     var user = {};
     var members = [];//在线用户组
     ws.onopen = function () {
+        ws.send(JSON.stringify({path: $location.path(), user: window.sessionStorage.User ? JSON.parse(Base64.decode(window.sessionStorage.User)) : {}}));
+        if($rootScope.$$listeners['$routeChangeSuccess'].length<3){
+            $rootScope.$on('$routeChangeSuccess', function (newRoute, oldRoute) {
+                ws.send(JSON.stringify({path: $location.path(), user: window.sessionStorage.User ? JSON.parse(Base64.decode(window.sessionStorage.User)) : {}}));
+            });
+        }else{
+            $message("聊天频道已连接");
+        }
         ws.onmessage = function (data) {
             message = JSON.parse(data.data);
             members = message.members;
@@ -183,17 +191,17 @@ app.factory('$socket', function ($rootScope,$location) {
             } else if (message.path === '/') {
                 //新主题
                 if (message.suffix === '/join/topic') {
-                        $rootScope.$broadcast('newTopic',message.message);
+                    $rootScope.$broadcast('newTopic', message.message);
                 }
                 //新评论
                 if (message.suffix === '/join/comment') {
-                        $rootScope.$broadcast('newComment',message.message);
+                    $rootScope.$broadcast('newComment', message.message);
                 }
             }
             if (message.suffix === '/to') {
                 $('audio')[0].play();
-                if(!$rootScope.showChatModal){
-                    $rootScope.$apply(function(){
+                if (!$rootScope.showChatModal) {
+                    $rootScope.$apply(function () {
                         ++$rootScope.chatCount;
                     })
                 }
