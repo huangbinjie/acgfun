@@ -177,10 +177,12 @@ var fs = require("fs");
     module.uploadFace = function (req, res, next) {
         if (!/png|jpg/.test(req.files.file.extension)) {
             res.json({"result": "failed", "msg": "图片格式不正确"});
+            fs.unlinkSync(req.files.file.path);
             return;
         }
-        if (req.files.file.size > 1024 * 1024 * 100) {
+        if (req.files.file.size > 1024 * 100) {
             res.json({"result": "failed", "msg": "图片太大了"});
+            fs.unlinkSync(req.files.file.path);
             return;
         }
         var filename = req.session.user._id + "_face." + req.files.file.extension;
