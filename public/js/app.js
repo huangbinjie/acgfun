@@ -61,9 +61,6 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', '$resourcePr
                 $anchorScroll();
             }, 1000)
         }
-        setTimeout(function () {
-            $socket.send(JSON.stringify({path: $location.path(), user: Auth.getUser()}));
-        }, 1000);
     });
 
     $socket.onclose = function () {

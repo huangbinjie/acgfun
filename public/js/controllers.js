@@ -293,12 +293,24 @@ app.controller('userCtrl', ['$scope', '$location', 'User', '$loadingBar', '$root
                 $message("请选择文件");
                 return;
             }
+            if(/gif/.test($scope.file.type)){
+                $message("不能选择gif");
+                $('#file').val(null);
+                $scope.file = undefined;
+                return;
+            }
+            if($scope.file.size>1024 * 100){
+                $message("图片太大了");
+                $('#file').val(null);
+                $scope.file = undefined;
+                return;
+            }
             $upload.upload({
                 url: '/upload/face',
                 method: 'POST',
                 file: $scope.file
             }).progress(function (evt) {
-                $(".progressbar").show().width(parseInt(100.0 * evt.loaded / evt.total) + "%");
+                $(".progressbar").show().width(parseInt(100.0 * evt.loaded / evt.total) + "%").html(parseInt(100.0 * evt.loaded / evt.total) + "%");
             }).success(function (data, status, headers, config) {
                 if (data.result === "success") {
                     $message("上传头像成功");
@@ -309,7 +321,7 @@ app.controller('userCtrl', ['$scope', '$location', 'User', '$loadingBar', '$root
                     $('#file').val(null);
                     $scope.file = undefined;
                 } else {
-                    $message("上传头像失败了");
+                    $message(data.msg?data.msg:"上传头像失败了");
                 }
             });
         }

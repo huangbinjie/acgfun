@@ -370,6 +370,9 @@ app.directive('profileContext', function ($http, $templateCache, $compile, $mess
         },
         controller: function ($scope) {
             $scope.url = "template/user/user-post.html";
+            $scope.$on('$destroy',function(){
+                $('.pika-single').remove();
+            })
         }
     }
 })
